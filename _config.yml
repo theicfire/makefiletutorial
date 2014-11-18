@@ -2,8 +2,8 @@ name: White Paper
 markdown: kramdown
 kramdown:
     input: GFM
-url: http://vimsheet.com
-description: A Great Vim Cheat Sheet
+url: http://makefiletutorial.com
+description: Makefile Tutorial by Example
 syntax-highlighting:
     enabled: true
     css: syntax.css
