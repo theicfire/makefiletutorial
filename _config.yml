@@ -1,0 +1,11 @@
+name: White Paper
+markdown: kramdown
+kramdown:
+    input: GFM
+url: http://vimsheet.com
+description: A Great Vim Cheat Sheet
+
+# Owner/author information
+owner:
+  name: Chase Lambert
+
