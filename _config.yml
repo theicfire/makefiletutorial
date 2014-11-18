@@ -4,6 +4,9 @@ kramdown:
     input: GFM
 url: http://vimsheet.com
 description: A Great Vim Cheat Sheet
+syntax-highlighting:
+    enabled: true
+    css: syntax.css
 
 # Owner/author information
 owner:
