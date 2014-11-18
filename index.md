@@ -12,48 +12,48 @@ some_binary:
 
 **Intro**  
 This file will make `some_binary` the first time, and the second time notice it's already made, resulting in `make: 'some_binary' is up to date.`
-```make
+{% highlight make %}
 some_binary:
 	touch some_binary
-```
+{% endhighlight %}
 
 **Intro**  
 Alternative syntax: same line
-```make
+{% highlight make %}
 some_binary: ; touch some_binary
-```
+{% endhighlight %}
 
 **Intro**  
 \ gives us multilines
-```make
+{% highlight make %}
 some_binary: 
 	touch \
 some_binary
-```
+{% endhighlight %}
 
 **Intro**  
 Will call other.txt target if it is newer than the `some_binary` file, or it doesn't exist. It will call the other.txt rule first.
-```make
+{% highlight make %}
 some_binary: other.txt
 	touch some_binary
 
 other.txt:
 	touch other.txt
-```
+{% endhighlight %}
 
 **Intro**  
 This will always make both targets, because `some_binary` depends on other.txt, which is never created.
-```make
+{% highlight make %}
 some_binary: other.txt
 	touch some_binary
 
 other.txt:
 	echo "nothing"
-```
+{% endhighlight %}
 
 **Intro**  
 "clean" is not a special word. If there's a file called clean that is made, then "make clean" won't have to do anything. Similarly, if the clean file is older than the `some_binary` file, the clean rule will not be called.
-```make
+{% highlight make %}
 some_binary: clean
 	touch some_binary
 
@@ -75,11 +75,11 @@ some_binary:
 clean:
 	rm some_binary
 	rm clean
-```
+{% endhighlight %}
 
 **2.4:**  
 Variables can only be strings. Here's an example:
-```make
+{% highlight make %}
 files = file1 file2
 some_binary: $(files)
 	echo "Look at this variable: " $(files)
@@ -92,12 +92,12 @@ file2:
  
 clean:
 	rm file1 file2 some_binary
-```
+{% endhighlight %}
 
 
 
 Here's a blah.c file that some examples below require
-```c
+{% highlight c %}
 #include<stdio.h>
 #include <string.h>
 
@@ -106,12 +106,12 @@ int main()
    #printf("hello there\n");
    #return 0;
 }
-```
+{% endhighlight %}
 
 **2.5:**  
 Example requires: blah.c  
 If we have a target that is a ".c" file, there is an *implicit command* that will be "cc -c file.c -o file.o".
-```make
+{% highlight make %}
 
 # Implicit command of: "cc -c blah.c -o blah.o"
 # Note: 1) Do not put a comment inside of the blah.o rule; the implicit rule will not run!
@@ -120,19 +120,19 @@ blah.o:
  
 clean:
 	rm blah.o
-```
+{% endhighlight %}
 
 **4.1**  
 Print literal '$'
-```make
+{% highlight make %}
 some_binary: 
 	echo $$
-```
+{% endhighlight %}
 
 **4.2**  
 We can use wildcards in the target, prerequisits, or commands.  
 Valid wildcards are `*, ?, [...]`  
-```make
+{% highlight make %}
 some_binary: *.c
 	# create the binary
 
@@ -143,12 +143,12 @@ some_binary: *.c
 clean:
 	rm *.c
 
-```
+{% endhighlight %}
 
 **4.2.3**  
 We CANNOT use wildcards in other places, like variable declarations or function arguments  
 Use the wildcard function instead.  
-```make
+{% highlight make %}
 wrong = *.o # Wrong
 objects := $(wildcard *.c) # Right
 some_binary: 
@@ -161,13 +161,13 @@ clean:
 	rm *.c
 
 
-```
+{% endhighlight %}
 
 **4.3.2**  
 Use vpath to specify where some set of prerequisites exist. The format is `vpath <pattern> <directories, space/colon seperated>`  
 `<pattern>` can have a `%`, which matches any zero or more characters.  
 You can also do this globallyish with the variable VPATH  
-```make
+{% highlight make %}
 
 vpath %.h ../headers ../other-directory
 
@@ -184,13 +184,13 @@ clean:
 	rm -rf ../headers
 	rm some_binary
 
-```
+{% endhighlight %}
 
 **4.4**  
 Making multiple targets? Make a phony 'all'!  
 Note here PHONY is *after* all, because the target is seen as 'all' instead of PHONY,  
 giving better error dumps.  
-```make
+{% highlight make %}
 all: one two three
 PHONY: all
 
@@ -204,12 +204,12 @@ three:
 clean:
 	rm one two three
 
-```
+{% endhighlight %}
 
 **4.8**  
 Multiple Targets: the rule will be run for each target  
 `$@` is a *automatic variable* that contains the target name.
-```make
+{% highlight make %}
 
 all: f1.o f2.o
 
@@ -224,7 +224,7 @@ f1.o f2.o:
 clean:
 	rm *.c
 
-```
+{% endhighlight %}
 
 **4.8**  
 Multiple Targets: We can use the wildcard % in targets, that captures zero or more of any character  
@@ -233,7 +233,7 @@ Note
 but is only one target and does not expand.  
 	2) PHONY is needed because otherwise make will create an automatic rule of "cc all.o f1.o f2.o -o all  
 TODO why was this not a problem when I didn't use the % wildcard?
-```make
+{% highlight make %}
 
 all: f1.o f2.o
 .PHONY: all
@@ -243,12 +243,12 @@ all: f1.o f2.o
 
 clean:
 	rm *.c
-```
+{% endhighlight %}
 
 **4.10**  
 Static Pattern Rules: each .o file has a prereq of the corresponding .c name  
 Run "make init" first to make the .c files
-```make
+{% highlight make %}
 objects = foo.o bar.o
 
 all: $(objects)
@@ -264,12 +264,12 @@ init:
 clean:
 	rm foo.c bar.c
 
-```
+{% endhighlight %}
 
 **4.10**  
 filter can be used in Static pattern rules to match the correct files  
 Run "make init" first to make the necessary files
-```make
+{% highlight make %}
 
 files = foo.elc bar.o lose.o
 src_files = foo.el bar.c lose.c
@@ -286,12 +286,12 @@ init:
 
 clean:
 	rm $(src_files)
-```
+{% endhighlight %}
 
 **4.11**  
 Double-Colon Rules are rarely used, but allow the same target to run commands from multiple targets.  
 If these were single colons, an warning would be printed and only the second set of commands would run.
-```make
+{% highlight make %}
 all: blah
 
 blah::
@@ -303,7 +303,7 @@ blah::
 clean:
 	rm $(src_files)
 
-```
+{% endhighlight %}
 
 **4.12**  
 Example requires: blah.c  
@@ -317,7 +317,7 @@ Notes:
     into:  
     main.o main.d : main.c defs.h  
 4) Running `make clean` will rerun the rm -f ... rule because the include line wants to include an up to date version of the file. There is such a target that updates it, so it runs that rule before including the file.  
-```make
+{% highlight make %}
 all: blah.d
 
 clean:
@@ -332,21 +332,21 @@ clean:
 sources = blah.c
 
 include $(sources:.c=.d)
-```
+{% endhighlight %}
 
 **5.1**  
 Add an @ before a command to stop it from being printed  
 You can also run make with -s to add an @ before each line  
-```make
+{% highlight make %}
 all: 
 	@echo "This make line will not be printed"
 	echo "But this will"
 
-```
+{% endhighlight %}
 
 **5.2**  
 Each command is run in a new shell (or at least the affect is as such)
-```make
+{% highlight make %}
 all: 
 	cd ..
 	# The cd above does not affect this line, because each command is effectively run in a new shell
@@ -359,20 +359,20 @@ all:
 	cd ..; \
 	echo `pwd`
 
-```
+{% endhighlight %}
 
 **5.2**  
 Note only: the default shell is /bin/sh. You can change this by changing the variable SHELL
-```make
+{% highlight make %}
 
 
-```
+{% endhighlight %}
 
 **5.4**  
 Make stops running a rule (and will propogate back to prerequisites) if a command returns a nonzero exit status.  
 `DELETE_ON_ERROR` will delete the target of a rule if the rule fails in this manner. This will happen for all targets, not just the one it is before like PHONY. It's a good idea to always use this, even though make does not for historical reasons.  
 Add "-k" when running make to continue running even in the face of errors. Helpful if you want to see all the errors of Make at once.  
-```make
+{% highlight make %}
 .DELETE_ON_ERROR:
 all: one two
 
@@ -383,29 +383,29 @@ one:
 two:
 	touch two
 	false
-```
+{% endhighlight %}
 
 **5.4**  
 Add a "-" before a command to suppress the error  
 Add "-i" to make to have this happen for every command.
-```make
+{% highlight make %}
 one:
 	false
 	touch one
 
-```
+{% endhighlight %}
 
 **5.5**  
 Note only: If you ctrl+c make, it will delete the newer targets it just made.
-```make
+{% highlight make %}
 
 
-```
+{% endhighlight %}
 
 **5.6**  
 Recursively call a makefile. Use the special $(MAKE) instead of "make"  
 because it will pass the make flags for you and won't itself be affected by them.
-```make
+{% highlight make %}
 new_contents = "\
 hello:\\n\
 \\ttouch inside_file"
@@ -417,7 +417,7 @@ all:
 clean:
 	rm -rf subdir
 
-```
+{% endhighlight %}
 
 **5.6**  
 The export directive takes a variable and makes it accessible to sub-make commands.  
@@ -427,7 +427,7 @@ Recursively call a makefile. Use the special $(MAKE) instead of "make"
 because it will pass the make flags for you and won't itself be affected by them.  
   
 Note: export has the same syntax as sh, but it they aren't related (although similar in function)  
-```make
+{% highlight make %}
 new_contents = "\
 hello:\\n\
 \\techo \$$(cooly)"
@@ -449,11 +449,11 @@ clean:
 	rm -rf subdir
 
 
-```
+{% endhighlight %}
 
 **5.6**  
 You need to export variables to have them run in the shell as well.  
-```make
+{% highlight make %}
 
 one=this will only work locally
 export two=we can run subcommands with this
@@ -464,11 +464,11 @@ all:
 	@echo $$one
 	@echo $(two)
 	@echo $$two
-```
+{% endhighlight %}
 
 **5.6**  
 `EXPORT_ALL_VARIABLES` does what you might expect  
-```make
+{% highlight make %}
 
 .EXPORT_ALL_VARIABLES:
 new_contents = "\
@@ -489,11 +489,11 @@ all:
 clean:
 	rm -rf subdir
 
-```
+{% endhighlight %}
 
 **5.7**  
 You can make a list of commands like so:  
-```make
+{% highlight make %}
 
 define sweet
 echo "hello"
@@ -512,11 +512,11 @@ one:
 clean:
 	rm -f one
 
-```
+{% endhighlight %}
 
 **6.1**  
 Reference variables using ${} or $()
-```make
+{% highlight make %}
 
 x = dude
 
@@ -529,13 +529,13 @@ all:
 	echo $x 
 
 
-```
+{% endhighlight %}
 
 **6.2**  
 Two flavors of variables:  
 recursive - only looks for the variables when the command is *used*, not when it's *defined*.  
 simply expanded - like normal imperative programming -- only those defined so far get expanded
-```make
+{% highlight make %}
 
 # This will print "later" at the end
 one = one ${later_variable}
@@ -548,11 +548,11 @@ later_variable = later
 all: 
 	echo $(one)
 	echo $(two)
-```
+{% endhighlight %}
 
 **6.2**  
 Simply expanded allows you to append to a variable. Recursive definitions will give an infinite loop error.  
-```make
+{% highlight make %}
 
 one = hello
 one := ${one} there
@@ -560,11 +560,11 @@ one := ${one} there
 .PHONY: all
 all: 
 	echo $(one)
-```
+{% endhighlight %}
 
 **6.2**  
 ?= only sets variables if they have not yet been set
-```make
+{% highlight make %}
 
 one = hello
 one ?= will not be set
@@ -574,12 +574,12 @@ two ?= will be set
 all: 
 	echo $(one)
 	echo $(two)
-```
+{% endhighlight %}
 
 **6.2**  
 Spaces at the end of a line are not stripped, ones at the start are  
 To make a variable with a single space, have a variable guard
-```make
+{% highlight make %}
 
 with_spaces = hello   # end of line
 after = $(with_spaces)there
@@ -591,13 +591,13 @@ space = $(nullstring) # end of line
 all: 
 	echo "$(after)"
 	echo start"$(space)"end
-```
+{% endhighlight %}
 
 **6.3**  
 You can text replace at the end of each space seperated word using $(var:a=b)  
 Note: don't put spaces in between anything; it will be seen as a search or replacement term  
 Note: This is shorthand for using the "patsubst" expansion function
-```make
+{% highlight make %}
 
 foo := a.o b.o c.o
 bar := $(foo:.o=.c)
@@ -605,11 +605,11 @@ bar := $(foo:.o=.c)
 .PHONY: all
 all: 
 	echo $(bar)
-```
+{% endhighlight %}
 
 **6.3**  
 You can use % as well to grab some text!
-```make
+{% highlight make %}
 
 foo := a.o b.o c.o
 bar := $(foo:%.o=%)
@@ -617,20 +617,20 @@ bar := $(foo:%.o=%)
 .PHONY: all
 all: 
 	echo $(bar)
-```
+{% endhighlight %}
 
 **6.5**  
 An undefined variable is actually an empty string :o
-```make
+{% highlight make %}
 
 .PHONY: all
 all: 
 	echo $(nowhere)
-```
+{% endhighlight %}
 
 **6.6**  
 Use += to append
-```make
+{% highlight make %}
 
 foo := start
 foo += more
@@ -638,24 +638,24 @@ foo += more
 .PHONY: all
 all: 
 	echo $(foo)
-```
+{% endhighlight %}
 
 **6.7**  
 You can override variables that come from the command line by using "override".
 Here we ran make with `make some_option=hi`
-```make
+{% highlight make %}
 
 override some_option += additional
 .PHONY: all
 all: 
 	echo $(some_option)
-```
+{% endhighlight %}
 
 **6.8**  
 "define" is actually just a multiline variable defintion. It has nothing with being a function.  
 Note here that it's a bit different than having a semi-colon between commands, because each is run
 in a seperate shell, as expected.
-```make
+{% highlight make %}
 
 one = export blah="I was set!"; echo $$blah
 
@@ -670,11 +670,11 @@ all:
 	@$(one)
 	@echo "This does not:"
 	@$(two)
-```
+{% endhighlight %}
 
 **6.10**  
 Variables can be assigned for specific targets
-```make
+{% highlight make %}
 
 all: one = cool
 
@@ -685,11 +685,11 @@ all:
 .PHONY: other
 other:
 	echo one is nothing: $(one)
-```
+{% endhighlight %}
 
 **6.11**  
 You can assign variables for specific target *patterns*
-```make
+{% highlight make %}
 
 %.c: one = cool
 
@@ -699,11 +699,11 @@ blah.c:
 .PHONY: other
 other:
 	echo one is nothing: $(one)
-```
+{% endhighlight %}
 
 **7.1**  
 Conditional/If statements
-```make
+{% highlight make %}
 
 foo = ok
 
@@ -713,11 +713,11 @@ ifeq ($(foo), ok)
 else
 	echo "nope"
 endif
-```
+{% endhighlight %}
 
 **7.2**  
 Check if variable is empty
-```make
+{% highlight make %}
 
 nullstring =
 foo = $(nullstring) # end of line; there is a space here
@@ -729,11 +729,11 @@ endif
 ifeq ($(foo),)
 	echo "foo doesn't even have spaces?"
 endif
-```
+{% endhighlight %}
 
 **7.2**  
 ifdef does not expand variable references; it just sees if something is defined at all
-```make
+{% highlight make %}
 
 bar =
 foo = $(bar)
@@ -746,11 +746,11 @@ ifdef bar
 	echo "but bar is not"
 endif
 
-```
+{% endhighlight %}
 
 **7.3**  
 Search for a MAKEFLAG
-```make
+{% highlight make %}
 
 bar =
 foo = $(bar)
@@ -760,11 +760,11 @@ all:
 ifneq (,$(findstring i, $(MAKEFLAGS)))
 	echo "i was passed to MAKEFLAGS"
 endif
-```
+{% endhighlight %}
 
 **8.1**  
 Call functions with $(fn, arguments) or $(fn, arguments)  
-```make
+{% highlight make %}
 
 bar := $(subst not, totally, "I am not superman")
 bar2 := $(subst not, totally, "I am not superman")
@@ -773,11 +773,11 @@ all:
 	@echo $(bar)
 	@echo $(bar2)
 
-```
+{% endhighlight %}
 
 **8.1**  
 If you want to replace spaces or commas, use variables
-```make
+{% highlight make %}
 comma := ,
 empty:=
 space := $(empty) $(empty)
@@ -787,11 +787,11 @@ bar := $(subst $(space),$(comma),$(foo))
 .PHONY: all
 all: 
 	@echo $(bar)
-```
+{% endhighlight %}
 
 **8.1**  
 Do NOT include spaces in the arguments after the first. That will be seen as part of the string.
-```make
+{% highlight make %}
 comma := ,
 empty:=
 space := $(empty) $(empty)
@@ -805,25 +805,25 @@ all:
 
 8.2, 8.3, 8.9 TODO do something about the fns  
 TODO 8.7 origin fn? Better in documentation?
-```
+{% endhighlight %}
 
 **8.4**  
 foreach takes:  
 $(foreach var,list,text) and sets var to each word in list, and outputs outputs that into a "list" of words in text. By list I mean a space seperated sentence of words.  
 This appends an exclamation after each word
-```make
+{% highlight make %}
 foo := who are you
 bar := $(foreach wrd,$(foo),$(wrd)!)
 
 .PHONY: all
 all: 
 	@echo $(bar)
-```
+{% endhighlight %}
 
 **8.5**  
 If: (in a function instead of normal.. call this the functional style)  
 Checks if the first argument is nonempty. If so runs the second argument, otherwise runs the third.
-```make
+{% highlight make %}
 foo := $(if this-is-not-empty,then!,else!)
 empty :=
 bar := $(if $(empty),then!,else!)
@@ -832,28 +832,28 @@ bar := $(if $(empty),then!,else!)
 all: 
 	@echo $(foo)
 	@echo $(bar)
-```
+{% endhighlight %}
 
 **8.6**  
 Call: $(call variable,param,param)  
 Sets each of the params as $(1), $(2), etc.  
 $(0) is set as the variable name
-```make
+{% highlight make %}
 
 sweet_new_fn = Variable Name: $(0)$ First: $(1) Second: $(2) Empty Variable: $(3)
 
 .PHONY: all
 all: 
 	@echo $(call sweet_new_fn, go, tigers)
-```
+{% endhighlight %}
 
 **8.8**  
 shell - This calls the shell, but it removes newlines!
-```make
+{% highlight make %}
 .PHONY: all
 all: 
 	@echo $(shell ls -la) # Very ugly because the newlines are gone!
-```
+{% endhighlight %}
 
 **9**  
 
