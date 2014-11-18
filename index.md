@@ -854,3 +854,8 @@ shell - This calls the shell, but it removes newlines!
 all: 
 	@echo $(shell ls -la) # Very ugly because the newlines are gone!
 ```
+
+**9**  
+
+* There's a nice [list of commands](http://www.gnu.org/software/make/manual/make.html#Options-Summary) that can be run from make. Check out `--dry-run, --touch, --old-file`. 
+* You can have multiple targets to make, i.e. `make clean run test` runs the 'clean' goal, then 'run', and then 'test'.
