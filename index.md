@@ -5,10 +5,10 @@ title: Makefile Tutorial by Example
 
 **Intro**  
 This makefile will always run. The default target is `some_binary`, because it is first.
-```make
+{% highlight make %}
 some_binary:
 	echo "nothing"
-```
+{% endhighlight %}
 
 **Intro**  
 This file will make `some_binary` the first time, and the second time notice it's already made, resulting in `make: 'some_binary' is up to date.`
