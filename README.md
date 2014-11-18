@@ -1,7 +1,7 @@
-A Great Vim Cheatsheet
+Makefile Tutorial by Example
 ========
 
-This is a two page website that has index.html and advanced.html. The two are created from markdown files in `index.html` and `advanced.html`.
+This is a single page website that has index.html, which is created by the file `index.md`.
 
 Pull requests are welcome!
 
