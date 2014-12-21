@@ -192,7 +192,7 @@ Note here PHONY is *after* all, because the target is seen as 'all' instead of P
 giving better error dumps.  
 {% highlight make %}
 all: one two three
-PHONY: all
+.PHONY: all
 
 one:
 	touch one
