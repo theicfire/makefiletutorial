@@ -130,7 +130,7 @@ some_binary:
 {% endhighlight %}
 
 **4.2**  
-We can use wildcards in the target, prerequisits, or commands.  
+We can use wildcards in the target, prerequisites, or commands.  
 Valid wildcards are `*, ?, [...]`  
 {% highlight make %}
 some_binary: *.c
