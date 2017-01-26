@@ -840,10 +840,11 @@ Sets each of the params as $(1), $(2), etc.
 $(0) is set as the variable name
 {% highlight make %}
 
-sweet_new_fn = Variable Name: $(0)$ First: $(1) Second: $(2) Empty Variable: $(3)
+sweet_new_fn = Variable/Function Name: $(0) First: $(1) Second: $(2) Empty Variable: $(3)
 
 .PHONY: all
 all: 
+	# Output is Variable/Function Name: sweet_new_fn First: go Second: tigers Empty Variable:
 	@echo $(call sweet_new_fn, go, tigers)
 {% endhighlight %}
 
