@@ -10,7 +10,20 @@ I read through the [GNU Make](https://www.cl.cam.ac.uk/teaching/0910/UnixTools/m
 - Target, goal, dependency
 -->
 
-**Intro**  
+**Makefile Syntax**  
+A Makefile consists of a set of *rules*. A rule generally looks like this:
+{% highlight txt %}
+targets : prerequisities
+   command
+   command
+   command
+{% endhighlight %}
+
+- The *targets* are file names, seperated by spaces. Typically, there is only one per rule.
+- The *commands* are a series of steps typically used to make the target(s). These *need to start with a tab character*, not spaces.
+- The *prerequisites* are also file names, seperated by spaces. These files need to exist before the commands for the target are run.
+
+**Simple Examples**  
 This makefile has a single target, called `some_file`. The default target is the first target, so in this case `some_file` will run.
 {% highlight make %}
 some_file:
@@ -62,7 +75,7 @@ some_file: clean
 	touch some_file
 
 clean:
-	rm some_file
+	rm -f some_file
 {% endhighlight %}
 
 Adding `.PHONY` to a target will prevent make from confusing the phony target with a file name. In this example, if the file "clean" is created, make clean will still be run. `.PHONY` is great to use, but I'll skip it in the rest of the examples for simplicity.
@@ -73,12 +86,12 @@ some_file:
  
 .PHONY: clean
 clean:
-	rm some_file
-	rm clean
+	rm -f some_file
+	rm -f clean
 {% endhighlight %}
 
 **Variables (Section 2.4)**  
-Variables can only be strings. Here's an example:
+Variables can only be strings. Here's an example of using them:
 {% highlight make %}
 files = file1 file2
 some_file: $(files)
@@ -91,47 +104,28 @@ file2:
 	touch file2
  
 clean:
-	rm file1 file2 some_file
-{% endhighlight %}
-
-
-**blah.c file**  
-Some of the below examples will require this `blah.c` file:
-{% highlight c %}
-#include<stdio.h>
-#include <string.h>
-
-int main()
-{
-   printf("hello there\n");
-   return 0;
-}
+	rm -f file1 file2 some_file
 {% endhighlight %}
 
 **Magic Implicit Commands (Section 2.5)**  
 Probably one of the most confusing parts about Make is the hidden coupling between Make and GCC. Make was largely made for GCC, and so makes compiling C/C++ programs "easy".
 
-If we have a target that is an object file (ends with .o), there is an *implicit command* that will be `cc -c file.c -o file.o`.
 {% highlight make %}
-# Requires blah.c
+# Implicit command of: "cc %blah.o -o blah"
+# Note: Do not put a comment inside of the blah.o rule; the implicit rule will not run!
+blah:
 
 # Implicit command of: "cc -c blah.c -o blah.o"
-# Note: 1) Do not put a comment inside of the blah.o rule; the implicit rule will not run!
-# 		2) If there is no blah.c file, the implicit rule will not run and will not complain.
 blah.o:
- 
+
+blah.c:
+	echo "int main() { return 0; }" > blah.c
+
 clean:
-	rm blah.o
+	rm -f blah.o blah blah.c
 {% endhighlight %}
 
-**4.1**  
-Print literal '$'
-{% highlight make %}
-some_file: 
-	echo $$
-{% endhighlight %}
-
-**4.2**  
+**Using Wildcard Characters (Section 4.2)**  
 We can use wildcards in the target, prerequisites, or commands.  
 Valid wildcards are `*, ?, [...]`  
 {% highlight make %}
@@ -143,11 +137,11 @@ some_file: *.c
 	touch f2.c
  
 clean:
-	rm *.c
+	rm -f *.c
 
 {% endhighlight %}
 
-**4.2.3**  
+**The Wildcard Function (Section 4.2.3)**  
 We CANNOT use wildcards in other places, like variable declarations or function arguments  
 Use the wildcard function instead.  
 {% highlight make %}
@@ -160,12 +154,12 @@ some_binary:
 	echo $(objects)
 
 clean:
-	rm *.c
+	rm -f *.c
 
 
 {% endhighlight %}
 
-**4.3.2**  
+**The vpath Directive (Section 4.3.2)**  
 Use vpath to specify where some set of prerequisites exist. The format is `vpath <pattern> <directories, space/colon seperated>`  
 `<pattern>` can have a `%`, which matches any zero or more characters.  
 You can also do this globallyish with the variable VPATH  
@@ -184,14 +178,12 @@ blah.h:
 
 clean:
 	rm -rf ../headers
-	rm some_binary
+	rm -f some_binary
 
 {% endhighlight %}
 
-**4.4**  
-Making multiple targets? Make a phony 'all'!  
-Note here PHONY is *after* all, because the target is seen as 'all' instead of PHONY,  
-giving better error dumps.  
+**The all target (Section 4.4)**  
+Making multiple targets and you want all of them to run? Make a `all` target and designate it as `.PHONY`
 {% highlight make %}
 all: one two three
 .PHONY: all
@@ -204,12 +196,12 @@ three:
 	touch three
 
 clean:
-	rm one two three
+	rm -f one two three
 
 {% endhighlight %}
 
-**4.8**  
-Multiple Targets: the rule will be run for each target  
+**Multiple targets (Section 4.8)**  
+When there are multiple targets for a rule, the commands will be run for each target  
 `$@` is a *automatic variable* that contains the target name.
 {% highlight make %}
 
@@ -223,17 +215,11 @@ f1.o f2.o:
 # f2.o
 # 	echo $@
 
-clean:
-	rm *.c
-
 {% endhighlight %}
 
-**4.8**  
-Multiple Targets: We can use the wildcard % in targets, that captures zero or more of any character  
-Note  
-	1) We do not use *.o, because that is just the string *.o, which might be useful in the commands,  
+**Multiple targets via wildcards (Section 4.8)**  
+We can use the wildcard % in targets, that captures zero or more of any character. Note we do not use *.o, because that is just the string *.o, which might be useful in the commands,  
 but is only one target and does not expand.  
-	2) PHONY is needed because otherwise make will create an automatic rule of "cc all.o f1.o f2.o -o all  
 <!--
 TODO why was this not a problem when I didn't use the % wildcard?
 -->
@@ -245,54 +231,80 @@ all: f1.o f2.o
 %.o:
 	echo $@
 
-clean:
-	rm *.c
 {% endhighlight %}
 
-**4.10**  
-Static Pattern Rules: each .o file has a prereq of the corresponding .c name  
-Run "make init" first to make the .c files
+**Static Pattern Rules (Section 4.10)**  
+Make loves c compilation. And every time it expresses its love, things get confusing. Here's the syntax for a new type of rule called a static pattern:
 {% highlight make %}
+targets ...: target-pattern: prereq-patterns ...
+   commands
+{% endhighlight %}
+
+The essence is that the a given target is matched by the target-pattern (via a `%` wildcard). Whatever was matched is called the *stem*. The stem is then substituted into the prereq-pattern, to generate the target's prereqs.
+
+A typical use case is to compile `.c` files into `.o` files. Here's the *manual way*:
+{% highlight make %}
+all: foo.o bar.o
+.PHONY: all
+
+# The automatic variable $@ matches the target, and $< matches the prerequisite
+foo.o: foo.c
+	echo "Call gcc to generate $@ from $<"
+
+bar.o: bar.c
+	echo "Call gcc to generate bar.o from bar.c"
+
+# Matches all .c files and creates them if they don't exist
+%.c:
+	touch $@
+
+clean:
+	rm -f foo.c bar.c
+{% endhighlight %}
+
+Here's the more *efficient way*, using a static pattern rule:
+{% highlight make %}
+# This Makefile uses less hard coded rules, via static pattern rules
 objects = foo.o bar.o
-
 all: $(objects)
+.PHONY: all
 
-# targets ...: target-pattern: prereq-patterns ...
+# Syntax - targets ...: target-pattern: prereq-patterns ...
+# In the case of the first target, foo.o, the target-pattern matches foo.o and sets the "stem" to be "foo".
+#   It then replaces that stem with the wilecard pattern in prereq-patterns
 $(objects): %.o: %.c
-	echo "make file" $@ "with prereqs" $<
+	echo "Call gcc to generate $@ from $<"
 
-init:
-	touch foo.c
-	touch bar.c
+%.c:
+	touch $@
 
 clean:
-	rm foo.c bar.c
+	rm -f foo.c bar.c
 
 {% endhighlight %}
 
-**4.10**  
-filter can be used in Static pattern rules to match the correct files  
-Run "make init" first to make the necessary files
+**Static Pattern Rules and Filter (Section 4.10)**  
+`filter` can be used in Static pattern rules to match the correct files  
 {% highlight make %}
 
-files = foo.elc bar.o lose.o
+obj_files = foo.elc bar.o lose.o
 src_files = foo.el bar.c lose.c
 
-all: $(files)
+all: $(obj_files)
 
-$(filter %.o,$(files)): %.o: %.c
+$(filter %.o,$(obj_files)): %.o: %.c
 	echo "target: " $@ "prereq: " $<
-$(filter %.elc,$(files)): %.elc: %.el
+$(filter %.elc,$(obj_files)): %.elc: %.el
 	echo "target: " $@ "prereq: " $<
 
-init:
-	touch $(src_files)
+%.c %.el:
+	touch %@
 
 clean:
-	rm $(src_files)
+	rm -f $(src_files)
 {% endhighlight %}
 
-**4.11**  
+**Double-Colon Rules (Section 4.11)**  
 Double-Colon Rules are rarely used, but allow the same target to run commands from multiple targets.  
 If these were single colons, an warning would be printed and only the second set of commands would run.
 {% highlight make %}
@@ -305,11 +317,14 @@ blah::
 	echo "hello again"
 
 clean:
-	rm $(src_files)
+	rm -f $(src_files)
 
 {% endhighlight %}
 
-**4.12**  
+<!--
+TODO: This example fails initially because blah.d doesn't exist. I'm not sure how to fix this example, there are probably better ones out there..
+
+**Generating Prerequisites Automatically (Section 4.12)**  
 Example requires: blah.c  
 Generating prereqs automatically  
 This makes one small makefile per source file  
@@ -322,10 +337,12 @@ Notes:
     main.o main.d : main.c defs.h  
 4) Running `make clean` will rerun the rm -f ... rule because the include line wants to include an up to date version of the file. There is such a target that updates it, so it runs that rule before including the file.  
 {% highlight make %}
+# Run make init first, then run make
+# This outputs
 all: blah.d
 
 clean:
-	rm blah.d
+	rm -f blah.d blah.c blah.h blah.o blah
 
 %.d: %.c
 	rm -f $@; \
@@ -333,22 +350,26 @@ clean:
 	 sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
 	 rm -f $@.$$$$
 
+init:
+	echo "#include \"blah.h\"; int main() { return 0; }" > blah.c
+	touch blah.h
+
 sources = blah.c
 
 include $(sources:.c=.d)
 {% endhighlight %}
+-->
 
-**5.1**  
+**Command Echoing/Silencing (Section 5.1)**  
 Add an @ before a command to stop it from being printed  
 You can also run make with -s to add an @ before each line  
 {% highlight make %}
 all: 
 	@echo "This make line will not be printed"
 	echo "But this will"
-
 {% endhighlight %}
 
-**5.2**  
+**Command Execution (Section 5.2)**  
 Each command is run in a new shell (or at least the affect is as such)
 {% highlight make %}
 all: 
@@ -365,11 +386,13 @@ all:
 
 {% endhighlight %}
 
-**5.2**  
-Note only: the default shell is /bin/sh. You can change this by changing the variable SHELL
+**Default Shell (Section 5.2)**  
+The default shell is `/bin/sh`. You can change this by changing the variable SHELL:
 {% highlight make %}
+SHELL=/bin/bash
 
-
+cool:
+	echo "Hello from bash"
 {% endhighlight %}
 
 **5.4**  
