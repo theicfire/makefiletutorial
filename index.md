@@ -7,7 +7,7 @@ I read through the [GNU Make](https://www.cl.cam.ac.uk/teaching/0910/UnixTools/m
 
 <!--
 # Vocab
-- Target: blah
+- Target, goal, dependency
 -->
 
 **Intro**  
@@ -863,5 +863,6 @@ all:
 
 **9**  
 
-* There's a nice [list of commands](http://www.gnu.org/software/make/manual/make.html#Options-Summary) that can be run from make. Check out `--dry-run, --touch, --old-file`. 
-* You can have multiple targets to make, i.e. `make clean run test` runs the 'clean' goal, then 'run', and then 'test'.
+There's a nice [list of commands](http://www.gnu.org/software/make/manual/make.html#Options-Summary) that can be run from make. Check out `--dry-run, --touch, --old-file`. 
+
+You can have multiple targets to make, i.e. `make clean run test` runs the 'clean' goal, then 'run', and then 'test'.
