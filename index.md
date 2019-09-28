@@ -11,71 +11,69 @@ I read through the [GNU Make](https://www.cl.cam.ac.uk/teaching/0910/UnixTools/m
 -->
 
 **Intro**  
-This makefile has a single target, called `some_binary`. The default target is the first target, so in this case `some_binary` will run.
+This makefile has a single target, called `some_file`. The default target is the first target, so in this case `some_file` will run.
 {% highlight make %}
-some_binary:
+some_file:
 	echo "This line will always print"
 {% endhighlight %}
 
-This file will make `some_binary` the first time, and the second time notice it's already made, resulting in `make: 'some_binary' is up to date.`
+This file will make `some_file` the first time, and the second time notice it's already made, resulting in `make: 'some_file' is up to date.`
 {% highlight make %}
-some_binary:
+some_file:
 	echo "This line will only print once"
-	touch some_binary
+	touch some_file
 {% endhighlight %}
 
 Alternative syntax: same line
 {% highlight make %}
-some_binary: ; touch some_binary
+some_file: ; touch some_file
 {% endhighlight %}
 
-The backslash ("\\") character gives us multilines
+The backslash ("\\") character gives us the ability to use multiple lines when the commands are too long
 {% highlight make %}
-some_binary: 
-	touch \
-	some_binary
+some_file: 
+	echo This line is too long, so \
+		it is broken up into multiple lines
 {% endhighlight %}
 
-Will call other.txt target if it is newer than the `some_binary` file, or it doesn't exist. It will call the other.txt rule first.
+Here, the target `some_file` "depends" on `other_file`. When we run `make`, the default target (`some_file`, since it's first) will get called. It will first look at its list of *dependencies*, and if any of them are older, it will first run the targets for those dependencies, and then run itself. The second time this is run, neither target will run because both targets exist.
 {% highlight make %}
-some_binary: other.txt
-	touch some_binary
+some_file: other_file
+	echo "This will run second, because it depends on other_file"
+	touch some_file
 
-other.txt:
-	touch other.txt
+other_file:
+	echo "This will run first"
+	touch other_file
 {% endhighlight %}
 
-This will always make both targets, because `some_binary` depends on other.txt, which is never created.
+This will always make both targets, because `some_file` depends on other_file, which is never created.
 {% highlight make %}
-some_binary: other.txt
-	touch some_binary
+some_file: other_file
+	touch some_file
 
-other.txt:
+other_file:
 	echo "nothing"
 {% endhighlight %}
 
-"clean" is not a special word. If there's a file called clean that is made, then "make clean" won't have to do anything. Similarly, if the clean file is older than the `some_binary` file, the clean rule will not be called.
+"clean" is often used as a target that removes the output of other targets.
 {% highlight make %}
-some_binary: clean
-	touch some_binary
+some_file: clean
+	touch some_file
 
 clean:
-	touch clean
+	rm some_file
+{% endhighlight %}
 
-actual_clean:
-	rm some_binary
-	rm clean
-
-# Adding PHONY to a target will prevent make from confusing the phony target with a file name.
-# In this example, if clean is created, make clean will still be run.
-# PHONY is great to use, but I'll skip it in the rest of the examples for simplicity.
-some_binary:
-	touch some_binary
+Adding `.PHONY` to a target will prevent make from confusing the phony target with a file name. In this example, if the file "clean" is created, make clean will still be run. `.PHONY` is great to use, but I'll skip it in the rest of the examples for simplicity.
+{% highlight make %}
+some_file:
+	touch some_file
 	touch clean
  
 .PHONY: clean
 clean:
-	rm some_binary
+	rm some_file
 	rm clean
 {% endhighlight %}
 
@@ -83,9 +81,9 @@ clean:
 Variables can only be strings. Here's an example:
 {% highlight make %}
 files = file1 file2
-some_binary: $(files)
+some_file: $(files)
 	echo "Look at this variable: " $(files)
-	touch some_binary
+	touch some_file
 
 file1:
 	touch file1
@@ -93,27 +91,29 @@ file2:
 	touch file2
  
 clean:
-	rm file1 file2 some_binary
+	rm file1 file2 some_file
 {% endhighlight %}
 
 
-
-Here's a blah.c file that some examples below require
+**blah.c file**  
+Some of the below examples will require this `blah.c` file:
 {% highlight c %}
 #include<stdio.h>
 #include <string.h>
 
 int main()
 {
-   #printf("hello there\n");
-   #return 0;
+   printf("hello there\n");
+   return 0;
 }
 {% endhighlight %}
 
-**2.5:**  
-Example requires: blah.c  
-If we have a target that is a ".c" file, there is an *implicit command* that will be "cc -c file.c -o file.o".
+**Magic Implicit Commands (Section 2.5)**  
+Probably one of the most confusing parts about Make is the hidden coupling between Make and GCC. Make was largely made for GCC, and so makes compiling C/C++ programs "easy".
+
+If we have a target that is an object file (ends with .o), there is an *implicit command* that will be `cc -c file.c -o file.o`.
 {% highlight make %}
+# Requires blah.c
 
 # Implicit command of: "cc -c blah.c -o blah.o"
 # Note: 1) Do not put a comment inside of the blah.o rule; the implicit rule will not run!
@@ -127,7 +127,7 @@ clean:
 **4.1**  
 Print literal '$'
 {% highlight make %}
-some_binary: 
+some_file: 
 	echo $$
 {% endhighlight %}
 
@@ -135,7 +135,7 @@ some_binary:
 We can use wildcards in the target, prerequisites, or commands.  
 Valid wildcards are `*, ?, [...]`  
 {% highlight make %}
-some_binary: *.c
+some_file: *.c
 	# create the binary
 
 *.c:
