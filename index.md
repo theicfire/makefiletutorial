@@ -3,7 +3,7 @@ layout: default
 title: Makefile Tutorial by Example
 ---
 
-I read through the [GNU Make](https://www.cl.cam.ac.uk/teaching/0910/UnixTools/make.pdf) book, and put together a set of examples to help quickly explain the concepts in the book. To run these, you'll need a terminal and "make" installed. For each example, put the contents in a file called `Makefile`, and in that directory run the command `make`.
+I read through the [GNU Make](https://www.cl.cam.ac.uk/teaching/0910/UnixTools/make.pdf) book, and put together a set of examples to help quickly explain the concepts in the book.
 
 <!--
 # Vocab
@@ -22,6 +22,38 @@ targets : prerequisities
 - The *targets* are file names, seperated by spaces. Typically, there is only one per rule.
 - The *commands* are a series of steps typically used to make the target(s). These *need to start with a tab character*, not spaces.
 - The *prerequisites* are also file names, seperated by spaces. These files need to exist before the commands for the target are run.
+
+**Make Overview**  
+The main use of Make is to list out a set of directions to compile some c or c++ files, although it can solve other similar problems. The user gives Make some *goal*, say "generate the file hello". The Makefile specifies how to make this file. Here's an example:
+{% highlight make %}
+# Since the blah target is first, it is the default target and will be run when we run "make"
+blah: blah.o
+	cc blah.o -o blah
+
+blah.o: blah.c
+	cc -c blah.c -o blah.o
+
+blah.c:
+	echo "int main() { return 0; }" > blah.c
+
+clean:
+	rm blah.o blah.c blah.h
+{% endhighlight %}
+
+**Running the Examples**  
+To run these, you'll need a terminal and "make" installed. For each example, put the contents in a file called `Makefile`, and in that directory run the command `make`. Here is the output of running the above example:
+```
+$ make
+echo "int main() { return 0; }" > blah.c
+cc -c blah.c -o blah.o
+cc blah.o -o blah
+```
+
+Some examples, like the above, have a target called "clean". Run it via `make clean` to delete the files that `make` generated:
+```
+$ make clean
+rm -f blah.o blah.c blah.h
+```
 
 **Simple Examples**  
 This makefile has a single target, called `some_file`. The default target is the first target, so in this case `some_file` will run.
@@ -111,7 +143,7 @@ clean:
 Probably one of the most confusing parts about Make is the hidden coupling between Make and GCC. Make was largely made for GCC, and so makes compiling C/C++ programs "easy".
 
 {% highlight make %}
-# Implicit command of: "cc %blah.o -o blah"
+# Implicit command of: "cc blah.o -o blah"
 # Note: Do not put a comment inside of the blah.o rule; the implicit rule will not run!
 blah:
 
