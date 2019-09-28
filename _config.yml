@@ -4,10 +4,7 @@ kramdown:
     input: GFM
 url: http://makefiletutorial.com
 description: Makefile Tutorial by Example
-syntax-highlighting:
-    enabled: true
-    css: syntax.css
-highlighter: pygments
+highlighter: rouge
 
 # Owner/author information
 owner:

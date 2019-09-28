@@ -3,35 +3,39 @@ layout: default
 title: Makefile Tutorial by Example
 ---
 
-**Intro**  
-This makefile will always run. The default target is `some_binary`, because it is first.
-{% highlight make %}
-some_binary:
-	echo "nothing"
-{% endhighlight %}
+I read through the [GNU Make](https://www.cl.cam.ac.uk/teaching/0910/UnixTools/make.pdf) book, and put together a set of examples to help quickly explain the concepts in the book. To run these, you'll need a terminal and "make" installed. For each example, put the contents in a file called `Makefile`, and in that directory run the command `make`.
+
+<!--
+# Vocab
+- Target: blah
+-->
 
 **Intro**  
+This makefile has a single target, called `some_binary`. The default target is the first target, so in this case `some_binary` will run.
+{% highlight make %}
+some_binary:
+	echo "This line will always print"
+{% endhighlight %}
+
 This file will make `some_binary` the first time, and the second time notice it's already made, resulting in `make: 'some_binary' is up to date.`
 {% highlight make %}
 some_binary:
+	echo "This line will only print once"
 	touch some_binary
 {% endhighlight %}
 
-**Intro**  
 Alternative syntax: same line
 {% highlight make %}
 some_binary: ; touch some_binary
 {% endhighlight %}
 
-**Intro**  
-\ gives us multilines
+The backslash ("\\") character gives us multilines
 {% highlight make %}
 some_binary: 
 	touch \
-some_binary
+	some_binary
 {% endhighlight %}
 
-**Intro**  
 Will call other.txt target if it is newer than the `some_binary` file, or it doesn't exist. It will call the other.txt rule first.
 {% highlight make %}
 some_binary: other.txt
@@ -41,7 +45,6 @@ other.txt:
 	touch other.txt
 {% endhighlight %}
 
-**Intro**  
 This will always make both targets, because `some_binary` depends on other.txt, which is never created.
 {% highlight make %}
 some_binary: other.txt
@@ -51,7 +54,6 @@ other.txt:
 	echo "nothing"
 {% endhighlight %}
 
-**Intro**  
 "clean" is not a special word. If there's a file called clean that is made, then "make clean" won't have to do anything. Similarly, if the clean file is older than the `some_binary` file, the clean rule will not be called.
 {% highlight make %}
 some_binary: clean
@@ -77,7 +79,7 @@ clean:
 	rm clean
 {% endhighlight %}
 
-**2.4:**  
+**Variables (Section 2.4)**  
 Variables can only be strings. Here's an example:
 {% highlight make %}
 files = file1 file2
@@ -232,7 +234,9 @@ Note
 	1) We do not use *.o, because that is just the string *.o, which might be useful in the commands,  
 but is only one target and does not expand.  
 	2) PHONY is needed because otherwise make will create an automatic rule of "cc all.o f1.o f2.o -o all  
+<!--
 TODO why was this not a problem when I didn't use the % wildcard?
+-->
 {% highlight make %}
 
 all: f1.o f2.o
@@ -504,7 +508,7 @@ endef
 .PHONY: all
 all: one
 	$(sweet)
-	# Append @ here to append @ to all the commands in sweet: @$(sweet)
+	# To make all the commands in sweet silent, prepend @ here
 
 one:
 	touch one
@@ -803,9 +807,11 @@ all:
 	# Output is ", a , b , c". Notice the spaces introduced
 	@echo $(bar)
 
-8.2, 8.3, 8.9 TODO do something about the fns  
-TODO 8.7 origin fn? Better in documentation?
 {% endhighlight %}
+
+<!-- # 8.2, 8.3, 8.9 TODO do something about the fns   
+# TODO 8.7 origin fn? Better in documentation?
+-->
 
 **8.4**  
 foreach takes:  

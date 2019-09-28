@@ -138,15 +138,18 @@ a:visited { color: #a0a; }
   margin-left: 1.35em;
 }
 
-.post code {
-  border: 1px solid #ddd;
-  background-color: #eef;
-  padding: 0 .2em;
-}
+/*.post code {*/
+  /*border: 1px solid #ddd;*/
+  /*background-color: #eef;*/
+  /*padding: 0 .2em;*/
+/*}*/
 
-.post pre code {
-  border: none;
-}
+/*.post pre code {*/
+  /*border: none;*/
+/*}*/
+
+
+pre, code { font-size: 15px; border: 1px solid #e8e8e8; border-radius: 3px; background-color: #eef; }
 
 /* terminal */
 .post pre.terminal {

@@ -39,10 +39,13 @@ body {
   text-shadow: 0 1px 0 rgba(255,255,255,1.0);
   border-top: 4px solid #556270;
   border-bottom: 4px solid #556270;
+  tab-size: 2;
+
 }
 
 strong {
   font-weight: bold;
+  font-size: 20px;
 }
 
 a {
@@ -418,76 +421,14 @@ p > a > img {
   Code Styles
 ----------------------------------------------------------------------------*/
 
-pre {
-  padding: 0 0 0 20px;
-  color: #444;
-  background: #fff;
-  border-bottom: 1px solid #eee;
-  border-radius: 4px;
-  overflow: auto;
-  -webkit-font-smoothing: subpixel-antialiased;
-}
-code{
-  padding: 0 4px;
-  font-family: "Source Code Pro", "Courier New", Courier, sans-serif;
-  font-size: 0.9em;
-  color: #556270;
-  background: #F4FAFF;
-  border-radius: 3px;
-}
-pre code {
-  padding: 0;
-  color: inherit;
-  background: inherit;
-  border-radius: 0;
-}
-code span.global {
-  color: #3388DD;
-}
-code span.brackets {
-  color: #777777;
-}
-code span.string {
-  color: #BC6710;
-}
-code span.symbol, code span.selectors {
-  color: #1199EE;
-}
-code span.properties {
-  color: #BB4411;
-}
-code span.keywords {
-  color: #44BB22;
-}
-code span.comment {
-  color: #BCBCBC;
-}
-code span.shell {
-  background:#f1f1f1;
-}
-
-code.html span.tag, code.xaml span.tag {
-  color: #BB4411;
-}
-code.html span.attribute, code.xaml span.attribute {
-  color: #44BB22;
-}
-code.html span.string, code.xaml span.string {
-  color: blue;
-}
-code.html span.comment, code.xaml span.comment {
-  color: #999999;
-}
-code.html span.doctype {
-  color: #D7FF80;
-}
+pre, code { font-size: 15px; border: 1px solid #e8e8e8; border-radius: 3px; background-color: #eef; }
 
 /*----------------------------------------------------------------------------
   Default Pygments Styles
 ----------------------------------------------------------------------------*/
 
 .highlight .c { color: #999988; font-style: italic } /* Comment */
-.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .err { color: #000000; } /* Error */
 .highlight .k { font-weight: normal } /* Keyword */
 .highlight .o { font-weight: normal } /* Operator */
 .highlight .cm { color: #999988; font-style: italic } /* Comment.Multiline */
