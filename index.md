@@ -427,10 +427,10 @@ cool:
 	echo "Hello from bash"
 {% endhighlight %}
 
-**5.4**  
-Make stops running a rule (and will propogate back to prerequisites) if a command returns a nonzero exit status.  
+**DELETE_ON_ERROR (Section 5.4)**  
+The make tool will stop running a rule (and will propogate back to prerequisites) if a command returns a nonzero exit status.  
 `DELETE_ON_ERROR` will delete the target of a rule if the rule fails in this manner. This will happen for all targets, not just the one it is before like PHONY. It's a good idea to always use this, even though make does not for historical reasons.  
-Add "-k" when running make to continue running even in the face of errors. Helpful if you want to see all the errors of Make at once.  
+
 {% highlight make %}
 .DELETE_ON_ERROR:
 all: one two
@@ -444,30 +444,28 @@ two:
 	false
 {% endhighlight %}
 
-**5.4**  
+**Error handling with `-k`, `-i`, and `i` (Section 5.4)**  
+Add `-k` when running make to continue running even in the face of errors. Helpful if you want to see all the errors of Make at once.  
 Add a "-" before a command to suppress the error  
 Add "-i" to make to have this happen for every command.
+
+**Handling errors with `-` and `-i` (Section 5.4)**  
 {% highlight make %}
 one:
-	false
+	# This error will be printed but ignored, and make will continue to run
+	-false
 	touch one
 
 {% endhighlight %}
 
-**5.5**  
+**Interrupting or killing make (Section 5.5)**  
 Note only: If you ctrl+c make, it will delete the newer targets it just made.
-{% highlight make %}
 
-
-{% endhighlight %}
-
-**5.6**  
+**Recursive use of make (Section 5.6)**  
 Recursively call a makefile. Use the special $(MAKE) instead of "make"  
 because it will pass the make flags for you and won't itself be affected by them.
 {% highlight make %}
-new_contents = "\
-hello:\\n\
-\\ttouch inside_file"
+new_contents = "hello:\n\ttouch inside_file"
 all:
 	mkdir -p subdir
 	echo $(new_contents) | sed -e 's/^ //' > subdir/makefile
@@ -478,25 +476,20 @@ clean:
 
 {% endhighlight %}
 
-**5.6**  
+**Use `export` for recursive make (Section 5.6)**  
 The export directive takes a variable and makes it accessible to sub-make commands.  
 In this example, "cooly" is exported such that the makefile in subdir can use it.  
   
-Recursively call a makefile. Use the special $(MAKE) instead of "make"  
-because it will pass the make flags for you and won't itself be affected by them.  
-  
-Note: export has the same syntax as sh, but it they aren't related (although similar in function)  
+Note: export has the same syntax as sh, but they aren't related (although similar in function)  
 {% highlight make %}
-new_contents = "\
-hello:\\n\
-\\techo \$$(cooly)"
+new_contents = "hello:\n\\techo \$$(cooly)"
 
 all:
 	mkdir -p subdir
 	echo $(new_contents) | sed -e 's/^ //' > subdir/makefile
 	@echo "---MAKEFILE CONTENTS---"
 	@cd subdir && cat makefile
-	@echo "---END mAKEFILE CONTENTS---"
+	@echo "---END MAKEFILE CONTENTS---"
 	cd subdir && $(MAKE)
 
 # Note that variables and exports. They are set/affected globally.
@@ -506,11 +499,9 @@ export cooly
 
 clean:
 	rm -rf subdir
-
-
 {% endhighlight %}
 
-**5.6**  
+**Another export example (Section 5.6)**  
 You need to export variables to have them run in the shell as well.  
 {% highlight make %}
 
@@ -525,14 +516,11 @@ all:
 	@echo $$two
 {% endhighlight %}
 
-**5.6**  
+**`EXPORT_ALL_VARIABLES` (Section 5.6)**  
 `EXPORT_ALL_VARIABLES` does what you might expect  
 {% highlight make %}
-
 .EXPORT_ALL_VARIABLES:
-new_contents = "\
-hello:\\n\
-\\techo \$$(cooly)"
+new_contents = "hello:\n\techo \$$(cooly)"
 
 cooly = "The subdirectory can see me!"
 # This would nullify the line above: unexport cooly
@@ -542,38 +530,14 @@ all:
 	echo $(new_contents) | sed -e 's/^ //' > subdir/makefile
 	@echo "---MAKEFILE CONTENTS---"
 	@cd subdir && cat makefile
-	@echo "---END mAKEFILE CONTENTS---"
+	@echo "---END MAKEFILE CONTENTS---"
 	cd subdir && $(MAKE)
 
 clean:
 	rm -rf subdir
-
 {% endhighlight %}
 
-**5.7**  
-You can make a list of commands like so:  
-{% highlight make %}
-
-define sweet
-echo "hello"
-echo "target:" $@
-echo "prereqs:" $<
-endef
-
-.PHONY: all
-all: one
-	$(sweet)
-	# To make all the commands in sweet silent, prepend @ here
-
-one:
-	touch one
-
-clean:
-	rm -f one
-
-{% endhighlight %}
-
-**6.1**  
+**Variables (Section 6.1)**  
 Reference variables using ${} or $()
 {% highlight make %}
 
@@ -590,15 +554,15 @@ all:
 
 {% endhighlight %}
 
-**6.2**  
+**Variables (Section 6.2)**  
 Two flavors of variables:  
-recursive - only looks for the variables when the command is *used*, not when it's *defined*.  
-simply expanded - like normal imperative programming -- only those defined so far get expanded
+- recursive (use `=`) - only looks for the variables when the command is *used*, not when it's *defined*.  
+- simply expanded (use `:=`) - like normal imperative programming -- only those defined so far get expanded
 {% highlight make %}
 
-# This will print "later" at the end
+# Recursive variable. This will print "later" below
 one = one ${later_variable}
-# This will not
+# Simply expanded variable. This will not print "later" below
 two := two ${later_variable}
 
 later_variable = later
@@ -609,11 +573,12 @@ all:
 	echo $(two)
 {% endhighlight %}
 
-**6.2**  
+**Variables (Section 6.2)**  
 Simply expanded allows you to append to a variable. Recursive definitions will give an infinite loop error.  
 {% highlight make %}
 
 one = hello
+# one gets defined as a simply expanded variable (:=) and thus can handle appending
 one := ${one} there
 
 .PHONY: all
@@ -621,7 +586,7 @@ all:
 	echo $(one)
 {% endhighlight %}
 
-**6.2**  
+**Variables and `?=` (Section 6.2)**  
 ?= only sets variables if they have not yet been set
 {% highlight make %}
 
@@ -635,16 +600,15 @@ all:
 	echo $(two)
 {% endhighlight %}
 
-**6.2**  
+**Variables: watch out for end-of-line spaces (Section 6.2)**  
 Spaces at the end of a line are not stripped, ones at the start are  
 To make a variable with a single space, have a variable guard
 {% highlight make %}
-
-with_spaces = hello   # end of line
+with_spaces = hello   # with_spaces has many spaces after "hello"
 after = $(with_spaces)there
 
 nullstring =
-space = $(nullstring) # end of line
+space = $(nullstring) # Make a variable with a single space.
 
 .PHONY: all
 all: 
@@ -652,13 +616,13 @@ all:
 	echo start"$(space)"end
 {% endhighlight %}
 
-**6.3**  
+**Variables: Text replacement (Section 6.3)**  
 You can text replace at the end of each space seperated word using $(var:a=b)  
 Note: don't put spaces in between anything; it will be seen as a search or replacement term  
-Note: This is shorthand for using the "patsubst" expansion function
+Note: This is shorthand for using make's `patsubst` expansion function
 {% highlight make %}
-
 foo := a.o b.o c.o
+# bar becomes a.c b.c c.c
 bar := $(foo:.o=.c)
 
 .PHONY: all
@@ -666,7 +630,7 @@ all:
 	echo $(bar)
 {% endhighlight %}
 
-**6.3**  
+**Variables: Text replacement (Section 6.3)**  
 You can use % as well to grab some text!
 {% highlight make %}
 
@@ -678,19 +642,19 @@ all:
 	echo $(bar)
 {% endhighlight %}
 
-**6.5**  
-An undefined variable is actually an empty string :o
+**Undefined Variables (Section 6.5)**  
+An undefined variable is actually an empty string!
 {% highlight make %}
 
 .PHONY: all
 all: 
+	# Undefined variables are just empty strings!
 	echo $(nowhere)
 {% endhighlight %}
 
-**6.6**  
+**Variable appending (Section 6.6)**  
 Use += to append
 {% highlight make %}
-
 foo := start
 foo += more
 
@@ -699,19 +663,22 @@ all:
 	echo $(foo)
 {% endhighlight %}
 
-**6.7**  
+**Command line arguments and `override` (Section 6.7)**  
 You can override variables that come from the command line by using "override".
 Here we ran make with `make some_option=hi`
 {% highlight make %}
-
-override some_option += additional
+# Overrides command line arguments
+override option_one = did_override
+# Does not override command line arguments
+option_two = not_override
 .PHONY: all
 all: 
-	echo $(some_option)
+	echo $(option_one)
+	echo $(option_two)
 {% endhighlight %}
 
-**6.8**  
-"define" is actually just a multiline variable defintion. It has nothing with being a function.  
+**List of commands and `define` (Section 6.8)**  
+"define" is actually just a list of commands. It has nothing with being a function.  
 Note here that it's a bit different than having a semi-colon between commands, because each is run
 in a seperate shell, as expected.
 {% highlight make %}
@@ -723,15 +690,17 @@ export blah=set
 echo $$blah
 endef
 
+# One and two are different.
+
 .PHONY: all
 all: 
-	@echo "This prints I was set:"
+	@echo "This prints 'I was set'"
 	@$(one)
-	@echo "This does not:"
+	@echo "This does not print 'I was set' because each command runs in a seperate shell"
 	@$(two)
 {% endhighlight %}
 
-**6.10**  
+**Target-specific variables (Section 6.10)**  
 Variables can be assigned for specific targets
 {% highlight make %}
 
@@ -746,7 +715,7 @@ other:
 	echo one is nothing: $(one)
 {% endhighlight %}
 
-**6.11**  
+**Pattern-specific variables (Section 6.11)**  
 You can assign variables for specific target *patterns*
 {% highlight make %}
 
@@ -760,8 +729,7 @@ other:
 	echo one is nothing: $(one)
 {% endhighlight %}
 
-**7.1**  
-Conditional/If statements
+**Conditional if/else (Section 7.1)**  
 {% highlight make %}
 
 foo = ok
@@ -774,23 +742,21 @@ else
 endif
 {% endhighlight %}
 
-**7.2**  
-Check if variable is empty
+**Check if a variable is empty (Section 7.2)**  
 {% highlight make %}
-
 nullstring =
 foo = $(nullstring) # end of line; there is a space here
 
 all:
 ifeq ($(strip $(foo)),)
-	echo "foo is empty"
+	echo "foo is empty after being stripped"
 endif
-ifeq ($(foo),)
-	echo "foo doesn't even have spaces?"
+ifeq ($(nullstring),)
+	echo "nullstring doesn't even have spaces"
 endif
 {% endhighlight %}
 
-**7.2**  
+**`ifdef` (Section 7.2)**  
 ifdef does not expand variable references; it just sees if something is defined at all
 {% highlight make %}
 
@@ -807,8 +773,8 @@ endif
 
 {% endhighlight %}
 
-**7.3**  
-Search for a MAKEFLAG
+**Testing make flags with `findstring` and `MAKEFLAG`(Section 7.3)**  
+Run this example with `make -i` to see it print out the echo statement.
 {% highlight make %}
 
 bar =
