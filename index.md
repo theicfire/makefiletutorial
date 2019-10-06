@@ -880,3 +880,59 @@ all:
 There's a nice [list of options](http://www.gnu.org/software/make/manual/make.html#Options-Summary) that can be run from make. Check out `--dry-run`, `--touch`, `--old-file`. 
 
 You can have multiple targets to make, i.e. `make clean run test` runs the 'clean' goal, then 'run', and then 'test'.
+
+**Implicit Rules (Section 10)**  
+Perhaps the most confusing part of make is the magic rules and variables that are made. Here's a list of implicit rules:
+- Compiling a C program: `n.o` is made automatically from `n.c` with a command of the form `$(CC) -c $(CPPFLAGS) $(CFLAGS)`
+- Compiling a C++ program: `n.o` is made automatically from `n.cc` or `n.cpp` with a command of the form `$(CXX) -c $(CPPFLAGS) $(CXXFLAGS)`
+- Linking a single object file: `n` is made automatically from `n.o` by running the command `$(CC) $(LDFLAGS) n.o $(LOADLIBES) $(LDLIBS)`
+
+As such, the important variables used by implicit rules are:
+- `CC`: Program for compiling C programs; default cc
+- `CXX`: Program for compiling C++ programs; default G++
+- `CFLAGS`: Extra flags to give to the C compiler
+- `CXXFLAGS`: Extra flags to give to the C++ compiler
+- `CPPFLAGS`: Extra flags to give to the C preprosessor
+- `LDFLAGS`: Extra flags to give to compilers when they are supposed to invoke the linker
+
+
+{% highlight make %}
+CC = gcc # Flag for implicit rules
+CFLAGS = -g # Flag for implicit rules. Turn on debug info
+
+# Implicit rule #1: blah is built via the C linker implicit rule
+# Implicit rule #2:  blah.o is built via the C++ compilation implicit rule, because blah.cpp exists
+blah: blah.o
+
+blah.c:
+	echo "int main() { return 0; }" > blah.c
+
+clean:
+	rm -f blah*
+{% endhighlight %}
+
+**Automatic Variables (Section 10.5)**  
+There are many [automatic variables](https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html), but often only a few show up:
+{% highlight make %}
+hey: one two
+	# Outputs "hey", since this is the first target
+	echo $@
+
+	# Outputs all prerequisites older than the target
+	echo $?
+
+	# Outputs all prerequisites
+	echo $^
+
+	touch hey
+
+one:
+	touch one
+
+two:
+	touch two
+
+clean:
+	rm -f hey one two
+
+{% endhighlight %}
