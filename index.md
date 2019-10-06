@@ -40,7 +40,7 @@ blah.c:
 	echo "int main() { return 0; }" > blah.c
 
 clean:
-	rm blah.o blah.c blah.h
+	rm -f blah.o blah.c blah
 {% endhighlight %}
 
 **Running the Examples**  
@@ -55,7 +55,7 @@ cc blah.o -o blah
 Some examples, like the above, have a target called "clean". Run it via `make clean` to delete the files that `make` generated:
 ```
 $ make clean
-rm -f blah.o blah.c blah.h
+rm -f blah.o blah.c blah
 ```
 
 **Simple Examples**  
