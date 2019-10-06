@@ -790,20 +790,16 @@ ifneq (,$(findstring i, $(MAKEFLAGS)))
 endif
 {% endhighlight %}
 
-**8.1**  
-Call functions with $(fn, arguments) or $(fn, arguments)  
+**Functions (Section 8.1)**  
+*Functions* are mainly just for text processing. Call functions with `$(fn, arguments)` or `${fn, arguments}`. You can make your own using the [call](https://www.gnu.org/software/make/manual/html_node/Call-Function.html#Call-Function) builtin function. Make has a decent amount of [builtin functions](https://www.gnu.org/software/make/manual/html_node/Functions.html).
 {% highlight make %}
-
-bar := $(subst not, totally, "I am not superman")
-bar2 := $(subst not, totally, "I am not superman")
-.PHONY: all
+bar := ${subst not, totally, "I am not superman"}
 all: 
 	@echo $(bar)
-	@echo $(bar2)
 
 {% endhighlight %}
 
-**8.1**  
+**Functions (Section 8.1)**  
 If you want to replace spaces or commas, use variables
 {% highlight make %}
 comma := ,
@@ -812,12 +808,11 @@ space := $(empty) $(empty)
 foo := a b c
 bar := $(subst $(space),$(comma),$(foo))
 
-.PHONY: all
 all: 
 	@echo $(bar)
 {% endhighlight %}
 
-**8.1**  
+**Functions (Section 8.1)**  
 Do NOT include spaces in the arguments after the first. That will be seen as part of the string.
 {% highlight make %}
 comma := ,
@@ -826,7 +821,6 @@ space := $(empty) $(empty)
 foo := a b c
 bar := $(subst $(space), $(comma) , $(foo))
 
-.PHONY: all
 all: 
 	# Output is ", a , b , c". Notice the spaces introduced
 	@echo $(bar)
@@ -837,56 +831,52 @@ all:
 # TODO 8.7 origin fn? Better in documentation?
 -->
 
-**8.4**  
-foreach takes:  
-$(foreach var,list,text) and sets var to each word in list, and outputs outputs that into a "list" of words in text. By list I mean a space seperated sentence of words.  
-This appends an exclamation after each word
+**The foreach function (Section 8.4)**  
+The foreach function looks like this: `$(foreach var,list,text)`. It converts one list of words (seperated by speces) to another. `var` is set to each word in list, and `text` is expanded for each word.  
+This appends an exclamation after each word:
 {% highlight make %}
 foo := who are you
+# For each "word" in foo, output that same word with an exclamation after
 bar := $(foreach wrd,$(foo),$(wrd)!)
 
-.PHONY: all
-all: 
+all:
+	# Output is "who! are! you!"
 	@echo $(bar)
 {% endhighlight %}
 
-**8.5**  
-If: (in a function instead of normal.. call this the functional style)  
-Checks if the first argument is nonempty. If so runs the second argument, otherwise runs the third.
+**The if function (Section 8.5)**  
+`if` checks if the first argument is nonempty. If so runs the second argument, otherwise runs the third.
 {% highlight make %}
 foo := $(if this-is-not-empty,then!,else!)
 empty :=
 bar := $(if $(empty),then!,else!)
 
-.PHONY: all
-all: 
+all:
 	@echo $(foo)
 	@echo $(bar)
 {% endhighlight %}
 
-**8.6**  
-Call: $(call variable,param,param)  
+**The call function (Section 8.6)**  
+`Call`: $(call variable,param,param)  
 Sets each of the params as $(1), $(2), etc.  
 $(0) is set as the variable name
 {% highlight make %}
+sweet_new_fn = Variable Name: $(0) First: $(1) Second: $(2) Empty Variable: $(3)
 
-sweet_new_fn = Variable Name: $(0)$ First: $(1) Second: $(2) Empty Variable: $(3)
-
-.PHONY: all
-all: 
+all:
+	# Outputs "Variable Name: sweet_new_fn First: go Second: tigers Empty Variable:"
 	@echo $(call sweet_new_fn, go, tigers)
 {% endhighlight %}
 
-**8.8**  
-shell - This calls the shell, but it removes newlines!
+**The shell function (Section 8.8)**  
+shell - This calls the shell, but it replaces newlines with spaces!
 {% highlight make %}
-.PHONY: all
 all: 
 	@echo $(shell ls -la) # Very ugly because the newlines are gone!
 {% endhighlight %}
 
-**9**  
+**Arguments to make (Section 9)**  
 
-There's a nice [list of commands](http://www.gnu.org/software/make/manual/make.html#Options-Summary) that can be run from make. Check out `--dry-run, --touch, --old-file`. 
+There's a nice [list of options](http://www.gnu.org/software/make/manual/make.html#Options-Summary) that can be run from make. Check out `--dry-run`, `--touch`, `--old-file`. 
 
 You can have multiple targets to make, i.e. `make clean run test` runs the 'clean' goal, then 'run', and then 'test'.
