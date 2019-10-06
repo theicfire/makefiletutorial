@@ -3,7 +3,7 @@ layout: default
 title: Makefile Tutorial by Example
 ---
 
-I read through the [GNU Make](https://www.cl.cam.ac.uk/teaching/0910/UnixTools/make.pdf) book, and put together a set of examples to help quickly explain the concepts in the book.
+This tutorial is based on the topics covered in the [GNU Make](https://www.cl.cam.ac.uk/teaching/0910/UnixTools/make.pdf) book. This tutorial teaches mainly through examples in order to help quickly explain the concepts in the book.
 
 <!--
 # Vocab
