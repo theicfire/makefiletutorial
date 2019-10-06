@@ -10,6 +10,9 @@ I read through the [GNU Make](https://www.cl.cam.ac.uk/teaching/0910/UnixTools/m
 - Target, goal, dependency
 -->
 
+**Getting started video**  
+<iframe width="560" height="315" src="https://www.youtube.com/embed/8QxYAUcq5FU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 **Makefile Syntax**  
 A Makefile consists of a set of *rules*. A rule generally looks like this:
 {% highlight txt %}
