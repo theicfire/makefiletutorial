@@ -37,17 +37,12 @@ body {
   line-height: 1.3;
   color: #333;
   text-shadow: 0 1px 0 rgba(255,255,255,1.0);
-  border-top: 4px solid #556270;
-  border-bottom: 4px solid #556270;
+  /*border-top: 4px solid #556270;*/
+  /*border-bottom: 4px solid #556270;*/
   tab-size: 2;
-
+  /*background:url(https://www.toptal.com/designers/subtlepatterns/patterns/dot-grid.png);*/
 }
-
-strong {
-  font-weight: bold;
-  font-size: 20px;
-}
-
+5
 a {
   color: #2382c8;
   text-decoration: none;
@@ -421,7 +416,7 @@ p > a > img {
   Code Styles
 ----------------------------------------------------------------------------*/
 
-pre, code { font-size: 15px; border: 1px solid #e8e8e8; border-radius: 3px; background-color: #eef; }
+pre, code { font-size: 15px; border: 1px solid #e8e8e8; border-radius: 3px; background-color: #eef; white-space: pre-wrap; }
 
 /*----------------------------------------------------------------------------
   Default Pygments Styles
@@ -488,6 +483,6 @@ pre, code { font-size: 15px; border: 1px solid #e8e8e8; border-radius: 3px; back
 .highlight .il { color: #009999 } /* Literal.Number.Integer.Long */
 
 .highlight pre {
-    margin-bottom: 20px;
+    margin-bottom: 0px;
 }
 /* @end */

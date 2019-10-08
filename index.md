@@ -3,15 +3,15 @@ layout: default
 title: Makefile Tutorial by Example
 ---
 
-This tutorial is based on the topics covered in the [GNU Make](https://www.cl.cam.ac.uk/teaching/0910/UnixTools/make.pdf) book. This tutorial teaches mainly through examples in order to help quickly explain the concepts in the book.
+<span class='intro'>This tutorial is based on the topics covered in the [GNU Make](https://www.cl.cam.ac.uk/teaching/0910/UnixTools/make.pdf) book. This tutorial teaches mainly through examples in order to help quickly explain the concepts in the book.</span>
 
 <!--
 # Vocab
 - Target, goal, dependency
--->
 
 **Getting started video**  
 <iframe width="560" height="315" src="https://www.youtube.com/embed/8QxYAUcq5FU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+-->
 
 **Makefile Syntax**  
 A Makefile consists of a set of *rules*. A rule generally looks like this:
@@ -44,7 +44,7 @@ clean:
 {% endhighlight %}
 
 **Running the Examples**  
-To run these, you'll need a terminal and "make" installed. For each example, put the contents in a file called `Makefile`, and in that directory run the command `make`. Here is the output of running the above example:
+I made a quick [video](/screencasts.html) to show how to run these examples. You'll need a terminal and "make" installed. For each example, put the contents in a file called `Makefile`, and in that directory run the command `make`. Here is the output of running the above example:
 ```
 $ make
 echo "int main() { return 0; }" > blah.c
