@@ -326,14 +326,15 @@ obj_files = foo.elc bar.o lose.o
 src_files = foo.el bar.c lose.c
 
 all: $(obj_files)
+.PHONY: all
 
 $(filter %.o,$(obj_files)): %.o: %.c
-	echo "target: " $@ "prereq: " $<
+	echo "target: $@ prereq: $<"
 $(filter %.elc,$(obj_files)): %.elc: %.el
-	echo "target: " $@ "prereq: " $<
+	echo "target: $@ prereq: $<" 
 
 %.c %.el:
-	touch %@
+	touch $@
 
 clean:
 	rm -f $(src_files)
