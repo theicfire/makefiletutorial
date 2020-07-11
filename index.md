@@ -319,21 +319,21 @@ clean:
 {% endhighlight %}
 
 **Static Pattern Rules and Filter (Section 4.10)**  
-`filter` can be used in Static pattern rules to match the correct files  
+`filter` can be used in Static pattern rules to match the correct files. In this example, I made up the `.raw` and `.result` extensions.
 {% highlight make %}
 
-obj_files = foo.elc bar.o lose.o
-src_files = foo.el bar.c lose.c
+obj_files = foo.result bar.o lose.o
+src_files = foo.raw bar.c lose.c
 
 all: $(obj_files)
 .PHONY: all
 
 $(filter %.o,$(obj_files)): %.o: %.c
 	echo "target: $@ prereq: $<"
-$(filter %.elc,$(obj_files)): %.elc: %.el
+$(filter %.result,$(obj_files)): %.result: %.raw
 	echo "target: $@ prereq: $<" 
 
-%.c %.el:
+%.c %.raw:
 	touch $@
 
 clean:
