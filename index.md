@@ -16,7 +16,7 @@ title: Makefile Tutorial by Example
 **Makefile Syntax**  
 A Makefile consists of a set of *rules*. A rule generally looks like this:
 {% highlight txt %}
-targets : prerequisities
+targets : prerequisites
    command
    command
    command
