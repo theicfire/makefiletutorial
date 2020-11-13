@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+
+<head>
+    <link rel=stylesheet href="https://s3-us-west-2.amazonaws.com/colors-css/2.2.0/colors.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono" rel="stylesheet">
+    <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/atom-one-dark.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css">
+    <link rel="stylesheet" type="text/css" href="./assets/bedrock.css">
+    <script src="http://localhost:35729/livereload.js"></script>
+    <title><%- title %></title>
+</head>
+
+<% function renderToc(items) { %>
+<% for (item of items) { %>
+<ol>
+    <li><a class="toc-item" href="#<%= item.id %>"><%= item.text %></a>
+    </li>
+    <% if (item.children.length > 0) { %>
+    <%- renderToc(item.children) %>
+    <% } %>
+</ol>
+<% } %>
+<% } %>
+
+<body>
+    <div id="left" class="column">
+        <div class="top-left">
+            left header
+        </div>
+        <div class="bottom">
+            <div class='toc'>
+                <% if (toc) { %>
+                <section class="toc sticky">
+                    <%- renderToc(toc) %>
+                </section>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    <div id="right" class="column">
+        <div class="top-right">right header</div>
+        <div class="bottom">
+            <%- contents %>
+        </div>
+    </div>
+
+</body>
+
+</html>

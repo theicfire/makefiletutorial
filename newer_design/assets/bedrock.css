@@ -1,0 +1,74 @@
+
+.toc > ol > li {
+    /* list-style: none; */
+    /* text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden; */
+}
+
+.toc li {
+    list-style: none;
+}
+
+.toc ol {
+    padding: 0px;
+}
+
+.toc > ol > li {
+    font-weight: bold;
+}
+
+pre {
+    overflow: auto;
+}
+
+html {
+    height: 100%;
+}
+
+* {
+    min-width: 0; /* Otherwise <pre> blocks take up more space then they should. Needed for flexbox. */
+}
+
+.pre-wrapper {
+    background-color: orange;
+}
+
+body {
+    height: 100%;   
+    width: 100%;
+    overflow-y: hidden;  /*turn off scroll*/
+    margin: 0px;  /*removes default style*/
+    display: flex;  /*enables flex content for its children*/
+    box-sizing: border-box;
+}
+
+.column {
+    height: 100%;  /*allows both columns to span the full height of the browser window*/
+    display: flex;
+    flex-direction: column;  /*places the left and right headers above the bottom content*/
+}
+
+#left {
+  flex: 0 0 300px;
+  order: 1;
+}
+
+#right {
+  flex: 1 0;  /*makes sure that content is not cut off in a smaller browser window*/
+  order: 2;
+}
+
+.top-left {
+    background-color: blue;
+}
+
+.top-right {
+    /* display: inline-flex; */
+    background-color: pink;
+}
+
+.bottom {
+    flex-grow: 1;  /*ensures that the container will take up the full height of the parent container*/
+    overflow-y: auto;  /*adds scroll to this container*/
+}
