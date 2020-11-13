@@ -1,0 +1,283 @@
+html {
+  scroll-behavior: smooth;
+}
+
+#left {
+  font-size: 14px;
+}
+
+#left ol {
+  padding: 0;
+  margin: 0;
+}
+
+#left ol > ol {
+  margin-left: 16px;
+}
+
+#left li {
+  margin-top: 8px;
+  list-style: none;
+}
+
+#left .active a {
+  color: #002b36;
+}
+
+pre {
+  overflow: auto;
+}
+
+html {
+  height: 100%;
+  font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  line-height: 1.3;
+  font-size: 16px;
+  color: #586e75;
+}
+
+a {
+  color: #839496;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+p {
+  margin: 16px 0 0 0;
+}
+
+pre {
+  margin: 8px 0 0 0;
+}
+
+h1 {
+  margin: 32px 0 0 0;
+  font-weight: 600;
+}
+
+h1, h2, h3, .intro-header {
+  color: #002b36;
+}
+
+h2 {
+  margin: 16px 0 0 0;
+  font-weight: 400;
+}
+
+* {
+  min-width: 0;
+  /* Otherwise <pre> blocks take up more space then they should. Needed for flexbox. */
+  box-sizing: border-box;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+  /*removes default style*/
+  box-sizing: border-box;
+  position: relative;
+}
+
+#header {
+  max-width: 1280px;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 16px;
+}
+
+#header .header-inside {
+  display: flex;
+  justify-content: center;
+}
+
+#header .title-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stetch;
+}
+
+#header .title-pic {
+  width: 600px;
+}
+
+#header .title-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: black;
+  margin: 0 20px;
+}
+
+#header .title-wrapper .title {
+  font-size: 60px;
+}
+
+#header .title-wrapper .subtitle {
+  font-size: 30px;
+}
+
+#header .social-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+#header .intro-buttons {
+  display: flex;
+  justify-content: space-between;
+  flex-flow: row wrap;
+}
+
+#header .intro-buttons a {
+  display: inline-block;
+  background-color: #2aa198;
+  color: white;
+  font-size: 18px;
+  padding: 16px 32px;
+  border: 0px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 20px 0px;
+}
+
+#header .intro-buttons a:hover {
+  background-color: #27968d;
+  text-decoration: none;
+}
+
+.body-wrapper {
+  max-width: 1280px;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 8px 0 8px;
+}
+
+.social-buttons img {
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+}
+
+#left {
+  top: 0;
+  position: sticky;
+  width: 300px;
+  float: left;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#left .sidebar-header {
+  border-bottom: 1px solid #eee;
+  box-shadow: -20px 0px 20px 0px white;
+  z-index: 2;
+}
+
+#left .sidebar-header .social-buttons {
+  display: flex;
+  justify-content: left;
+}
+
+#left .sidebar-header .sidebar-title a {
+  display: flex;
+  justify-content: left;
+  font-size: 32px;
+  color: black;
+}
+
+#left .sidebar-header .sidebar-title a:hover {
+  text-decoration: none;
+}
+
+#left .sidebar-header .github-stars {
+  margin-top: 3px;
+}
+
+#left .toc {
+  overflow-y: hidden;
+  padding-bottom: 16px;
+}
+
+#left .toc:hover {
+  overflow-y: auto;
+}
+
+#right {
+  margin-left: calc(32px + 300px);
+}
+
+.content {
+  padding-bottom: 36px;
+}
+
+.content ul {
+  margin: 8px 0 0 32px;
+  padding: 0;
+  list-style: none;
+}
+
+.content ul li {
+  line-height: 16px;
+  margin-top: 8px;
+}
+
+.content ul li::before {
+  content: "\2022";
+  /* Add content: \2022 is the CSS Code/unicode for a bullet */
+  color: #c1c9d2;
+  /* Change the color */
+  font-weight: bold;
+  /* If you want it to be bold */
+  display: inline-block;
+  /* Needed to add space between the bullet and the text */
+  width: 24px;
+  /* Also needed for space (tweak if needed) */
+  margin-left: -24px;
+  /* Also needed for space (tweak if needed) */
+}
+
+.yt-video {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+code {
+  color: #002b36;
+  border-radius: 4px;
+  background-color: #eef1f1;
+  font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+  padding: 0px 8px;
+  font-size: 14px;
+}
+
+pre code {
+  border-radius: 8px;
+  font-size: 16px;
+  padding: 0px;
+}
+
+@media (max-width: 1100px) {
+  .title-pic {
+    display: none;
+  }
+  #left {
+    display: none;
+  }
+  #right {
+    margin-left: 0px;
+  }
+}
+
+@media (min-width: 1100px) {
+  #header .social-buttons {
+    display: none;
+  }
+}
