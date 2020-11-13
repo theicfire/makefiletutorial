@@ -36,7 +36,6 @@ function build(callback) {
     // Use Github Flavored Markdown for content
     .use(
       markdown({
-        smartypants: true,
         gfm: true,
         tables: true,
       })
@@ -52,14 +51,14 @@ function build(callback) {
 
     // Group my content into 4 distinct collections. These collection names
     // are defined as `collection: <name>` inside the markdown YAML.
-    .use(
-      collections({
-        "Get Started": { sortBy: "date" },
-        Tutorials: { sortBy: "date" },
-        "User Authentication": { sortBy: "date" },
-        "Building with React & Flux": { sortBy: "date" },
-      })
-    )
+    // .use(
+    //   collections({
+    //     "Get Started": { sortBy: "date" },
+    //     Tutorials: { sortBy: "date" },
+    //     "User Authentication": { sortBy: "date" },
+    //     "Building with React & Flux": { sortBy: "date" },
+    //   })
+    // )
 
     // Use handlebars as layout engine.
     //.use(layouts('handlebars'))
