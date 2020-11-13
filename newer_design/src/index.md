@@ -899,11 +899,24 @@ two:
 ```
 
 # Makefile Templates
-Now that you understand `make`, let's look at some useful templates you can use for your own projects.
+Now that you understand `make`, let's look a template you can use for your own projects.
 
 ## Medium project
-<!-- The layout used in this example is as follows: -->
 <!-- Partly from https://www.partow.net/programming/makefile/index.html -->
+The layout used in this example is as follows:
+```
+─┬[ Project ]
+ ├──● Makefile
+ ├──┬[ include ]
+ │  └──● program.hpp
+ └──┬[ src ]
+    ├──┬[ module1 ]
+    │  ├──● mod1.cpp
+    ├──● program1.cpp
+    └──● program2.cpp
+```
+
+This makefile will automatically build all the C++ files, link them together, and generate a single executable located at `build/apps/program`:
 ```makefile
 CXX      := g++
 CXXFLAGS := -Wall -Wuninitialized -std=c++17 -g
@@ -915,6 +928,7 @@ TARGET   := program
 INCLUDE  := -Iinclude/
 SRC      :=                      \
    $(wildcard src/*.cpp)         \
+   $(wildcard src/module1/*.cpp) \
 
 OBJECTS  := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 
