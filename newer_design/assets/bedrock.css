@@ -1,11 +1,3 @@
-
-.toc > ol > li {
-    /* list-style: none; */
-    /* text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden; */
-}
-
 .toc li {
     list-style: none;
 }
@@ -57,6 +49,8 @@ body {
 #right {
   flex: 1 0;  /*makes sure that content is not cut off in a smaller browser window*/
   order: 2;
+  /* display: flex;
+  justify-content: center; */
 }
 
 .top-left {
@@ -68,7 +62,18 @@ body {
     background-color: pink;
 }
 
-.bottom {
+.toc {
     flex-grow: 1;  /*ensures that the container will take up the full height of the parent container*/
     overflow-y: auto;  /*adds scroll to this container*/
+}
+
+.content {
+    flex-grow: 1;  /*ensures that the container will take up the full height of the parent container*/
+    overflow-y: auto;  /*adds scroll to this container*/
+    display: flex;
+    justify-content: center;
+}
+
+.inner-content {
+    max-width: 800px;
 }

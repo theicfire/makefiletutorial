@@ -29,20 +29,20 @@
         <div class="top-left">
             left header
         </div>
-        <div class="bottom">
-            <div class='toc'>
-                <% if (toc) { %>
-                <section class="toc sticky">
-                    <%- renderToc(toc) %>
-                </section>
-                <% } %>
-            </div>
+        <div class='toc'>
+            <% if (toc) { %>
+            <section class="toc sticky">
+                <%- renderToc(toc) %>
+            </section>
+            <% } %>
         </div>
     </div>
     <div id="right" class="column">
         <div class="top-right">right header</div>
-        <div class="bottom">
-            <%- contents %>
+        <div class="content">
+            <div class="inner-content">
+                <%- contents %>
+            </div>
         </div>
     </div>
 
