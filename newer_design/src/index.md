@@ -153,7 +153,8 @@ all:
 ```
 
 # Rules, Wildcards, Automatic Variables, Implicit Magic
-## Magic Implicit Commands (Section 2.5)
+## Magic Implicit Commands
+<!--  (Section 2.5) -->
 
 Probably one of the most confusing parts about Make is the hidden coupling between Make and GCC. Make was largely made for GCC, and so makes compiling C/C++ programs "easy".
 
@@ -172,7 +173,8 @@ clean:
 	rm -f blah.o blah blah.c
 ```
 
-## Using Wildcard Characters (Section 4.2)
+## Using Wildcard Characters
+<!--  (Section 4.2) -->
 We can use wildcards in the target, prerequisites, or commands.  
 Valid wildcards are `*, ?, [...]`  
 ```makefile
@@ -188,7 +190,8 @@ clean:
 
 ```
 
-## The Wildcard Function (Section 4.2.3)
+## The Wildcard Function
+<!--  (Section 4.2.3) -->
 We CANNOT use wildcards in other places, like variable declarations or function arguments  
 Use the wildcard function instead.  
 ```makefile
@@ -206,7 +209,8 @@ clean:
 
 ```
 
-## The vpath Directive (Section 4.3.2)
+## The vpath Directive
+<!--  (Section 4.3.2) -->
 Use vpath to specify where some set of prerequisites exist. The format is `vpath <pattern> <directories, space/colon seperated>`  
 `<pattern>` can have a `%`, which matches any zero or more characters.  
 You can also do this globallyish with the variable VPATH  
@@ -229,7 +233,8 @@ clean:
 
 ```
 
-## Static Pattern Rules (Section 4.10)
+## Static Pattern Rules
+<!--  (Section 4.10) -->
 Make loves c compilation. And every time it expresses its love, things get confusing. Here's the syntax for a new type of rule called a static pattern:
 ```makefile
 targets ...: target-pattern: prereq-patterns ...
@@ -277,7 +282,8 @@ clean:
 
 ```
 
-## Static Pattern Rules and Filter (Section 4.10)
+## Static Pattern Rules and Filter
+<!--  (Section 4.10) -->
 `filter` can be used in Static pattern rules to match the correct files. In this example, I made up the `.raw` and `.result` extensions.
 ```makefile
 
@@ -298,7 +304,8 @@ clean:
 	rm -f $(src_files)
 ```
 
-## Double-Colon Rules (Section 4.11)
+## Double-Colon Rules
+<!--  (Section 4.11) -->
 Double-Colon Rules are rarely used, but allow the same target to run commands from multiple targets.  
 If these were single colons, an warning would be printed and only the second set of commands would run.
 ```makefile
@@ -315,7 +322,8 @@ clean:
 
 ```
 
-## Implicit Rules (Section 10)
+## Implicit Rules
+<!--  (Section 10) -->
 Perhaps the most confusing part of make is the magic rules and variables that are made. Here's a list of implicit rules:
 - Compiling a C program: `n.o` is made automatically from `n.c` with a command of the form `$(CC) -c $(CPPFLAGS) $(CFLAGS)`
 - Compiling a C++ program: `n.o` is made automatically from `n.cc` or `n.cpp` with a command of the form `$(CXX) -c $(CPPFLAGS) $(CXXFLAGS)`
@@ -345,7 +353,8 @@ clean:
 	rm -f blah*
 ```
 
-## Automatic Variables (Section 10.5)
+## Automatic Variables
+<!--  (Section 10.5) -->
 There are many [automatic variables](https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html), but often only a few show up:
 ```makefile
 hey: one two
@@ -373,7 +382,8 @@ clean:
 
 
 # Targets
-## The all target (Section 4.4)
+## The all target
+<!--  (Section 4.4) -->
 Making multiple targets and you want all of them to run? Make a `all` target.
 ```makefile
 all: one two three
@@ -390,7 +400,8 @@ clean:
 
 ```
 
-## Multiple targets (Section 4.8)
+## Multiple targets
+<!--  (Section 4.8) -->
 When there are multiple targets for a rule, the commands will be run for each target  
 `$@` is a *automatic variable* that contains the target name.
 ```makefile
@@ -407,7 +418,8 @@ f1.o f2.o:
 
 ```
 
-## Multiple targets via wildcards (Section 4.8)
+## Multiple targets via wildcards
+<!--  (Section 4.8) -->
 We can use the wildcard % in targets, that captures zero or more of any character. Note we do not use *.o, because that is just the string *.o, which might be useful in the commands,  
 but is only one target and does not expand.  
 <!--
@@ -424,7 +436,8 @@ all: f1.o f2.o
 
 
 # Commands and execution
-## Command Echoing/Silencing (Section 5.1)
+## Command Echoing/Silencing
+<!--  (Section 5.1) -->
 Add an @ before a command to stop it from being printed  
 You can also run make with -s to add an @ before each line  
 ```makefile
@@ -433,7 +446,8 @@ all:
 	echo "But this will"
 ```
 
-## Command Execution (Section 5.2)
+## Command Execution
+<!--  (Section 5.2) -->
 Each command is run in a new shell (or at least the affect is as such)
 ```makefile
 all: 
@@ -450,7 +464,8 @@ all:
 
 ```
 
-## Default Shell (Section 5.2)
+## Default Shell
+<!--  (Section 5.2) -->
 The default shell is `/bin/sh`. You can change this by changing the variable SHELL:
 ```makefile
 SHELL=/bin/bash
@@ -459,12 +474,14 @@ cool:
 	echo "Hello from bash"
 ```
 
-## Error handling with `-k`, `-i`, and `i` (Section 5.4)
+## Error handling with `-k`, `-i`, and `i`
+<!--  (Section 5.4) -->
 Add `-k` when running make to continue running even in the face of errors. Helpful if you want to see all the errors of Make at once.  
 Add a "-" before a command to suppress the error  
 Add "-i" to make to have this happen for every command.
 
-## Handling errors with `-` and `-i` (Section 5.4)
+## Handling errors with `-` and `-i`
+<!--  (Section 5.4) -->
 ```makefile
 one:
 	# This error will be printed but ignored, and make will continue to run
@@ -473,10 +490,12 @@ one:
 
 ```
 
-## Interrupting or killing make (Section 5.5)
+## Interrupting or killing make
+<!--  (Section 5.5) -->
 Note only: If you ctrl+c make, it will delete the newer targets it just made.
 
-## Recursive use of make (Section 5.6)
+## Recursive use of make
+<!--  (Section 5.6) -->
 Recursively call a makefile. Use the special $(MAKE) instead of "make"  
 because it will pass the make flags for you and won't itself be affected by them.
 ```makefile
@@ -491,7 +510,8 @@ clean:
 
 ```
 
-## Use `export` for recursive make (Section 5.6)
+## Use `export` for recursive make
+<!--  (Section 5.6) -->
 The export directive takes a variable and makes it accessible to sub-make commands.  
 In this example, "cooly" is exported such that the makefile in subdir can use it.  
   
@@ -516,7 +536,8 @@ clean:
 	rm -rf subdir
 ```
 
-## Another export example (Section 5.6)
+## Another export example
+<!--  (Section 5.6) -->
 You need to export variables to have them run in the shell as well.  
 ```makefile
 
@@ -530,7 +551,8 @@ all:
 	@echo $$two
 ```
 
-## `EXPORT_ALL_VARIABLES` (Section 5.6)
+## `EXPORT_ALL_VARIABLES`
+<!--  (Section 5.6) -->
 `EXPORT_ALL_VARIABLES` does what you might expect  
 ```makefile
 .EXPORT_ALL_VARIABLES:
@@ -551,14 +573,16 @@ clean:
 	rm -rf subdir
 ```
 
-## Arguments to make (Section 9)
+## Arguments to make
+<!--  (Section 9) -->
 
 There's a nice [list of options](http://www.gnu.org/software/make/manual/make.html#Options-Summary) that can be run from make. Check out `--dry-run`, `--touch`, `--old-file`. 
 
 You can have multiple targets to make, i.e. `make clean run test` runs the 'clean' goal, then 'run', and then 'test'.
 
 # Variables Pt. 2
-## Flavors and modification (6.1, 6.2, 6.3)
+## Flavors and modification
+<!-- (6.1, 6.2, 6.3) -->
 There are two flavors of variables:  
 - recursive (use `=`) - only looks for the variables when the command is *used*, not when it's *defined*.  
 - simply expanded (use `:=`) - like normal imperative programming -- only those defined so far get expanded
@@ -653,7 +677,8 @@ all:
 	echo $(foo)
 ```
 
-## Command line arguments and `override` (Section 6.7)
+## Command line arguments and `override`
+<!--  (Section 6.7) -->
 You can override variables that come from the command line by using "override".
 Here we ran make with `make some_option=hi`
 ```makefile
@@ -666,7 +691,8 @@ all:
 	echo $(option_two)
 ```
 
-## List of commands and `define` (Section 6.8)
+## List of commands and `define`
+<!--  (Section 6.8) -->
 "define" is actually just a list of commands. It has nothing with being a function.  
 Note here that it's a bit different than having a semi-colon between commands, because each is run
 in a seperate shell, as expected.
@@ -688,7 +714,8 @@ all:
 	@$(two)
 ```
 
-## Target-specific variables (Section 6.10)
+## Target-specific variables
+<!--  (Section 6.10) -->
 Variables can be assigned for specific targets
 ```makefile
 
@@ -701,7 +728,8 @@ other:
 	echo one is nothing: $(one)
 ```
 
-## Pattern-specific variables (Section 6.11)
+## Pattern-specific variables
+<!--  (Section 6.11) -->
 You can assign variables for specific target *patterns*
 ```makefile
 
@@ -715,7 +743,8 @@ other:
 ```
 
 # Conditional part of Makefiles
-## Conditional if/else (Section 7.1)
+## Conditional if/else
+<!--  (Section 7.1) -->
 ```makefile
 
 foo = ok
@@ -728,7 +757,8 @@ else
 endif
 ```
 
-## Check if a variable is empty (Section 7.2)
+## Check if a variable is empty
+<!--  (Section 7.2) -->
 ```makefile
 nullstring =
 foo = $(nullstring) # end of line; there is a space here
@@ -742,7 +772,8 @@ ifeq ($(nullstring),)
 endif
 ```
 
-## `ifdef` (Section 7.2)
+## `ifdef`
+<!--  (Section 7.2) -->
 ifdef does not expand variable references; it just sees if something is defined at all
 ```makefile
 
@@ -759,7 +790,8 @@ endif
 
 ```
 
-## Testing make flags with `findstring` and `MAKEFLAG`(Section 7.3)
+## Testing make flags with `findstring` and `MAKEFLAG`
+<!-- `(Section 7.3) -->
 Run this example with `make -i` to see it print out the echo statement.
 ```makefile
 
@@ -774,7 +806,8 @@ endif
 ```
 
 # Functions
-## Functions (Section 8.1)
+## Functions
+<!--  (Section 8.1) -->
 *Functions* are mainly just for text processing. Call functions with `$(fn, arguments)` or `${fn, arguments}`. You can make your own using the [call](https://www.gnu.org/software/make/manual/html_node/Call-Function.html#Call-Function) builtin function. Make has a decent amount of [builtin functions](https://www.gnu.org/software/make/manual/html_node/Functions.html).
 ```makefile
 bar := ${subst not, totally, "I am not superman"}
@@ -813,7 +846,8 @@ all:
 # TODO 8.7 origin fn? Better in documentation?
 -->
 
-## The foreach function (Section 8.4)
+## The foreach function
+<!--  (Section 8.4) -->
 The foreach function looks like this: `$(foreach var,list,text)`. It converts one list of words (seperated by speces) to another. `var` is set to each word in list, and `text` is expanded for each word.  
 This appends an exclamation after each word:
 ```makefile
@@ -826,7 +860,8 @@ all:
 	@echo $(bar)
 ```
 
-## The if function (Section 8.5)
+## The if function
+<!--  (Section 8.5) -->
 `if` checks if the first argument is nonempty. If so runs the second argument, otherwise runs the third.
 ```makefile
 foo := $(if this-is-not-empty,then!,else!)
@@ -838,7 +873,8 @@ all:
 	@echo $(bar)
 ```
 
-## The call function (Section 8.6)
+## The call function
+<!--  (Section 8.6) -->
 `Call`: $(call variable,param,param)  
 Sets each of the params as $(1), $(2), etc.  
 $(0) is set as the variable name
@@ -850,7 +886,8 @@ all:
 	@echo $(call sweet_new_fn, go, tigers)
 ```
 
-## The shell function (Section 8.8)
+## The shell function
+<!--  (Section 8.8) -->
 shell - This calls the shell, but it replaces newlines with spaces!
 ```makefile
 all: 
@@ -880,7 +917,7 @@ clean:
 ```
 
 ## .Delete_on_error
-(Section 5.4)
+<!-- (Section 5.4) -->
 
 The make tool will stop running a rule (and will propogate back to prerequisites) if a command returns a nonzero exit status.  
 `DELETE_ON_ERROR` will delete the target of a rule if the rule fails in this manner. This will happen for all targets, not just the one it is before like PHONY. It's a good idea to always use this, even though make does not for historical reasons.  
