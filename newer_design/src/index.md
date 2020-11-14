@@ -18,7 +18,7 @@ autotoc: true
 -->
 
 # Getting Started
-Makefiles are used to help decide which parts of a large program need to be recompiled. Typicall c or c++ files are compiled, but any language that can be compiled with shell commands will work. It can be used beyond programs too, when you need a series of instructions to run depending on what files have changed.
+Makefiles are used to help decide which parts of a large program need to be recompiled. Typically c or c++ files are compiled, but any language that can be compiled with shell commands will work. It can be used beyond programs too, when you need a series of instructions to run depending on what files have changed.
 
 This guide spends minimal time describing the features, and instead focuses on runnable examples to demonstrate make.
 
