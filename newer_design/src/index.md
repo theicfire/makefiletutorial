@@ -52,7 +52,7 @@ targets: prerequisities
 - The *commands* are a series of steps typically used to make the target(s). These *need to start with a tab character*, not spaces.
 - The *prerequisites* are also file names, seperated by spaces. These files need to exist before the commands for the target are run.
 
-## First example
+## First Example
 This will build a program called `blah` in a series of steps:
 - Since the `blah` *target* is first, it is the default target and will be run when we run "make"
 - `blah` requires `blah.o`, so make searches for the `blah.o` target
@@ -78,7 +78,7 @@ clean:
 	rm -f blah.o blah.c blah
 ```
 
-## Simple Examples
+## More Simple Examples
 This makefile has a single target, called `some_file`. The default target is the first target, so in this case `some_file` will run.
 ```makefile
 some_file:
