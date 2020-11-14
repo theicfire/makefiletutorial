@@ -10,7 +10,7 @@ var Metalsmith = require("metalsmith"),
   argv = require("minimist")(process.argv);
 var serve = require("metalsmith-serve");
 var watch = require("metalsmith-watch");
-var stylus = require("metalsmith-stylus");
+var sass = require("metalsmith-sass");
 
 build(function () {
   console.log("Done building.");
@@ -64,6 +64,12 @@ function build(callback) {
     //.use(layouts('handlebars'))
     .use(layouts({ engine: "ejs" }))
 
+    .use(
+      sass({
+        outputStyle: "expanded",
+      })
+    )
+
     // Use the assets plugin to specify where assets are stored
     .use(
       assets({
@@ -82,6 +88,7 @@ function build(callback) {
       watch({
         paths: {
           "src/*.md": true,
+          "src/*": "**/**",
           "layouts/*": "**/*",
           "assets/*.css": "**/*",
         },

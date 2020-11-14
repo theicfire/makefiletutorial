@@ -2,11 +2,14 @@
     list-style: none;
 }
 
-#left ol {
-    padding: 0;
-}
 #left {
-    padding-left: 10px;
+    padding-left: 8px;
+    ol {
+        padding: 0;
+    }
+    > ol > li {
+        font-weight: bold;
+    }
 }
 
 pre {
@@ -30,9 +33,6 @@ a:hover {
     text-decoration: underline;
 }
 
-#left > ol > li {
-    font-weight: bold;
-}
 
 p {
     margin: 16px 0 0 0;
@@ -59,7 +59,7 @@ h2 {
 }
 
 :root {
-    --header-height: 200px;
+    --header-height: 36px;
 }
 
 body {
@@ -78,6 +78,24 @@ body {
     background-color: #eeeeee;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    .logo-link {
+        margin-left: 8px;
+        display: flex;
+        align-items: center;
+        .logo-title {
+            color: black;
+            font-size:24px;
+        }
+    }
+    .github-stars {
+        margin-right: 8px;
+    }
+    .header-links {
+        display:flex;
+        justify-content: space-between;
+        width: 260px; // TODO I want to specify space between each
+    }
 }
 
 #left {
