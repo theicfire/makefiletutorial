@@ -6,6 +6,7 @@
     "ejs": "^3.1.5",
     "handlebars": "^4.7.6",
     "metalsmith": "^2.3.0",
+    "metalsmith-sass": "^1.7.0",
     "metalsmith-serve": "0.0.7",
     "metalsmith-stylus": "^3.0.0"
   },

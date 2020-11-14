@@ -59,7 +59,7 @@ h2 {
 }
 
 :root {
-    --header-height: 20px;
+    --header-height: 200px;
 }
 
 body {
@@ -75,7 +75,9 @@ body {
 #header {
     flex: 0 0 100%;
     height: var(--header-height);
-    background-color: pink;
+    background-color: #eeeeee;
+    display: flex;
+    justify-content: space-between;
 }
 
 #left {
