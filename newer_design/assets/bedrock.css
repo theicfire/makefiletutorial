@@ -70,39 +70,35 @@ body {
     overflow-y: hidden;  /*turn off scroll*/
     margin: 0px;  /*removes default style*/
     display: flex;  /*enables flex content for its children*/
+    flex-flow: row wrap;
     box-sizing: border-box;
 }
 
-.column {
-    height: 100%;  /*allows both columns to span the full height of the browser window*/
-    display: flex;
-    flex-direction: column;  /*places the left and right headers above the bottom content*/
+.header {
+    flex: 0 0 100%;
+    height: 30px;
+    background-color: pink;
+    position: relative;
 }
 
 #left {
   flex: 0 0 300px;
   order: 1;
+  height: calc(100% - 30px);
+  overflow-y: auto;  /*adds scroll to this container*/
 }
 
 #right {
   flex: 1 0;  /*makes sure that content is not cut off in a smaller browser window*/
   order: 2;
+  overflow-y: auto;  /*adds scroll to this container*/
+  height: calc(100% - 30px);
   /* display: flex;
   justify-content: center; */
 }
 
-.top-left {
-    background-color: blue;
-}
-
-.top-right {
-    /* display: inline-flex; */
-    background-color: pink;
-}
-
 .toc {
     flex-grow: 1;  /*ensures that the container will take up the full height of the parent container*/
-    overflow-y: auto;  /*adds scroll to this container*/
 }
 
 .content {

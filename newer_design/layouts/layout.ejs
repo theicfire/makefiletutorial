@@ -26,10 +26,8 @@
 <% } %>
 
 <body>
+    <div class='header'>header</div>
     <div id="left" class="column">
-        <div class="top-left">
-            left header
-        </div>
         <div class='toc'>
             <% if (toc) { %>
             <%- renderToc(toc) %>
@@ -37,7 +35,6 @@
         </div>
     </div>
     <div id="right" class="column">
-        <div class="top-right">right header</div>
         <div class="content">
             <div class="inner-content">
                 <%- contents %>
