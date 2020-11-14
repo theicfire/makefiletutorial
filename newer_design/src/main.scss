@@ -83,13 +83,23 @@ body {
         margin-left: 8px;
         display: flex;
         align-items: center;
+        flex: 0 0 300px;
         .logo-title {
             color: black;
             font-size:24px;
         }
     }
+    .right-header {
+        flex: 1 0;
+        order: 2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
     .github-stars {
-        margin-right: 8px;
+        margin-left: 16px;
+        padding-top: 3px;
     }
     .header-links {
         display:flex;
