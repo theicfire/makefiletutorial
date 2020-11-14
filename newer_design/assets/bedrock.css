@@ -1,15 +1,14 @@
-.toc li {
+#left li {
     list-style: none;
 }
 
-.toc ol {
+#left ol {
     padding: 0px;
 }
 
-.toc > ol {
+#left > ol {
     padding-left: 10px;
 }
-
 
 pre {
     overflow: auto;
@@ -32,7 +31,7 @@ a:hover {
     text-decoration: underline;
 }
 
-.toc > ol > li {
+#left > ol > li {
     font-weight: bold;
 }
 
@@ -60,8 +59,8 @@ h2 {
     min-width: 0; /* Otherwise <pre> blocks take up more space then they should. Needed for flexbox. */
 }
 
-.pre-wrapper {
-    background-color: orange;
+:root {
+    --header-height: 20px;
 }
 
 body {
@@ -74,38 +73,26 @@ body {
     box-sizing: border-box;
 }
 
-.header {
+#header {
     flex: 0 0 100%;
-    height: 30px;
+    height: var(--header-height);
     background-color: pink;
-    position: relative;
 }
 
 #left {
   flex: 0 0 300px;
   order: 1;
-  height: calc(100% - 30px);
+  height: calc(100% - var(--header-height));
   overflow-y: auto;  /*adds scroll to this container*/
 }
 
 #right {
-  flex: 1 0;  /*makes sure that content is not cut off in a smaller browser window*/
+  flex: 1 0;
   order: 2;
   overflow-y: auto;  /*adds scroll to this container*/
-  height: calc(100% - 30px);
-  /* display: flex;
-  justify-content: center; */
-}
-
-.toc {
-    flex-grow: 1;  /*ensures that the container will take up the full height of the parent container*/
-}
-
-.content {
-    flex-grow: 1;  /*ensures that the container will take up the full height of the parent container*/
-    overflow-y: auto;  /*adds scroll to this container*/
-    display: flex;
-    justify-content: center;
+  height: calc(100% - var(--header-height));
+  display: flex;
+  justify-content: center;
 }
 
 .inner-content {

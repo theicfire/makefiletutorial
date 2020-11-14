@@ -26,19 +26,15 @@
 <% } %>
 
 <body>
-    <div class='header'>header</div>
-    <div id="left" class="column">
-        <div class='toc'>
-            <% if (toc) { %>
-            <%- renderToc(toc) %>
-            <% } %>
-        </div>
+    <div id='header'>header</div>
+    <div id="left">
+        <% if (toc) { %>
+        <%- renderToc(toc) %>
+        <% } %>
     </div>
-    <div id="right" class="column">
-        <div class="content">
-            <div class="inner-content">
-                <%- contents %>
-            </div>
+    <div id="right">
+        <div class="inner-content">
+            <%- contents %>
         </div>
     </div>
 
