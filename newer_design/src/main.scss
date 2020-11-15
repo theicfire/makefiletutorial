@@ -8,16 +8,17 @@ $header-height: 36px;
 }
 
 #left {
+    font-size: 14px;
     // padding-left: 8px;
     ol {
         padding: 0;
         margin: 0;
     }
-    > ol {
-        margin-top: $med-space;
+    > ol > ol {
+        margin-left: $med-space;
     }
-    > ol > li {
-        font-weight: bold;
+    li {
+        margin-top: 8px;
     }
 }
 
@@ -34,7 +35,8 @@ html {
 }
 
 a {
-    color: #4078c0;
+    // color: #4078c0;
+    color: #697386;
     text-decoration: none;
 }
 
@@ -141,6 +143,7 @@ body {
   overflow-y: auto;  /*adds scroll to this container*/
   position: fixed;
   width: $sidebar-width;
+  padding-bottom: 36px;
 }
 
 #right {
