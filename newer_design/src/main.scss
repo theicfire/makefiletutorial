@@ -59,8 +59,18 @@ ul {
 
 h1 {
     margin: 32px 0 0 0;
-
 }
+
+h1:before, h2:before {
+    // Needed for anchor links. Found in https://stackoverflow.com/questions/10732690/offsetting-an-html-anchor-to-adjust-for-fixed-header
+    content: '';
+    display: block;
+    position: relative;
+    width: 0;
+    height: $header-height;
+    margin-top: -$header-height;
+}
+
 h2 {
     margin: $med-space 0 0 0;
 }
@@ -86,7 +96,8 @@ body {
 #header {
     // flex: 0 0 100%;
     height: $header-height;
-    background-color: #eeeeee;
+    background-color: white;
+    border-bottom: 1px solid #eee;
     position: fixed;
     top: 0;
     right: 0;
