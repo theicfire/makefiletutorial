@@ -22,6 +22,8 @@ Makefiles are used to help decide which parts of a large program need to be reco
 
 This guide spends minimal time describing the features, and instead focuses on runnable examples to demonstrate make.
 
+If you already know make, check out the [Quick Start Template](#quick-start-template)
+
 
 ## Running the Examples
 I made a quick [video](/screencasts.html) to show how to run these examples. You'll need a terminal and "make" installed. For each example, put the contents in a file called `Makefile`, and in that directory run the command `make`. Here is the output of running the above example:
@@ -50,11 +52,11 @@ targets: prerequisities
 
 - The *targets* are file names, seperated by spaces. Typically, there is only one per rule.
 - The *commands* are a series of steps typically used to make the target(s). These *need to start with a tab character*, not spaces.
-- The *prerequisites* are also file names, seperated by spaces. These files need to exist before the commands for the target are run.
+- The *prerequisites* are also file names, seperated by spaces. These files need to exist before the commands for the target are run. These are also called *dependencies*
 
-## First Example
-This will build a program called `blah` in a series of steps:
-- Since the `blah` *target* is first, it is the default target and will be run when we run "make"
+## Beginner Examples
+Our first makefile has three seperate *rules*. When you run `make blah` in the terminal, it will build a program called `blah` in a series of steps:
+- Make is given `blah` as the target, so it first searches for this target
 - `blah` requires `blah.o`, so make searches for the `blah.o` target
 - `blah.o` requires `blah.c`, so make searches for the `blah.c` target
 - `blah.c` has no dependencies, so the `echo` command is run
@@ -62,23 +64,17 @@ This will build a program called `blah` in a series of steps:
 - The top `cc` command is run, because all the `blah` dependencies are finished
 - That's it: `blah` is a compiled c program
 
-You can run `make clean` to run the clean *goal*, which will remove the generated files
-
 ```makefile
 blah: blah.o
-	cc blah.o -o blah
+	cc blah.o -o blah # Runs third
 
 blah.o: blah.c
-	cc -c blah.c -o blah.o
+	cc -c blah.c -o blah.o # Runs second
 
 blah.c:
-	echo "int main() { return 0; }" > blah.c
-
-clean:
-	rm -f blah.o blah.c blah
+	echo "int main() { return 0; }" > blah.c # Runs first
 ```
 
-## More Simple Examples
 This makefile has a single target, called `some_file`. The default target is the first target, so in this case `some_file` will run.
 ```makefile
 some_file:
@@ -152,28 +148,61 @@ all:
 	echo $x 
 ```
 
-# Rules, Wildcards, Automatic Variables, Implicit Magic
-## Magic Implicit Commands
-<!--  (Section 2.5) -->
-
-Probably one of the most confusing parts about Make is the hidden coupling between Make and GCC. Make was largely made for GCC, and so makes compiling C/C++ programs "easy".
-
+# Targets
+## The all target
+<!--  (Section 4.4) -->
+Making multiple targets and you want all of them to run? Make a `all` target.
 ```makefile
-# Implicit command of: "cc blah.o -o blah"
-# Note: Do not put a comment inside of the blah.o rule; the implicit rule will not run!
-blah:
+all: one two three
 
-# Implicit command of: "cc -c blah.c -o blah.o"
-blah.o:
-
-blah.c:
-	echo "int main() { return 0; }" > blah.c
+one:
+	touch one
+two:
+	touch two
+three:
+	touch three
 
 clean:
-	rm -f blah.o blah blah.c
+	rm -f one two three
+
 ```
 
-## Using Wildcard Characters
+## Multiple targets
+<!--  (Section 4.8) -->
+When there are multiple targets for a rule, the commands will be run for each target  
+`$@` is a *automatic variable* that contains the target name.
+```makefile
+
+all: f1.o f2.o
+
+f1.o f2.o:
+	echo $@
+# Equivalent to:
+# f1.o
+# 	echo $@
+# f2.o
+# 	echo $@
+
+```
+
+## Multiple targets via wildcards
+<!--  (Section 4.8) -->
+We can use the wildcard % in targets, that captures zero or more of any character. Note we do not use *.o, because that is just the string *.o, which might be useful in the commands,  
+but is only one target and does not expand.  
+<!--
+TODO why was this not a problem when I didn't use the % wildcard?
+-->
+```makefile
+
+all: f1.o f2.o
+
+%.o:
+	echo $@
+
+```
+
+# Automatic Variables and Wildcards
+## Wildcard
 <!--  (Section 4.2) -->
 We can use wildcards in the target, prerequisites, or commands.  
 Valid wildcards are `*, ?, [...]`  
@@ -190,7 +219,6 @@ clean:
 
 ```
 
-## The Wildcard Function
 <!--  (Section 4.2.3) -->
 We CANNOT use wildcards in other places, like variable declarations or function arguments  
 Use the wildcard function instead.  
@@ -209,30 +237,34 @@ clean:
 
 ```
 
-## The vpath Directive
-<!--  (Section 4.3.2) -->
-Use vpath to specify where some set of prerequisites exist. The format is `vpath <pattern> <directories, space/colon seperated>`  
-`<pattern>` can have a `%`, which matches any zero or more characters.  
-You can also do this globallyish with the variable VPATH  
+## Automatic Variables
+<!--  (Section 10.5) -->
+There are many [automatic variables](https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html), but often only a few show up:
 ```makefile
+hey: one two
+	# Outputs "hey", since this is the first target
+	echo $@
 
-vpath %.h ../headers ../other-directory
+	# Outputs all prerequisites older than the target
+	echo $?
 
-some_binary: ../headers blah.h
-	touch some_binary
+	# Outputs all prerequisites
+	echo $^
 
-../headers:
-	mkdir ../headers
+	touch hey
 
-blah.h:
-	touch ../headers/blah.h
+one:
+	touch one
+
+two:
+	touch two
 
 clean:
-	rm -rf ../headers
-	rm -f some_binary
+	rm -f hey one two
 
 ```
 
+# Fancy Rules
 ## Static Pattern Rules
 <!--  (Section 4.10) -->
 Make loves c compilation. And every time it expresses its love, things get confusing. Here's the syntax for a new type of rule called a static pattern:
@@ -306,8 +338,7 @@ clean:
 
 ## Double-Colon Rules
 <!--  (Section 4.11) -->
-Double-Colon Rules are rarely used, but allow the same target to run commands from multiple targets.  
-If these were single colons, an warning would be printed and only the second set of commands would run.
+Double-Colon Rules are rarely used, but allow the same target to run commands from multiple targets. If these were single colons, an warning would be printed and only the second set of commands would run.
 ```makefile
 all: blah
 
@@ -353,86 +384,8 @@ clean:
 	rm -f blah*
 ```
 
-## Automatic Variables
-<!--  (Section 10.5) -->
-There are many [automatic variables](https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html), but often only a few show up:
-```makefile
-hey: one two
-	# Outputs "hey", since this is the first target
-	echo $@
-
-	# Outputs all prerequisites older than the target
-	echo $?
-
-	# Outputs all prerequisites
-	echo $^
-
-	touch hey
-
-one:
-	touch one
-
-two:
-	touch two
-
-clean:
-	rm -f hey one two
-
-```
 
 
-# Targets
-## The all target
-<!--  (Section 4.4) -->
-Making multiple targets and you want all of them to run? Make a `all` target.
-```makefile
-all: one two three
-
-one:
-	touch one
-two:
-	touch two
-three:
-	touch three
-
-clean:
-	rm -f one two three
-
-```
-
-## Multiple targets
-<!--  (Section 4.8) -->
-When there are multiple targets for a rule, the commands will be run for each target  
-`$@` is a *automatic variable* that contains the target name.
-```makefile
-
-all: f1.o f2.o
-
-f1.o f2.o:
-	echo $@
-# Equivalent to:
-# f1.o
-# 	echo $@
-# f2.o
-# 	echo $@
-
-```
-
-## Multiple targets via wildcards
-<!--  (Section 4.8) -->
-We can use the wildcard % in targets, that captures zero or more of any character. Note we do not use *.o, because that is just the string *.o, which might be useful in the commands,  
-but is only one target and does not expand.  
-<!--
-TODO why was this not a problem when I didn't use the % wildcard?
--->
-```makefile
-
-all: f1.o f2.o
-
-%.o:
-	echo $@
-
-```
 
 
 # Commands and execution
@@ -480,7 +433,6 @@ Add `-k` when running make to continue running even in the face of errors. Helpf
 Add a "-" before a command to suppress the error  
 Add "-i" to make to have this happen for every command.
 
-## Handling errors with `-` and `-i`
 <!--  (Section 5.4) -->
 ```makefile
 one:
@@ -496,8 +448,7 @@ Note only: If you ctrl+c make, it will delete the newer targets it just made.
 
 ## Recursive use of make
 <!--  (Section 5.6) -->
-Recursively call a makefile. Use the special $(MAKE) instead of "make"  
-because it will pass the make flags for you and won't itself be affected by them.
+To recursively call a makefile, use the special $(MAKE) instead of "make" because it will pass the make flags for you and won't itself be affected by them.
 ```makefile
 new_contents = "hello:\n\ttouch inside_file"
 all:
@@ -510,10 +461,9 @@ clean:
 
 ```
 
-## Use `export` for recursive make
+## Use export for recursive make
 <!--  (Section 5.6) -->
-The export directive takes a variable and makes it accessible to sub-make commands.  
-In this example, "cooly" is exported such that the makefile in subdir can use it.  
+The export directive takes a variable and makes it accessible to sub-make commands. In this example, "cooly" is exported such that the makefile in subdir can use it.  
   
 Note: export has the same syntax as sh, but they aren't related (although similar in function)  
 ```makefile
@@ -536,7 +486,6 @@ clean:
 	rm -rf subdir
 ```
 
-## Another export example
 <!--  (Section 5.6) -->
 You need to export variables to have them run in the shell as well.  
 ```makefile
@@ -551,9 +500,8 @@ all:
 	@echo $$two
 ```
 
-## `EXPORT_ALL_VARIABLES`
 <!--  (Section 5.6) -->
-`EXPORT_ALL_VARIABLES` does what you might expect  
+`.EXPORT_ALL_VARIABLES` exports all variables for you.
 ```makefile
 .EXPORT_ALL_VARIABLES:
 new_contents = "hello:\n\techo \$$(cooly)"
@@ -677,7 +625,7 @@ all:
 	echo $(foo)
 ```
 
-## Command line arguments and `override`
+## Command line arguments and override
 <!--  (Section 6.7) -->
 You can override variables that come from the command line by using "override".
 Here we ran make with `make some_option=hi`
@@ -691,7 +639,7 @@ all:
 	echo $(option_two)
 ```
 
-## List of commands and `define`
+## List of commands and define
 <!--  (Section 6.8) -->
 "define" is actually just a list of commands. It has nothing with being a function.  
 Note here that it's a bit different than having a semi-colon between commands, because each is run
@@ -772,7 +720,7 @@ ifeq ($(nullstring),)
 endif
 ```
 
-## `ifdef`
+## Check if a variable is defined
 <!--  (Section 7.2) -->
 ifdef does not expand variable references; it just sees if something is defined at all
 ```makefile
@@ -790,9 +738,9 @@ endif
 
 ```
 
-## Testing make flags with `findstring` and `MAKEFLAG`
+## $(makeflags)
 <!-- `(Section 7.3) -->
-Run this example with `make -i` to see it print out the echo statement.
+This example shows you how to test make flags with `findstring` and `MAKEFLAGS`. Run this example with `make -i` to see it print out the echo statement.
 ```makefile
 
 bar =
@@ -895,6 +843,29 @@ all:
 ```
 
 # Other Features
+## The vpath Directive
+<!--  (Section 4.3.2) -->
+Use vpath to specify where some set of prerequisites exist. The format is `vpath <pattern> <directories, space/colon seperated>`  
+`<pattern>` can have a `%`, which matches any zero or more characters.  
+You can also do this globallyish with the variable VPATH  
+```makefile
+
+vpath %.h ../headers ../other-directory
+
+some_binary: ../headers blah.h
+	touch some_binary
+
+../headers:
+	mkdir ../headers
+
+blah.h:
+	touch ../headers/blah.h
+
+clean:
+	rm -rf ../headers
+	rm -f some_binary
+
+```
 ## Multiline
 The backslash ("\\") character gives us the ability to use multiple lines when the commands are too long
 ```makefile
@@ -903,7 +874,7 @@ some_file:
 		it is broken up into multiple lines
 ```
 
-## .Phony
+## .phony
 Adding `.PHONY` to a target will prevent make from confusing the phony target with a file name. In this example, if the file `clean` is created, make clean will still be run. `.PHONY` is great to use, but I'll skip it in the rest of the examples for simplicity.
 ```makefile
 some_file:
@@ -916,7 +887,7 @@ clean:
 	rm -f clean
 ```
 
-## .Delete_on_error
+## .delete_on_error
 <!-- (Section 5.4) -->
 
 The make tool will stop running a rule (and will propogate back to prerequisites) if a command returns a nonzero exit status.  
@@ -935,15 +906,14 @@ two:
 	false
 ```
 
-# Makefile Templates
+# Quick Start Template
 Now that you understand `make`, let's look a template you can use for your own projects.
 
-## Medium project
 <!-- Partly from https://www.partow.net/programming/makefile/index.html -->
-The layout used in this example is as follows:
+The file structure used in this example is as follows:
 ```
-─┬[ Project ]
- ├──● Makefile
+─┬[ Project Folder ]
+ ├──● Makefile (Shown below)
  ├──┬[ include ]
  │  └──● program.hpp
  └──┬[ src ]
