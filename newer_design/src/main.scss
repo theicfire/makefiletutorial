@@ -1,11 +1,20 @@
+$sidebar-width: 300px;
+$page-width: 1280px;
+$med-space: 16px;
+$header-height: 36px;
+
 #left li {
     list-style: none;
 }
 
 #left {
-    padding-left: 8px;
+    // padding-left: 8px;
     ol {
         padding: 0;
+        margin: 0;
+    }
+    > ol {
+        margin-top: $med-space;
     }
     > ol > li {
         font-weight: bold;
@@ -20,7 +29,7 @@ html {
     height: 100%;
     font-family: 'Roboto', serif;
     line-height: 1.3;
-    font-size: 16px;
+    font-size: $med-space;
     color: #3c4257;
 }
 
@@ -35,7 +44,7 @@ a:hover {
 
 
 p {
-    margin: 16px 0 0 0;
+    margin: $med-space 0 0 0;
 }
 
 pre {
@@ -51,34 +60,43 @@ h1 {
 
 }
 h2 {
-    margin: 16px 0 0 0;
+    margin: $med-space 0 0 0;
 }
 
 * {
     min-width: 0; /* Otherwise <pre> blocks take up more space then they should. Needed for flexbox. */
+    box-sizing: border-box;
 }
 
-:root {
-    --header-height: 36px;
-}
 
 body {
     height: 100%;   
     width: 100%;
-    overflow-y: hidden;  /*turn off scroll*/
+    // overflow-y: hidden;  /*turn off scroll*/
     margin: 0px;  /*removes default style*/
-    display: flex;  /*enables flex content for its children*/
-    flex-flow: row wrap;
+    // display: flex;  /*enables flex content for its children*/
+    // flex-flow: row wrap;
+    // flex-direction: column;
     box-sizing: border-box;
+    position: relative;
 }
 
 #header {
-    flex: 0 0 100%;
-    height: var(--header-height);
+    // flex: 0 0 100%;
+    height: $header-height;
     background-color: #eeeeee;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    .inner-header {
+        max-width: $page-width;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
     .logo-link {
         margin-left: 8px;
         display: flex;
@@ -98,7 +116,7 @@ body {
         display: flex;
     }
     .github-stars {
-        margin-left: 16px;
+        margin-left: $med-space;
         padding-top: 3px;
     }
     .header-links {
@@ -108,24 +126,28 @@ body {
     }
 }
 
+.body-wrapper {
+    max-width: $page-width;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: $header-height + $med-space;
+    padding: 0 8px 0 8px;
+}
+
 #left {
-  flex: 0 0 300px;
-  order: 1;
-  height: calc(100% - var(--header-height));
+  height: calc(100% - #{$header-height});
+  top: 0;
+  top: $header-height;
   overflow-y: auto;  /*adds scroll to this container*/
+  position: fixed;
+  width: $sidebar-width;
 }
 
 #right {
-  flex: 1 0;
-  order: 2;
-  overflow-y: auto;  /*adds scroll to this container*/
-  height: calc(100% - var(--header-height));
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin-left: calc(32px + #{$sidebar-width});
 }
 
+
 .content {
-    max-width: 700px;
     margin-bottom: 36px;
 }

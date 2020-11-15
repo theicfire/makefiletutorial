@@ -7,7 +7,7 @@ date: 2016-12-24
 autotoc: true
 ---
 
-<span class='intro'>This tutorial is based on the topics covered in the [GNU Make](https://www.cl.cam.ac.uk/teaching/0910/UnixTools/make.pdf) book. This tutorial teaches mainly through examples in order to help quickly explain the concepts in the book.</span>
+<!-- <span class='intro'>This tutorial is based on the topics covered in the [GNU Make](https://www.cl.cam.ac.uk/teaching/0910/UnixTools/make.pdf) book. This tutorial teaches mainly through examples in order to help quickly explain the concepts in the book.</span> -->
 
 <!--
 # Vocab
