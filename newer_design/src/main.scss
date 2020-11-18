@@ -3,10 +3,6 @@ $page-width: 1280px;
 $med-space: 16px;
 $header-height: 36px;
 
-#left li {
-    list-style: none;
-}
-
 #left {
     font-size: 14px;
     // padding-left: 8px;
@@ -19,6 +15,11 @@ $header-height: 36px;
     }
     li {
         margin-top: 8px;
+        list-style: none;
+    }
+    .active a {
+        color: #111;
+        font-weight: bold;
     }
 }
 
