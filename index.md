@@ -275,7 +275,7 @@ targets ...: target-pattern: prereq-patterns ...
    commands
 {% endhighlight %}
 
-The essence is that the a given target is matched by the target-pattern (via a `%` wildcard). Whatever was matched is called the *stem*. The stem is then substituted into the prereq-pattern, to generate the target's prereqs.
+The essence is that the given target is matched by the target-pattern (via a `%` wildcard). Whatever was matched is called the *stem*. The stem is then substituted into the prereq-pattern, to generate the target's prereqs.
 
 A typical use case is to compile `.c` files into `.o` files. Here's the *manual way*:
 {% highlight make %}
@@ -342,7 +342,7 @@ clean:
 
 **Double-Colon Rules (Section 4.11)**  
 Double-Colon Rules are rarely used, but allow the same target to run commands from multiple targets.  
-If these were single colons, an warning would be printed and only the second set of commands would run.
+If these were single colons, a warning would be printed and only the second set of commands would run.
 {% highlight make %}
 all: blah
 
@@ -682,7 +682,7 @@ all:
 {% endhighlight %}
 
 **List of commands and `define` (Section 6.8)**  
-"define" is actually just a list of commands. It has nothing with being a function.  
+"define" is actually just a list of commands. It has nothing to do with being a function.
 Note here that it's a bit different than having a semi-colon between commands, because each is run
 in a seperate shell, as expected.
 {% highlight make %}
