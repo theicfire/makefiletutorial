@@ -1,5 +1,6 @@
 $sidebar-width: 300px;
 $page-width: 1280px;
+$small-space: 8px;
 $med-space: 16px;
 $header-height: 36px;
 
@@ -85,17 +86,12 @@ h2 {
 body {
     height: 100%;   
     width: 100%;
-    // overflow-y: hidden;  /*turn off scroll*/
     margin: 0px;  /*removes default style*/
-    // display: flex;  /*enables flex content for its children*/
-    // flex-flow: row wrap;
-    // flex-direction: column;
     box-sizing: border-box;
     position: relative;
 }
 
 #header {
-    // flex: 0 0 100%;
     height: $header-height;
     background-color: white;
     border-bottom: 1px solid #eee;
@@ -112,31 +108,20 @@ body {
         margin-right: auto;
     }
     .logo-link {
-        margin-left: 8px;
-        display: flex;
-        align-items: center;
-        flex: 0 0 300px;
+        margin-left: $small-space;
         .logo-title {
             color: black;
             font-size:24px;
         }
     }
-    .right-header {
-        flex: 1 0;
-        order: 2;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        display: flex;
-    }
     .github-stars {
-        margin-left: $med-space;
-        padding-top: 3px;
+        margin-right: $small-space;
+        padding-top: 6px;
     }
     .header-links {
         display:flex;
         justify-content: space-between;
-        width: 260px; // TODO I want to specify space between each
+        width: 260px; // TODO I want to specify space between each. Otherwise when I add links I have to change this.
     }
 }
 
