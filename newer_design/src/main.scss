@@ -110,9 +110,14 @@ body {
     .logo-link {
         margin-left: $small-space;
         .logo-title {
+            // font-family: 'Roboto', serif;
             color: black;
             font-size:24px;
+            font-weight: 300;
         }
+    }
+    .logo-link:hover {
+        text-decoration: none;
     }
     .github-stars {
         margin-right: $small-space;
