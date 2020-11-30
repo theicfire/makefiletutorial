@@ -166,19 +166,21 @@ body {
 .content {
     margin-bottom: 36px;
     ul {
-        margin: 8px 0 0 4px;
+        margin: 8px 0 0 32px;
         padding: 0;
         list-style: none;
+        // list-style-position: inside;
     }
     ul li {
         line-height: 16px;
         margin-top: 8px;
     }
     ul li::before {
-        content: "·";
+        content: "\2022";  /* Add content: \2022 is the CSS Code/unicode for a bullet */
         color: #c1c9d2; /* Change the color */
-        font-size: 50px;
-        vertical-align: middle;
-        margin-right: 16px;
+        font-weight: bold; /* If you want it to be bold */
+        display: inline-block; /* Needed to add space between the bullet and the text */
+        width: 24px; /* Also needed for space (tweak if needed) */
+        margin-left: -24px; /* Also needed for space (tweak if needed) */
     }
 }
