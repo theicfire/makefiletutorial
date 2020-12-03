@@ -17,6 +17,18 @@ autotoc: true
 <iframe width="560" height="315" src="https://www.youtube.com/embed/8QxYAUcq5FU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 -->
 
+<b>I built this guide because I could never quite wrap my head around understanding Makefiles.</b> They seemed awash with hidden rules and esoteric symbols, and asking simple questions didn’t yield simple answers. To solve this once and for all, I sat down for several weekends and read everything I could about Makefiles. I’ve congregated the most critical knowledge into this guide, where I help you learn Make through a series of descriptive, self contained examples that you can run yourself.
+
+If you’re totally new to Make, check out the Beginner Video that will get you up and running. If you instead mostly understand Make, consider checking out the Quick Start Template, which also has ample comments about what each part of the Makefile is doing.
+
+Good luck, and I hope you are able to slay the confusing world of Makefiles!
+
+<div class='intro-buttons'>
+<button>Start the Tutorial</button>
+<button>Quick Start Template</button>
+
+</div>
+
 # Getting Started
 Makefiles are used to help decide which parts of a large program need to be recompiled. Typically c or c++ files are compiled, but any language that can be compiled with shell commands will work. It can be used beyond programs too, when you need a series of instructions to run depending on what files have changed.
 
@@ -26,19 +38,26 @@ If you already know make, check out the [Quick Start Template](#quick-start-temp
 
 
 ## Running the Examples
-I made a quick [video](/screencasts.html) to show how to run these examples. You'll need a terminal and "make" installed. For each example, put the contents in a file called `Makefile`, and in that directory run the command `make`. Here is the output of running the above example:
+
+
+To run these examples, you'll need a terminal and "make" installed. For each example, put the contents in a file called `Makefile`, and in that directory run the command `make`. Let's start with the simplest of Makefiles:
 ```
-$ make
-echo "int main() { return 0; }" > blah.c
-cc -c blah.c -o blah.o
-cc blah.o -o blah
+hello:
+	echo "hello world"
 ```
 
-Some examples, like the above, have a target called "clean". Run it via `make clean` to delete the files that `make` generated:
+Here is the output of running the above example:
 ```
-$ make clean
-rm -f blah.o blah.c blah
+$ make
+echo "hello world"
+hello world
 ```
+
+That's it! If you're a bit confused, here's a video that goes through these steps, along with describing the basic structure of Makefiles.
+
+<div class='yt-video'>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/8QxYAUcq5FU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
 
 ## Makefile Syntax
 
@@ -55,7 +74,7 @@ targets: prerequisities
 - The *prerequisites* are also file names, seperated by spaces. These files need to exist before the commands for the target are run. These are also called *dependencies*
 
 ## Beginner Examples
-Our first makefile has three seperate *rules*. When you run `make blah` in the terminal, it will build a program called `blah` in a series of steps:
+The following Makefile has three seperate *rules*. When you run `make blah` in the terminal, it will build a program called `blah` in a series of steps:
 - Make is given `blah` as the target, so it first searches for this target
 - `blah` requires `blah.o`, so make searches for the `blah.o` target
 - `blah.o` requires `blah.c`, so make searches for the `blah.c` target
