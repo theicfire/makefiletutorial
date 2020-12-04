@@ -4,6 +4,10 @@ $small-space: 8px;
 $med-space: 16px;
 $header-height: 36px;
 
+html {
+  scroll-behavior: smooth;
+}
+
 #left {
     font-size: 14px;
     // padding-left: 8px;
@@ -154,7 +158,7 @@ body {
 
 
 .content {
-    margin-bottom: 36px;
+    padding-bottom: 36px; // Not sure why padding doesn't work
     ul {
         margin: 8px 0 0 32px;
         padding: 0;
@@ -184,14 +188,39 @@ body {
 .intro-buttons {
     display: flex;
     justify-content: space-evenly;
-    button {
-        background-color: #AD00FF;
-        color: white;
+    margin-top: 32px;
+    a {
+        display:inline-block;
+        background-color: #eee;
+        // background-color: #AD00FF;
+        color: black;
         font-size: 18px;
         padding: 16px 32px;
         border: 0px;
         border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, .25);
-        margin-top: 16px;
+        // box-shadow: 0 2px 4px rgba(0, 0, 0, .25);
+        cursor: pointer;
+    }
+    a:hover {
+        background-color: #ddd;
+        text-decoration: none;
+    }
+}
+
+.intro-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 80px 0 32px 0;
+    img {
+        height: 120px;
+    }
+    .title-wrapper {
+        margin-left: 40px;
+        display: flex;
+        flex-direction: column;
+        .title {
+            font-size: 40px;
+        }
     }
 }
