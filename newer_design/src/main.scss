@@ -215,10 +215,6 @@ body {
     }
 }
 
-code {
-    border-radius: 8px;
-}
-
 .intro-header {
     display: flex;
     justify-content: center;
@@ -237,11 +233,17 @@ code {
     }
 }
 
-p code {
+code {
     color: #002b36;
     border-radius: 4px;
     background-color: #eef1f1;
     font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
     padding: 0px 8px;
     font-size: 14px;
+}
+
+pre code {
+    border-radius: 8px;
+    font-size: 16px;
+    padding: 0px;
 }

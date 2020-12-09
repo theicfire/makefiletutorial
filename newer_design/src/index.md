@@ -403,8 +403,8 @@ clean:
 # Commands and execution
 ## Command Echoing/Silencing
 <!--  (Section 5.1) -->
-Add an @ before a command to stop it from being printed  
-You can also run make with -s to add an @ before each line  
+Add an `@` before a command to stop it from being printed  
+You can also run make with `-s` to add an `@` before each line  
 ```makefile
 all: 
 	@echo "This make line will not be printed"
@@ -442,8 +442,8 @@ cool:
 ## Error handling with `-k`, `-i`, and `i`
 <!--  (Section 5.4) -->
 Add `-k` when running make to continue running even in the face of errors. Helpful if you want to see all the errors of Make at once.  
-Add a "-" before a command to suppress the error  
-Add "-i" to make to have this happen for every command.
+Add a `-` before a command to suppress the error  
+Add `-i` to make to have this happen for every command.
 
 <!--  (Section 5.4) -->
 ```makefile
@@ -456,11 +456,11 @@ one:
 
 ## Interrupting or killing make
 <!--  (Section 5.5) -->
-Note only: If you ctrl+c make, it will delete the newer targets it just made.
+Note only: If you `ctrl+c` make, it will delete the newer targets it just made.
 
 ## Recursive use of make
 <!--  (Section 5.6) -->
-To recursively call a makefile, use the special $(MAKE) instead of "make" because it will pass the make flags for you and won't itself be affected by them.
+To recursively call a makefile, use the special `$(MAKE)` instead of `make` because it will pass the make flags for you and won't itself be affected by them.
 ```makefile
 new_contents = "hello:\n\ttouch inside_file"
 all:
@@ -475,7 +475,7 @@ clean:
 
 ## Use export for recursive make
 <!--  (Section 5.6) -->
-The export directive takes a variable and makes it accessible to sub-make commands. In this example, "cooly" is exported such that the makefile in subdir can use it.  
+The export directive takes a variable and makes it accessible to sub-make commands. In this example, `cooly` is exported such that the makefile in subdir can use it.  
   
 Note: export has the same syntax as sh, but they aren't related (although similar in function)  
 ```makefile
@@ -538,7 +538,7 @@ clean:
 
 There's a nice [list of options](http://www.gnu.org/software/make/manual/make.html#Options-Summary) that can be run from make. Check out `--dry-run`, `--touch`, `--old-file`. 
 
-You can have multiple targets to make, i.e. `make clean run test` runs the 'clean' goal, then 'run', and then 'test'.
+You can have multiple targets to make, i.e. `make clean run test` runs the `clean` goal, then `run`, and then `test`.
 
 # Variables Pt. 2
 ## Flavors and modification
@@ -639,7 +639,7 @@ all:
 
 ## Command line arguments and override
 <!--  (Section 6.7) -->
-You can override variables that come from the command line by using "override".
+You can override variables that come from the command line by using `override`.
 Here we ran make with `make some_option=hi`
 ```makefile
 # Overrides command line arguments
