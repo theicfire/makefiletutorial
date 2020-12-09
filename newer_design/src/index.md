@@ -34,13 +34,13 @@ Makefiles are used to help decide which parts of a large program need to be reco
 
 
 To run these examples, you'll need a terminal and "make" installed. For each example, put the contents in a file called `Makefile`, and in that directory run the command `make`. Let's start with the simplest of Makefiles:
-```
+```makefile
 hello:
 	echo "hello world"
 ```
 
 Here is the output of running the above example:
-```
+```shell
 $ make
 echo "hello world"
 hello world

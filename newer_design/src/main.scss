@@ -23,8 +23,8 @@ html {
         list-style: none;
     }
     .active a {
-        color: #111;
-        font-weight: bold;
+        color: #002b36;
+        // font-weight: bold;
     }
 }
 
@@ -38,12 +38,12 @@ html {
     // font-family: 'Roboto', serif;
     line-height: 1.3;
     font-size: 16px;
-    color: #3c4257;
+    color: #586e75;
 }
 
 a {
     // color: #4078c0;
-    color: #697386;
+    color: #839496;
     text-decoration: none;
 }
 
@@ -64,6 +64,10 @@ pre {
 h1 {
     margin: 32px 0 0 0;
     font-weight: 600;
+}
+
+h1, h2, h3, .intro-header {
+    color: #002b36;
 }
 
 h1:before, h2:before {
@@ -115,7 +119,7 @@ body {
         margin-left: $small-space;
         .logo-title {
             // font-family: 'Roboto', serif;
-            color: black;
+            color: #073642;
             font-size:24px;
             font-weight: 300;
         }
@@ -146,10 +150,14 @@ body {
   height: calc(100% - #{$header-height});
   top: 0;
   top: $header-height;
-  overflow-y: auto;  /*adds scroll to this container*/
+  overflow-y: hidden;
   position: fixed;
   width: $sidebar-width;
   padding-bottom: 16px;
+}
+
+#left:hover {
+  overflow-y: auto;  /*adds scroll to this container*/
 }
 
 #right {
@@ -191,9 +199,9 @@ body {
     margin-top: 32px;
     a {
         display:inline-block;
-        background-color: #eee;
+        background-color: #2aa198;
         // background-color: #AD00FF;
-        color: black;
+        color: white;
         font-size: 18px;
         padding: 16px 32px;
         border: 0px;
@@ -202,9 +210,13 @@ body {
         cursor: pointer;
     }
     a:hover {
-        background-color: #ddd;
+        background-color: #27968d;
         text-decoration: none;
     }
+}
+
+code {
+    border-radius: 8px;
 }
 
 .intro-header {
@@ -224,3 +236,11 @@ body {
         }
     }
 }
+
+
+
+
+
+
+
+
