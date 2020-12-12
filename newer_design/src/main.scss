@@ -147,13 +147,16 @@ body {
 
 #left {
   top: 0;
-  overflow-y: hidden;
   position: sticky;
   width: $sidebar-width;
-  padding-bottom: 16px;
   float: left;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
   .sidebar-header {
+      border-bottom: 1px solid #eee;
+      box-shadow: -20px 5px 20px 5px white;
+      z-index: 2;
       .sidebar-title {
           display: flex;
           justify-content: left;
@@ -173,11 +176,13 @@ body {
           margin-top: 3px;
       }
   }
-}
-
-
-#left:hover {
-  overflow-y: auto;  /*adds scroll to this container*/
+  .toc {
+       overflow-y: hidden;
+       padding-bottom: 16px;
+  }
+  .toc:hover {
+      overflow-y: auto;
+  }
 }
 
 #right {

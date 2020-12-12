@@ -53,9 +53,11 @@
                             data-show-count="true" aria-label="Star ntkme/github-buttons on GitHub">Star</a></span>
                 </div>
             </div>
-            <% if (toc) { %>
-            <%- renderToc(toc) %>
-            <% } %>
+            <div class='toc'>
+                <% if (toc) { %>
+                <%- renderToc(toc) %>
+                <% } %>
+            </div>
         </div>
         <div id="right">
             <div class="content">
