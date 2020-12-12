@@ -7,25 +7,11 @@ date: 2016-12-24
 autotoc: true
 ---
 
-<div class='intro-header'>
-<img src='assets/large_gnu_logo.png'/>
-<div class='title-wrapper'>
-<div class='title'>Makefile Tutorial</div>
-<div class='subtitle'>Through short examples</div>
-</div>
-</div>
-
 <b>I built this guide because I could never quite wrap my head around understanding Makefiles.</b> They seemed awash with hidden rules and esoteric symbols, and asking simple questions didn’t yield simple answers. To solve this, I sat down for several weekends and read everything I could about Makefiles. I’ve congregated the most critical knowledge into this guide, where I help you learn Make through a series of descriptive, self contained examples that you can run yourself.
 
 If you mostly understand Make, consider checking out the Makefile Cookbook, which has a template for medium sizes projects with ample comments about what each part of the Makefile is doing.
 
 Good luck, and I hope you are able to slay the confusing world of Makefiles!
-
-<div class='intro-buttons'>
-<a href='#getting-started'>Start the Tutorial</a>
-<a href='http://localhost:8000/#makefile-cookbook'>Makefile Cookbook</a>
-
-</div>
 
 # Getting Started
 Makefiles are used to help decide which parts of a large program need to be recompiled. Typically C or C++ files are compiled, but any language that can be compiled with shell commands will work. It can be used beyond programs too, when you need a series of instructions to run depending on what files have changed.

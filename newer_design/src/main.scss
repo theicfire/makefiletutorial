@@ -2,7 +2,6 @@ $sidebar-width: 300px;
 $page-width: 1280px;
 $small-space: 8px;
 $med-space: 16px;
-$header-height: 36px;
 
 html {
   scroll-behavior: smooth;
@@ -70,16 +69,6 @@ h1, h2, h3, .intro-header {
     color: #002b36;
 }
 
-h1:before, h2:before {
-    // Needed for anchor links. Found in https://stackoverflow.com/questions/10732690/offsetting-an-html-anchor-to-adjust-for-fixed-header
-    content: '';
-    display: block;
-    position: relative;
-    width: 0;
-    height: $header-height;
-    margin-top: -$header-height;
-}
-
 h2 {
     margin: $med-space 0 0 0;
     font-weight: 400;
@@ -99,9 +88,53 @@ body {
     position: relative;
 }
 
+    .title-pic {
+        position: absolute;
+        left: 200px;
+        width: 400px;
+        top: 0;
+    }
 #header {
-    height: $header-height;
-    border-bottom: 1px solid #eee;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .title-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: left;
+        color: black;
+        .title {
+            font-size: 60px;
+        }
+        .subtitle {
+            font-size: 30px;
+        }
+    }
+    .intro-buttons {
+        display: flex;
+        justify-content: space-evenly;
+        // margin-top: 32px;
+        a {
+            display:inline-block;
+            background-color: #2aa198;
+            // background-color: #AD00FF;
+            color: white;
+            font-size: 18px;
+            padding: 16px 32px;
+            border: 0px;
+            border-radius: 8px;
+            // box-shadow: 0 2px 4px rgba(0, 0, 0, .25);
+            cursor: pointer;
+            margin: 20px 80px;
+        }
+        a:hover {
+            background-color: #27968d;
+            text-decoration: none;
+        }
+    }
 }
 
 .body-wrapper {
@@ -120,7 +153,28 @@ body {
   padding-bottom: 16px;
   float: left;
   height: 100vh;
+  .sidebar-header {
+      .sidebar-title {
+          display: flex;
+          justify-content: left;
+          font-size: 32px;
+      }
+      .sidebar-subtitle {
+          display: flex;
+          justify-content: left;
+          margin-left: 16px;
+          img {
+              width: 25px;
+              height: 25px;
+              margin-right: 10px;
+          }
+      }
+      .github-stars {
+          margin-top: 3px;
+      }
+  }
 }
+
 
 #left:hover {
   overflow-y: auto;  /*adds scroll to this container*/
@@ -159,45 +213,6 @@ body {
         margin-top: 16px;
 }
 
-.intro-buttons {
-    display: flex;
-    justify-content: space-evenly;
-    margin-top: 32px;
-    a {
-        display:inline-block;
-        background-color: #2aa198;
-        // background-color: #AD00FF;
-        color: white;
-        font-size: 18px;
-        padding: 16px 32px;
-        border: 0px;
-        border-radius: 8px;
-        // box-shadow: 0 2px 4px rgba(0, 0, 0, .25);
-        cursor: pointer;
-    }
-    a:hover {
-        background-color: #27968d;
-        text-decoration: none;
-    }
-}
-
-.intro-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0px 0 32px 0;
-    img {
-        height: 120px;
-    }
-    .title-wrapper {
-        margin-left: 40px;
-        display: flex;
-        flex-direction: column;
-        .title {
-            font-size: 40px;
-        }
-    }
-}
 
 code {
     color: #002b36;
