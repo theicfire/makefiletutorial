@@ -101,59 +101,25 @@ body {
 
 #header {
     height: $header-height;
-    background-color: white;
     border-bottom: 1px solid #eee;
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
-    .inner-header {
-        max-width: $page-width;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    .logo-link {
-        margin-left: $small-space;
-        .logo-title {
-            // font-family: 'Roboto', serif;
-            color: #073642;
-            font-size:24px;
-            font-weight: 300;
-        }
-    }
-    .logo-link:hover {
-        text-decoration: none;
-    }
-    .github-stars {
-        margin-right: $small-space;
-        padding-top: 6px;
-    }
-    .header-links {
-        display:flex;
-        justify-content: space-between;
-        width: 260px; // TODO I want to specify space between each. Otherwise when I add links I have to change this.
-    }
 }
 
 .body-wrapper {
     max-width: $page-width;
+    position: relative;
     margin-left: auto;
     margin-right: auto;
-    margin-top: $header-height + $med-space;
     padding: 0 8px 0 8px;
 }
 
 #left {
-  height: calc(100% - #{$header-height});
   top: 0;
-  top: $header-height;
   overflow-y: hidden;
-  position: fixed;
+  position: sticky;
   width: $sidebar-width;
   padding-bottom: 16px;
+  float: left;
+  height: 100vh;
 }
 
 #left:hover {
@@ -219,7 +185,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 80px 0 32px 0;
+    margin: 0px 0 32px 0;
     img {
         height: 120px;
     }
