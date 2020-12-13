@@ -21,17 +21,11 @@ function get_lowest_header(header_order, in_view_headers) {
   return ret;
 }
 
-function get_header_height() {
-  // Hacky..
-  return document.querySelector("#header").offsetHeight;
-}
-
 window.addEventListener("DOMContentLoaded", () => {
   //   console.log("loaded");
   const in_view = {};
   const header_order = get_header_order();
   let current_header_id = "";
-  const header_height = get_header_height();
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -64,8 +58,7 @@ window.addEventListener("DOMContentLoaded", () => {
         }
       });
     },
-    // TODO 36px hardcoded for
-    { rootMargin: `-${header_height}px 0px 0px 0px` }
+    { rootMargin: `0px 0px 0px 0px` }
   );
 
   // Track all sections that have an `id` applied
