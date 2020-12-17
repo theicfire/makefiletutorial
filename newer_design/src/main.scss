@@ -179,14 +179,17 @@ body {
       box-shadow: -20px 0px 20px 0px white;
       z-index: 2;
       .social-buttons {
-    display: flex;
-    justify-content: left;
-
+        display: flex;
+        justify-content: left;
       }
-      .sidebar-title {
+      .sidebar-title a {
           display: flex;
           justify-content: left;
           font-size: 32px;
+          color: black;
+      }
+      .sidebar-title a:hover {
+          text-decoration: none;
       }
       .github-stars {
           margin-top: 3px;
