@@ -1,5 +1,5 @@
 ---
-title: Makefile Tutorial
+title: Makefile Tutorial By Example
 draft: false
 collection: Get Started
 layout: layout.ejs
