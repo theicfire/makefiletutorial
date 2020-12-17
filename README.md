@@ -1,8 +1,6 @@
 Makefile Tutorial by Example
 ========
 
-This is a single page website that has index.html, which is created by the file `index.md`. It uses github page's automatic jekyll compilation to do the conversion.
+This is a single page website. It's built by [metalsmith](https://metalsmith.io/), and the generated files are in `docs` (picked because Github Pages only supports `/` and `/docs` as directories to serve from).
 
-Run this locally by running `jekyll serve` in this directory. I've tested it with jekyll 4.0.0
-
-Design from [white-paper](https://github.com/vinitkumar/white-paper).
+Run this locally by running `node build.js` in this directory.
