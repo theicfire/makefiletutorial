@@ -88,24 +88,33 @@ body {
     position: relative;
 }
 
-    .title-pic {
-        position: absolute;
-        left: 200px;
-        width: 400px;
-        top: 0;
-    }
+
 #header {
-    height: 300px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    max-width: $page-width;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    // height: 300px;
+    margin-top: 16px;
+    .header-inside {
+        display: flex;
+        justify-content: center;
+    }
+    .title-left {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: stetch;
+    }
+    .title-pic {
+        width: 600px;
+    }
     .title-wrapper {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: left;
         color: black;
+        margin: 0 20px;
         .title {
             font-size: 60px;
         }
@@ -113,9 +122,15 @@ body {
             font-size: 30px;
         }
     }
+    .social-buttons {
+        display: flex;
+        justify-content: center;
+    }
     .intro-buttons {
         display: flex;
-        justify-content: space-evenly;
+        justify-content: space-between;
+        flex-flow: row wrap;
+        // width: 500px;
         // margin-top: 32px;
         a {
             display:inline-block;
@@ -128,7 +143,7 @@ body {
             border-radius: 8px;
             // box-shadow: 0 2px 4px rgba(0, 0, 0, .25);
             cursor: pointer;
-            margin: 20px 80px;
+            margin: 20px 0px;
         }
         a:hover {
             background-color: #27968d;
@@ -145,6 +160,12 @@ body {
     padding: 0 8px 0 8px;
 }
 
+.social-buttons img {
+        width: 25px;
+        height: 25px;
+        margin-right: 10px;
+}
+
 #left {
   top: 0;
   position: sticky;
@@ -155,22 +176,17 @@ body {
   flex-direction: column;
   .sidebar-header {
       border-bottom: 1px solid #eee;
-      box-shadow: -20px 5px 20px 5px white;
+      box-shadow: -20px 0px 20px 0px white;
       z-index: 2;
+      .social-buttons {
+    display: flex;
+    justify-content: left;
+
+      }
       .sidebar-title {
           display: flex;
           justify-content: left;
           font-size: 32px;
-      }
-      .sidebar-subtitle {
-          display: flex;
-          justify-content: left;
-          margin-left: 16px;
-          img {
-              width: 25px;
-              height: 25px;
-              margin-right: 10px;
-          }
       }
       .github-stars {
           margin-top: 3px;
@@ -232,4 +248,22 @@ pre code {
     border-radius: 8px;
     font-size: 16px;
     padding: 0px;
+}
+
+@media (max-width: 1100px) {
+    .title-pic {
+        display: none;
+    }
+    #left {
+        display: none;
+    }
+    #right {
+        margin-left: 0px;
+    }
+}
+
+@media (min-width: 1100px) {
+    #header .social-buttons {
+        display: none;
+    }
 }

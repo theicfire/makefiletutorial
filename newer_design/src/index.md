@@ -928,8 +928,6 @@ CXXFLAGS := -Wall -Wuninitialized -std=c++17 -g
 LDFLAGS  := -L/usr/lib -Llib
 BUILD    := ./build
 OBJ_DIR  := $(BUILD)/objects
-APP_DIR  := $(BUILD)/apps
-TARGET   := program
 INCLUDE  := -Iinclude/
 SRC      :=                      \
    $(wildcard src/*.cpp)         \
@@ -937,23 +935,21 @@ SRC      :=                      \
 
 OBJECTS  := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 
-all: mkdirs $(APP_DIR)/$(TARGET) 
+all: mkdirs $(BUILD)/program
 
 $(OBJ_DIR)/%.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
 
-$(APP_DIR)/$(TARGET): $(OBJECTS)
+$(BUILD)/program: $(OBJECTS)
 	$(CXX) $(CXXFLAGS) -o $(APP_DIR)/$(TARGET) $^ $(LDFLAGS)
 
 .PHONY: all mkdirs clean
 
 mkdirs:
-	mkdir -p $(APP_DIR)
 	mkdir -p $(OBJ_DIR)
 
 clean:
-	rm -rvf $(OBJ_DIR)/*
-	rm -rvf $(APP_DIR)/*
+	rm -rvf $(BUILD)/*
 ```
 
 
