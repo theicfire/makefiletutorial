@@ -22,7 +22,7 @@ function build(callback) {
     .source("./src")
 
     // This is where I want to build my files to
-    .destination("./build")
+    .destination("./docs")
 
     // Clean the build directory before running any plugins
     .clean(true)
