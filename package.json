@@ -1,7 +1,7 @@
 {
-  "name": "bedrock",
+  "name": "makefile-tutorial",
   "version": "1.0.0",
-  "description": "Github pages for Bedrock.",
+  "description": "Makefile Tutorial with Examples",
   "dependencies": {
     "ejs": "^3.1.5",
     "handlebars": "^4.7.6",
@@ -22,17 +22,6 @@
     "metalsmith-watch": "^1.0.3",
     "minimist": "^1.2.0"
   },
-  "scripts": {
-    "deploy": "./deploy.sh"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tilomitra/bedrock.git"
-  },
-  "author": "Tilo Mitra",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/tilomitra/bedrock/issues"
-  },
-  "homepage": "https://github.com/tilomitra/bedrock#readme"
+  "author": "Chase Lambert",
+  "license": "MIT"
 }
