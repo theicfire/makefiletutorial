@@ -7,9 +7,9 @@ date: 2016-12-24
 autotoc: true
 ---
 
-<b>I built this guide because I could never quite wrap my head around understanding Makefiles.</b> They seemed awash with hidden rules and esoteric symbols, and asking simple questions didn’t yield simple answers. To solve this, I sat down for several weekends and read everything I could about Makefiles. I’ve congregated the most critical knowledge into this guide, where I help you learn Make through a series of descriptive, self contained examples that you can run yourself.
+<b>I built this guide because I could never quite wrap my head around understanding Makefiles.</b> They seemed awash with hidden rules and esoteric symbols, and asking simple questions didn’t yield simple answers. To solve this, I sat down for several weekends and read everything I could about Makefiles. I've condensed the most critical knowledge into this guide. Each topic has a brief description and a self contained example that you can run yourself.
 
-If you mostly understand Make, consider checking out the Makefile Cookbook, which has a template for medium sizes projects with ample comments about what each part of the Makefile is doing.
+If you mostly understand Make, consider checking out the Makefile Cookbook, which has a <b>template for medium sized projects</b> with ample comments about what each part of the Makefile is doing.
 
 Good luck, and I hope you are able to slay the confusing world of Makefiles!
 
@@ -905,7 +905,7 @@ two:
 ```
 
 # Makefile Cookbook
-Now that you understand `make`, let's look a template you can use for your own projects.
+Now that you understand `make`, let's look at a template you can use for your own projects.
 
 <!-- Partly from https://www.partow.net/programming/makefile/index.html -->
 The file structure used in this example is as follows:
