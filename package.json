@@ -4,7 +4,7 @@
   "description": "Makefile Tutorial with Examples",
   "scripts": {
     "dev": "node build.js --dev",
-    "deploy": "node build.js && git push"
+    "build": "node build.js"
   },
   "dependencies": {
     "ejs": "^3.1.5",

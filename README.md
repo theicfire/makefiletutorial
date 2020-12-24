@@ -8,5 +8,7 @@ To run this locally:
 - `yarn dev`
 
 To deploy:
+- Make changes
+- `yarn build` (or `yarn dev`)
 - Commit changes
-- `yarn deploy`
+- git push
