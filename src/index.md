@@ -7,7 +7,7 @@ date: 2016-12-24
 autotoc: true
 ---
 
-<b>I built this guide because I could never quite wrap my head around understanding Makefiles.</b> They seemed awash with hidden rules and esoteric symbols, and asking simple questions didn’t yield simple answers. To solve this, I sat down for several weekends and read everything I could about Makefiles. I've condensed the most critical knowledge into this guide. Each topic has a brief description and a self contained example that you can run yourself.
+<b>I built this guide because I could never quite wrap my head around Makefiles.</b> They seemed awash with hidden rules and esoteric symbols, and asking simple questions didn’t yield simple answers. To solve this, I sat down for several weekends and read everything I could about Makefiles. I've condensed the most critical knowledge into this guide. Each topic has a brief description and a self contained example that you can run yourself.
 
 If you mostly understand Make, consider checking out the Makefile Cookbook, which has a <b>template for medium sized projects</b> with ample comments about what each part of the Makefile is doing.
 
