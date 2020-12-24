@@ -2,6 +2,10 @@
   "name": "makefile-tutorial",
   "version": "1.0.0",
   "description": "Makefile Tutorial with Examples",
+  "scripts": {
+    "dev": "node build.js --dev",
+    "deploy": "node build.js && git push"
+  },
   "dependencies": {
     "ejs": "^3.1.5",
     "handlebars": "^4.7.6",
@@ -21,6 +25,14 @@
     "metalsmith-metallic": "^2.0.1",
     "metalsmith-watch": "^1.0.3",
     "minimist": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=12.10.0",
+    "yarn": "^1.21.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theicfire/makefiletutorial"
   },
   "author": "Chase Lambert",
   "license": "MIT"

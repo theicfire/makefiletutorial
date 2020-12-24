@@ -1,28 +1,27 @@
-var Metalsmith = require("metalsmith"),
-  metallic = require("metalsmith-metallic"),
-  drafts = require("metalsmith-drafts"),
-  layouts = require("metalsmith-layouts"),
-  markdown = require("metalsmith-markdown"),
-  assets = require("metalsmith-assets"),
-  collections = require("metalsmith-collections"),
-  autotoc = require("metalsmith-autotoc"),
-  browserSync = require("browser-sync"),
-  argv = require("minimist")(process.argv);
-var serve = require("metalsmith-serve");
-var watch = require("metalsmith-watch");
-var sass = require("metalsmith-sass");
+var Metalsmith = require('metalsmith'),
+  metallic = require('metalsmith-metallic'),
+  drafts = require('metalsmith-drafts'),
+  layouts = require('metalsmith-layouts'),
+  markdown = require('metalsmith-markdown'),
+  assets = require('metalsmith-assets'),
+  collections = require('metalsmith-collections'),
+  autotoc = require('metalsmith-autotoc'),
+  argv = require('minimist')(process.argv);
+var serve = require('metalsmith-serve');
+var watch = require('metalsmith-watch');
+var sass = require('metalsmith-sass');
 
 build(function () {
-  console.log("Done building.");
+  console.log('Done building.');
 });
 
 function build(callback) {
-  Metalsmith(__dirname)
+  const smith = Metalsmith(__dirname)
     // This is the source directory
-    .source("./src")
+    .source('./src')
 
     // This is where I want to build my files to
-    .destination("./docs")
+    .destination('./docs')
 
     // Clean the build directory before running any plugins
     .clean(true)
@@ -38,15 +37,15 @@ function build(callback) {
       markdown({
         gfm: true,
         tables: true,
-      })
+      }),
     )
 
     // Generate a table of contents JSON for every heading.
     .use(
       autotoc({
-        selector: "h1, h2, h3, h4, h5, h6",
-        headerIdPrefix: "subhead",
-      })
+        selector: 'h1, h2, h3, h4, h5, h6',
+        headerIdPrefix: 'subhead',
+      }),
     )
 
     // Group my content into 4 distinct collections. These collection names
@@ -62,43 +61,45 @@ function build(callback) {
 
     // Use handlebars as layout engine.
     //.use(layouts('handlebars'))
-    .use(layouts({ engine: "ejs" }))
+    .use(layouts({ engine: 'ejs' }))
 
     .use(
       sass({
-        outputStyle: "expanded",
-      })
+        outputStyle: 'expanded',
+      }),
     )
 
     // Use the assets plugin to specify where assets are stored
     .use(
       assets({
-        source: "./assets",
-        destination: "./assets",
-      })
-    )
+        source: './assets',
+        destination: './assets',
+      }),
+    );
 
-    .use(
-      serve({
-        port: 8000,
-        verbose: true,
-      })
-    )
-    .use(
-      watch({
-        paths: {
-          "src/*.md": true,
-          "src/*": "**/**",
-          "layouts/*": "**/*",
-          "assets/*.css": "**/*",
-        },
-      })
-    )
+  if (argv.dev) {
+    smith
+      .use(
+        serve({
+          port: 8000,
+          verbose: true,
+        }),
+      )
+      .use(
+        watch({
+          paths: {
+            'src/*.md': true,
+            'src/*': '**/**',
+            'layouts/*': '**/*',
+            'assets/*.css': '**/*',
+          },
+        }),
+      );
+  }
 
-    // Build everything!
-    .build(function (err) {
-      var message = err ? err : "Build complete";
-      console.log(message);
-      callback();
-    });
+  smith.build(function (err) {
+    var message = err ? err : 'Build complete';
+    console.log(message);
+    callback();
+  });
 }
