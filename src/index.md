@@ -180,7 +180,7 @@ clean:
 ## Multiple targets
 <!--  (Section 4.8) -->
 When there are multiple targets for a rule, the commands will be run for each target  
-`$@` is a *automatic variable* that contains the target name.
+`$@` is an [automatic variable](#automatic-variables) that contains the target name.
 ```makefile
 
 all: f1.o f2.o
@@ -192,21 +192,6 @@ f1.o f2.o:
 # 	echo $@
 # f2.o
 # 	echo $@
-
-```
-
-## Multiple targets via wildcards
-<!--  (Section 4.8) -->
-We can use the wildcard % in targets, that captures zero or more of any character. Note we do not use *.o, because that is just the string *.o, which might be useful in the commands, but is only one target and does not expand.  
-<!--
-TODO why was this not a problem when I didn't use the % wildcard?
--->
-```makefile
-
-all: f1.o f2.o
-
-%.o:
-	echo $@
 
 ```
 

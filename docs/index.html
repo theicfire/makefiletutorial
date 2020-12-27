@@ -127,12 +127,6 @@
     
 </ol>
 
-<ol>
-    <li><a class="toc-item" href="#multiple-targets-via-wildcards">Multiple targets via wildcards</a>
-    </li>
-    
-</ol>
-
 
     
 </ol>
@@ -566,7 +560,7 @@ hello world</code></pre>
 
 <h2 id="multiple-targets">Multiple targets</h2>
 <!--  (Section 4.8) -->
-<p>When there are multiple targets for a rule, the commands will be run for each target<br><code>$@</code> is a <em>automatic variable</em> that contains the target name.</p>
+<p>When there are multiple targets for a rule, the commands will be run for each target<br><code>$@</code> is an <a href="#automatic-variables">automatic variable</a> that contains the target name.</p>
 <pre><code class="hljs makefile"><span class="hljs-section">all: f1.o f2.o</span>
 
 f1.o f2.o:
@@ -576,16 +570,6 @@ f1.o f2.o:
 <span class="hljs-comment">#     echo $@</span>
 <span class="hljs-comment"># f2.o</span>
 <span class="hljs-comment">#     echo $@</span></code></pre>
-
-<h2 id="multiple-targets-via-wildcards">Multiple targets via wildcards</h2>
-<!--  (Section 4.8) -->
-<p>We can use the wildcard % in targets, that captures zero or more of any character. Note we do not use <em>.o, because that is just the string </em>.o, which might be useful in the commands, but is only one target and does not expand.<br><!--
-TODO why was this not a problem when I didn't use the % wildcard?
---></p>
-<pre><code class="hljs makefile"><span class="hljs-section">all: f1.o f2.o</span>
-
-<span class="hljs-section">%.o:</span>
-    echo <span class="hljs-variable">$@</span></code></pre>
 
 <h1 id="automatic-variables-and-wildcards">Automatic Variables and Wildcards</h1>
 <h2 id="-wildcard">* Wildcard</h2>
