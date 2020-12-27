@@ -579,9 +579,9 @@ f1.o f2.o:
 <span class="hljs-section">print: $(wildcard *.c)</span>
     ls -la  <span class="hljs-variable">$?</span></code></pre>
 
-<p><code>*</code> may be used in the target, prerequisites, or in the <code>wildcard</code> function.
-Danger: <code>*</code> may not be directly used in a variable definitions
-Danger: When <code>*</code> matches no files, it is left as it is (unless run in the <code>wildcard</code> function)</p>
+<p><code>*</code> may be used in the target, prerequisites, or in the <code>wildcard</code> function.</p>
+<p>Danger: <code>*</code> may not be directly used in a variable definitions</p>
+<p>Danger: When <code>*</code> matches no files, it is left as it is (unless run in the <code>wildcard</code> function)</p>
 <pre><code class="hljs makefile">thing_wrong := *.o <span class="hljs-comment"># Don't do this! '*' will not get expanded</span>
 thing_right := <span class="hljs-variable">$(<span class="hljs-built_in">wildcard</span> *.o)</span>
 
