@@ -469,7 +469,7 @@ cool:
 	echo "Hello from bash"
 ```
 
-## Error handling with `-k`, `-i`, and `i`
+## Error handling with `-k`, `-i`, and `-`
 <!--  (Section 5.4) -->
 Add `-k` when running make to continue running even in the face of errors. Helpful if you want to see all the errors of Make at once.  
 Add a `-` before a command to suppress the error  
@@ -908,6 +908,15 @@ all:
 ```
 
 # Other Features
+## Include Makefiles
+The include directive tells make to read one or more other makefiles. It's a line in the makefile makefile that looks like this:
+```makefile
+include filenames...
+```
+
+This is particularly useful when you use compiler flags like `-M` that create Makefiles based on the source. For example, if some c files includes a header, that header will be added to a Makefile that's written by gcc. I talk about this more in the [Makefile Cookbook](#makefile-cookbook)
+
+
 ## The vpath Directive
 <!--  (Section 4.3.2) -->
 Use vpath to specify where some set of prerequisites exist. The format is `vpath <pattern> <directories, space/colon seperated>`  
@@ -972,55 +981,61 @@ two:
 ```
 
 # Makefile Cookbook
-Now that you understand `make`, let's look at a template you can use for your own projects.
+Let's go through a really juicy Make example that works well for medium sized projects.
 
-<!-- Partly from https://www.partow.net/programming/makefile/index.html -->
-The file structure used in this example is as follows:
-```
-─┬[ Project Folder ]
- ├──● Makefile (Shown below)
- ├──┬[ include ]
- │  └──● program.hpp
- └──┬[ src ]
-    ├──┬[ module1 ]
-    │  ├──● mod1.cpp
-    ├──● program1.cpp
-    └──● program2.cpp
-```
+The neat thing about this makefile is it automatically determines dependencies for you. All you have to do is put your C/C++ files in the `src/` folder.
 
-This makefile will automatically build all the C++ files, link them together, and generate a single executable located at `build/apps/program`:
 ```makefile
-CXX      := g++
-CXXFLAGS := -Wall -Wuninitialized -std=c++17 -g
-LDFLAGS  := -L/usr/lib -Llib
-BUILD    := ./build
-OBJ_DIR  := $(BUILD)/objects
-INCLUDE  := -Iinclude/
-SRC      :=                      \
-   $(wildcard src/*.cpp)         \
-   $(wildcard src/module1/*.cpp) \
+# Thanks to Job Vranish (https://spin.atomicobject.com/2016/08/26/makefile-c-projects/)
+TARGET_EXEC := final_program
 
-OBJECTS  := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
+BUILD_DIR := ./build
+SRC_DIRS := ./src
 
-all: mkdirs $(BUILD)/program
+# Find all the C and C++ files we want to compile
+SRCS := $(shell find $(SRC_DIRS) -name *.cpp -or -name *.c)
 
-$(OBJ_DIR)/%.o: %.cpp
-	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
+# String substitution for every C/C++ file.
+# As an example, hello.cpp turns into ./build/hello.cpp.o
+OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 
-$(BUILD)/program: $(OBJECTS)
-	$(CXX) $(CXXFLAGS) -o $(APP_DIR)/$(TARGET) $^ $(LDFLAGS)
+# String substitution (suffix version without %).
+# As an example, ./build/hello.cpp.o turns into ./build/hello.cpp.d
+DEPS := $(OBJS:.o=.d)
 
-.PHONY: all mkdirs clean
+# Every folder in ./src will need to be passed to GCC so that it can find header files
+INC_DIRS := $(shell find $(SRC_DIRS) -type d)
+# Add a prefix to INC_DIRS. So moduleA would become -ImoduleA. GCC understands this -I flag
+INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
-mkdirs:
-	mkdir -p $(OBJ_DIR)
+# The -MMD and -MP flags together generate Makefiles for us!
+# These files will have .d instead of .o as the output.
+CPPFLAGS := $(INC_FLAGS) -MMD -MP
 
+# The final build step.
+$(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
+	$(CC) $(OBJS) -o $@ $(LDFLAGS)
+
+# Build step for C source
+$(BUILD_DIR)/%.c.o: %.c
+	mkdir -p $(dir $@)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+# Build step for C++ source
+$(BUILD_DIR)/%.cpp.o: %.cpp
+	mkdir -p $(dir $@)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+
+
+.PHONY: clean
 clean:
-	rm -rvf $(BUILD)/*
+	rm -r $(BUILD_DIR)
+
+# Include the .d makefiles. The - at the front suppresses the errors of missing
+# Makefiles. Initially, all the .d files will be missing, and we don't want those
+# errors to show up.
+-include $(DEPS)
 ```
-
-
-
 
 <!--
 TODO: This example fails initially because blah.d doesn't exist. I'm not sure how to fix this example, there are probably better ones out there..

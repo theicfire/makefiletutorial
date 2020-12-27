@@ -230,7 +230,7 @@
 </ol>
 
 <ol>
-    <li><a class="toc-item" href="#error-handling-with-k-i-and-i">Error handling with -k, -i, and i</a>
+    <li><a class="toc-item" href="#error-handling-with-k-i-and-">Error handling with -k, -i, and -</a>
     </li>
     
 </ol>
@@ -388,6 +388,12 @@
     </li>
     
     
+
+<ol>
+    <li><a class="toc-item" href="#include-makefiles">Include Makefiles</a>
+    </li>
+    
+</ol>
 
 <ol>
     <li><a class="toc-item" href="#the-vpath-directive">The vpath Directive</a>
@@ -807,7 +813,7 @@ CFLAGS = -g <span class="hljs-comment"># Flag for implicit rules. Turn on debug 
 <span class="hljs-section">cool:</span>
     echo <span class="hljs-string">"Hello from bash"</span></code></pre>
 
-<h2 id="error-handling-with-k-i-and-i">Error handling with <code>-k</code>, <code>-i</code>, and <code>i</code></h2>
+<h2 id="error-handling-with-k-i-and-">Error handling with <code>-k</code>, <code>-i</code>, and <code>-</code></h2>
 <!--  (Section 5.4) -->
 <p>Add <code>-k</code> when running make to continue running even in the face of errors. Helpful if you want to see all the errors of Make at once.<br>Add a <code>-</code> before a command to suppress the error<br>Add <code>-i</code> to make to have this happen for every command.</p>
 <!--  (Section 5.4) -->
@@ -1153,6 +1159,11 @@ bar := <span class="hljs-variable">$(<span class="hljs-built_in">if</span> <span
     @echo <span class="hljs-variable">$(<span class="hljs-built_in">shell</span> ls -la)</span> <span class="hljs-comment"># Very ugly because the newlines are gone!</span></code></pre>
 
 <h1 id="other-features">Other Features</h1>
+<h2 id="include-makefiles">Include Makefiles</h2>
+<p>The include directive tells make to read one or more other makefiles. It&#39;s a line in the makefile makefile that looks like this:</p>
+<pre><code class="hljs makefile"><span class="hljs-keyword">include</span> filenames...</code></pre>
+
+<p>This is particularly useful when you use compiler flags like <code>-M</code> that create Makefiles based on the source. For example, if some c files includes a header, that header will be added to a Makefile that&#39;s written by gcc. I talk about this more in the <a href="#makefile-cookbook">Makefile Cookbook</a></p>
 <h2 id="the-vpath-directive">The vpath Directive</h2>
 <!--  (Section 4.3.2) -->
 <p>Use vpath to specify where some set of prerequisites exist. The format is <code>vpath &lt;pattern&gt; &lt;directories, space/colon seperated&gt;</code><br><code>&lt;pattern&gt;</code> can have a <code>%</code>, which matches any zero or more characters.<br>You can also do this globallyish with the variable VPATH  </p>
@@ -1202,50 +1213,57 @@ The backslash ("\\") character gives us the ability to use multiple lines when t
     false</code></pre>
 
 <h1 id="makefile-cookbook">Makefile Cookbook</h1>
-<p>Now that you understand <code>make</code>, let&#39;s look at a template you can use for your own projects.</p>
-<!-- Partly from https://www.partow.net/programming/makefile/index.html -->
-<p>The file structure used in this example is as follows:</p>
-<pre><code class="hljs">─┬<span class="hljs-selector-attr">[ Project Folder ]</span>
- ├──● <span class="hljs-selector-tag">Makefile</span> (<span class="hljs-selector-tag">Shown</span> <span class="hljs-selector-tag">below</span>)
- ├──┬<span class="hljs-selector-attr">[ include ]</span>
- │  └──● <span class="hljs-selector-tag">program</span><span class="hljs-selector-class">.hpp</span>
- └──┬<span class="hljs-selector-attr">[ src ]</span>
-    ├──┬<span class="hljs-selector-attr">[ module1 ]</span>
-    │  ├──● <span class="hljs-selector-tag">mod1</span><span class="hljs-selector-class">.cpp</span>
-    ├──● <span class="hljs-selector-tag">program1</span><span class="hljs-selector-class">.cpp</span>
-    └──● <span class="hljs-selector-tag">program2</span><span class="hljs-selector-class">.cpp</span></code></pre>
+<p>Let&#39;s go through a really juicy Make example that works well for medium sized projects.</p>
+<p>The neat thing about this makefile is it automatically determines dependencies for you. All you have to do is put your C/C++ files in the <code>src/</code> folder.</p>
+<pre><code class="hljs makefile"><span class="hljs-comment"># Thanks to Job Vranish (https://spin.atomicobject.com/2016/08/26/makefile-c-projects/)</span>
+TARGET_EXEC := final_program
 
-<p>This makefile will automatically build all the C++ files, link them together, and generate a single executable located at <code>build/apps/program</code>:</p>
-<pre><code class="hljs makefile">CXX      := g++
-CXXFLAGS := -Wall -Wuninitialized -std=c++17 -g
-LDFLAGS  := -L/usr/lib -Llib
-BUILD    := ./build
-OBJ_DIR  := <span class="hljs-variable">$(BUILD)</span>/objects
-INCLUDE  := -Iinclude/
-SRC      :=                      \
-   <span class="hljs-variable">$(<span class="hljs-built_in">wildcard</span> src/*.cpp)</span>         \
-   <span class="hljs-variable">$(<span class="hljs-built_in">wildcard</span> src/module1/*.cpp)</span> \
+BUILD_DIR := ./build
+SRC_DIRS := ./src
 
-OBJECTS  := $(SRC:%.cpp=<span class="hljs-variable">$(OBJ_DIR)</span>/%.o)
+<span class="hljs-comment"># Find all the C and C++ files we want to compile</span>
+SRCS := <span class="hljs-variable">$(<span class="hljs-built_in">shell</span> find <span class="hljs-variable">$(SRC_DIRS)</span> -name *.cpp -<span class="hljs-built_in">or</span> -name *.c)</span>
 
-<span class="hljs-section">all: mkdirs <span class="hljs-variable">$(BUILD)</span>/program</span>
+<span class="hljs-comment"># String substitution for every C/C++ file.</span>
+<span class="hljs-comment"># As an example, hello.cpp turns into ./build/hello.cpp.o</span>
+OBJS := $(SRCS:%=<span class="hljs-variable">$(BUILD_DIR)</span>/%.o)
 
-<span class="hljs-variable">$(OBJ_DIR)</span>/%.o: %.cpp
-    <span class="hljs-variable">$(CXX)</span> <span class="hljs-variable">$(CXXFLAGS)</span> <span class="hljs-variable">$(INCLUDE)</span> -c <span class="hljs-variable">$&lt;</span> -o <span class="hljs-variable">$@</span>
+<span class="hljs-comment"># String substitution (suffix version without %).</span>
+<span class="hljs-comment"># As an example, ./build/hello.cpp.o turns into ./build/hello.cpp.d</span>
+DEPS := $(OBJS:.o=.d)
 
-<span class="hljs-variable">$(BUILD)</span>/program: <span class="hljs-variable">$(OBJECTS)</span>
-    <span class="hljs-variable">$(CXX)</span> <span class="hljs-variable">$(CXXFLAGS)</span> -o <span class="hljs-variable">$(APP_DIR)</span>/<span class="hljs-variable">$(TARGET)</span> <span class="hljs-variable">$^</span> <span class="hljs-variable">$(LDFLAGS)</span>
+<span class="hljs-comment"># Every folder in ./src will need to be passed to GCC so that it can find header files</span>
+INC_DIRS := <span class="hljs-variable">$(<span class="hljs-built_in">shell</span> find <span class="hljs-variable">$(SRC_DIRS)</span> -type d)</span>
+<span class="hljs-comment"># Add a prefix to INC_DIRS. So moduleA would become -ImoduleA. GCC understands this -I flag</span>
+INC_FLAGS := <span class="hljs-variable">$(<span class="hljs-built_in">addprefix</span> -I,<span class="hljs-variable">$(INC_DIRS)</span>)</span>
 
-<span class="hljs-meta"><span class="hljs-meta-keyword">.PHONY</span>: all mkdirs clean</span>
+<span class="hljs-comment"># The -MMD and -MP flags together generate Makefiles for us!</span>
+<span class="hljs-comment"># These files will have .d instead of .o as the output.</span>
+CPPFLAGS := <span class="hljs-variable">$(INC_FLAGS)</span> -MMD -MP
 
-<span class="hljs-section">mkdirs:</span>
-    mkdir -p <span class="hljs-variable">$(OBJ_DIR)</span>
+<span class="hljs-comment"># The final build step.</span>
+<span class="hljs-variable">$(BUILD_DIR)</span>/<span class="hljs-variable">$(TARGET_EXEC)</span>: <span class="hljs-variable">$(OBJS)</span>
+    <span class="hljs-variable">$(CC)</span> <span class="hljs-variable">$(OBJS)</span> -o <span class="hljs-variable">$@</span> <span class="hljs-variable">$(LDFLAGS)</span>
 
+<span class="hljs-comment"># Build step for C source</span>
+<span class="hljs-variable">$(BUILD_DIR)</span>/%.c.o: %.c
+    mkdir -p <span class="hljs-variable">$(<span class="hljs-built_in">dir</span> <span class="hljs-variable">$@</span>)</span>
+    <span class="hljs-variable">$(CC)</span> <span class="hljs-variable">$(CPPFLAGS)</span> <span class="hljs-variable">$(CFLAGS)</span> -c <span class="hljs-variable">$&lt;</span> -o <span class="hljs-variable">$@</span>
+
+<span class="hljs-comment"># Build step for C++ source</span>
+<span class="hljs-variable">$(BUILD_DIR)</span>/%.cpp.o: %.cpp
+    mkdir -p <span class="hljs-variable">$(<span class="hljs-built_in">dir</span> <span class="hljs-variable">$@</span>)</span>
+    <span class="hljs-variable">$(CXX)</span> <span class="hljs-variable">$(CPPFLAGS)</span> <span class="hljs-variable">$(CXXFLAGS)</span> -c <span class="hljs-variable">$&lt;</span> -o <span class="hljs-variable">$@</span>
+
+
+<span class="hljs-meta"><span class="hljs-meta-keyword">.PHONY</span>: clean</span>
 <span class="hljs-section">clean:</span>
-    rm -rvf <span class="hljs-variable">$(BUILD)</span>/*</code></pre>
+    rm -r <span class="hljs-variable">$(BUILD_DIR)</span>
 
-
-
+<span class="hljs-comment"># Include the .d makefiles. The - at the front suppresses the errors of missing</span>
+<span class="hljs-comment"># Makefiles. Initially, all the .d files will be missing, and we don't want those</span>
+<span class="hljs-comment"># errors to show up.</span>
+<span class="hljs-keyword">-include</span> <span class="hljs-variable">$(DEPS)</span></code></pre>
 
 <!--
 TODO: This example fails initially because blah.d doesn't exist. I'm not sure how to fix this example, there are probably better ones out there..
