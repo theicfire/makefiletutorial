@@ -904,7 +904,7 @@ one := ${one} there
 <span class="hljs-section">all: </span>
     echo <span class="hljs-variable">$(one)</span></code></pre>
 
-<p>?= only sets variables if they have not yet been set</p>
+<p><code>?=</code> only sets variables if they have not yet been set</p>
 <pre><code class="hljs makefile">one = hello
 one ?= will not be set
 two ?= will be set
@@ -924,34 +924,19 @@ space = <span class="hljs-variable">$(nullstring)</span> <span class="hljs-comme
     echo <span class="hljs-string">"<span class="hljs-variable">$(after)</span>"</span>
     echo start<span class="hljs-string">"<span class="hljs-variable">$(space)</span>"</span>end</code></pre>
 
-<p>Use the form $(var:a=b) to replace text in a series of space-seperated words.</p>
-<p>Note: don&#39;t put spaces in between anything; it will be seen as a search or replacement term<br>Note: This is shorthand for using make&#39;s <code>patsubst</code> expansion function</p>
-<pre><code class="hljs makefile">foo := a.o b.o c.o
-<span class="hljs-comment"># bar becomes a.c b.c c.c</span>
-bar := $(foo:.o=.c)
-
-<span class="hljs-section">all: </span>
-    echo <span class="hljs-variable">$(bar)</span></code></pre>
-
-<p>You can use % as well to grab some text!</p>
-<pre><code class="hljs makefile">foo := a.o b.o c.o
-bar := $(foo:%.o=%)
-
-<span class="hljs-section">all: </span>
-    echo <span class="hljs-variable">$(bar)</span></code></pre>
-
 <p>An undefined variable is actually an empty string!</p>
 <pre><code class="hljs makefile"><span class="hljs-section">all: </span>
     <span class="hljs-comment"># Undefined variables are just empty strings!</span>
     echo <span class="hljs-variable">$(nowhere)</span></code></pre>
 
-<p>Use += to append</p>
+<p>Use <code>+=</code> to append</p>
 <pre><code class="hljs makefile">foo := start
 foo += more
 
 <span class="hljs-section">all: </span>
     echo <span class="hljs-variable">$(foo)</span></code></pre>
 
+<p><a href="#string-substitution">String Substitution</a> is also a really common and useful way to modify variables. Also check out <a href="https://www.gnu.org/software/make/manual/html_node/Text-Functions.html#Text-Functions">Text Functions</a> and <a href="https://www.gnu.org/software/make/manual/html_node/File-Name-Functions.html#File-Name-Functions">Filename Functions</a>.</p>
 <h2 id="command-line-arguments-and-override">Command line arguments and override</h2>
 <!--  (Section 6.7) -->
 <p>You can override variables that come from the command line by using <code>override</code>.
@@ -1094,6 +1079,7 @@ bar := <span class="hljs-variable">$(<span class="hljs-built_in">subst</span> <s
 <p>&quot;Finds whitespace-separated words in text that match pattern and replaces them with replacement. Here pattern may contain a ‘%’ which acts as a wildcard, matching any number of any characters within a word. If replacement also contains a ‘%’, the ‘%’ is replaced by the text that matched the ‘%’ in pattern. Only the first ‘%’ in the pattern and replacement is treated this way; any subsequent ‘%’ is unchanged.&quot; (<a href="https://www.gnu.org/software/make/manual/html_node/Text-Functions.html#Text-Functions">GNU docs</a>)</p>
 <p>The substitution reference <code>$(text:pattern=replacement)</code> is a shorthand for this.</p>
 <p>There&#39;s another shorthand that that replaces only suffixes: <code>$(text:suffix=replacement)</code>. No <code>%</code> wildcard is used here.</p>
+<p>Note: don&#39;t add extra spaces for this shorthand. It will be seen as a search or replacement term.</p>
 <pre><code class="hljs makefile">foo := a.o b.o l.a c.o
 one := <span class="hljs-variable">$(<span class="hljs-built_in">patsubst</span> %.o,%.c,<span class="hljs-variable">$(foo)</span>)</span>
 <span class="hljs-comment"># This is a shorthand for the above</span>

@@ -590,7 +590,7 @@ all:
 	echo $(one)
 ```
 
-?= only sets variables if they have not yet been set
+`?=` only sets variables if they have not yet been set
 ```makefile
 
 one = hello
@@ -615,29 +615,6 @@ all:
 	echo start"$(space)"end
 ```
 
-Use the form $(var:a=b) to replace text in a series of space-seperated words.
-
-Note: don't put spaces in between anything; it will be seen as a search or replacement term  
-Note: This is shorthand for using make's `patsubst` expansion function
-```makefile
-foo := a.o b.o c.o
-# bar becomes a.c b.c c.c
-bar := $(foo:.o=.c)
-
-all: 
-	echo $(bar)
-```
-
-You can use % as well to grab some text!
-```makefile
-
-foo := a.o b.o c.o
-bar := $(foo:%.o=%)
-
-all: 
-	echo $(bar)
-```
-
 An undefined variable is actually an empty string!
 ```makefile
 
@@ -646,7 +623,7 @@ all:
 	echo $(nowhere)
 ```
 
-Use += to append
+Use `+=` to append
 ```makefile
 foo := start
 foo += more
@@ -654,6 +631,8 @@ foo += more
 all: 
 	echo $(foo)
 ```
+
+[String Substitution](#string-substitution) is also a really common and useful way to modify variables. Also check out [Text Functions](https://www.gnu.org/software/make/manual/html_node/Text-Functions.html#Text-Functions) and [Filename Functions](https://www.gnu.org/software/make/manual/html_node/File-Name-Functions.html#File-Name-Functions).
 
 ## Command line arguments and override
 <!--  (Section 6.7) -->
@@ -832,6 +811,8 @@ all:
 The substitution reference `$(text:pattern=replacement)` is a shorthand for this.
 
 There's another shorthand that that replaces only suffixes: `$(text:suffix=replacement)`. No `%` wildcard is used here.
+
+Note: don't add extra spaces for this shorthand. It will be seen as a search or replacement term.
 
 ```makefile
 foo := a.o b.o l.a c.o
