@@ -213,6 +213,10 @@ body {
   margin-left: calc(32px + 300px);
 }
 
+#right a {
+  color: #2aa198;
+}
+
 .content {
   padding-bottom: 36px;
 }
@@ -262,6 +266,11 @@ pre code {
   border-radius: 8px;
   font-size: 16px;
   padding: 0px;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
 }
 
 @media (max-width: 1100px) {

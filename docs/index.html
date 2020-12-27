@@ -70,6 +70,18 @@
     
 
 <ol>
+    <li><a class="toc-item" href="#why-do-makefiles-exist-">Why do Makefiles exist?</a>
+    </li>
+    
+</ol>
+
+<ol>
+    <li><a class="toc-item" href="#what-alternatives-are-there-to-make-">What alternatives are there to Make?</a>
+    </li>
+    
+</ol>
+
+<ol>
     <li><a class="toc-item" href="#running-the-examples">Running the Examples</a>
     </li>
     
@@ -132,7 +144,13 @@
     
 
 <ol>
-    <li><a class="toc-item" href="#wildcard">Wildcard</a>
+    <li><a class="toc-item" href="#-wildcard">* Wildcard</a>
+    </li>
+    
+</ol>
+
+<ol>
+    <li><a class="toc-item" href="#-wildcard">% Wildcard</a>
     </li>
     
 </ol>
@@ -166,13 +184,19 @@
 </ol>
 
 <ol>
-    <li><a class="toc-item" href="#double-colon-rules">Double-Colon Rules</a>
+    <li><a class="toc-item" href="#implicit-rules">Implicit Rules</a>
     </li>
     
 </ol>
 
 <ol>
-    <li><a class="toc-item" href="#implicit-rules">Implicit Rules</a>
+    <li><a class="toc-item" href="#pattern-rules">Pattern Rules</a>
+    </li>
+    
+</ol>
+
+<ol>
+    <li><a class="toc-item" href="#double-colon-rules">Double-Colon Rules</a>
     </li>
     
 </ol>
@@ -326,6 +350,12 @@
 </ol>
 
 <ol>
+    <li><a class="toc-item" href="#string-substitution">String Substitution</a>
+    </li>
+    
+</ol>
+
+<ol>
     <li><a class="toc-item" href="#the-foreach-function">The foreach function</a>
     </li>
     
@@ -394,10 +424,19 @@
         <div id="right">
             <div class="content">
                 <p><b>I built this guide because I could never quite wrap my head around Makefiles.</b> They seemed awash with hidden rules and esoteric symbols, and asking simple questions didn’t yield simple answers. To solve this, I sat down for several weekends and read everything I could about Makefiles. I&#39;ve condensed the most critical knowledge into this guide. Each topic has a brief description and a self contained example that you can run yourself.</p>
-<p>If you mostly understand Make, consider checking out the Makefile Cookbook, which has a <b>template for medium sized projects</b> with ample comments about what each part of the Makefile is doing.</p>
+<p>If you mostly understand Make, consider checking out the Makefile Cookbook, which has a template for medium sized projects with ample comments about what each part of the Makefile is doing.</p>
 <p>Good luck, and I hope you are able to slay the confusing world of Makefiles!</p>
 <h1 id="getting-started">Getting Started</h1>
-<p>Makefiles are used to help decide which parts of a large program need to be recompiled. Typically C or C++ files are compiled, but any language that can be compiled with shell commands will work. It can be used beyond programs too, when you need a series of instructions to run depending on what files have changed.</p>
+<h2 id="why-do-makefiles-exist-">Why do Makefiles exist?</h2>
+<p>Makefiles are used to help decide which parts of a large program need to be recompiled. In the vast majority of cases, C or C++ files are compiled. Other languages typically have their own tools that serve a similar purpose as Make. It can be used beyond programs too, when you need a series of instructions to run depending on what files have changed. This tutorial will focus on the C/C++ compilation use case.</p>
+<p>Here&#39;s an example dependency graph that you might build with Make. If any file&#39;s dependencies changes, then the file will get recompiled:</p>
+<div class="center">
+<img src="/assets/dependency_graph.png">
+</div>
+
+<h2 id="what-alternatives-are-there-to-make-">What alternatives are there to Make?</h2>
+<p>Popular C/C++ alternative build systems are <a href="https://scons.org/">SCons</a>, <a href="https://cmake.org/">CMake</a>, <a href="https://bazel.build/">Bazel</a>, and <a href="https://ninja-build.org/">Ninja</a>. Some code editors like <a href="https://visualstudio.microsoft.com/">Microsoft Visual Studio</a> have their own built in build tools. For Java, there&#39;s <a href="https://ant.apache.org/">Ant</a>, <a href="https://maven.apache.org/what-is-maven.html">Maven</a>, and <a href="https://gradle.org/">Gradle</a>. Other languages like Go and Rust have their own build tools.</p>
+<p>Interpreted languages like Python, Ruby, and Javascript don&#39;t require an analogue to Makefiles. The goal of Makefiles is to compile whatever files need to be compiled, based on what files have changed. But when files in interpreted languages change, nothing needs to get recompiled. When the program runs, the most recent version of the file is used.</p>
 <h2 id="running-the-examples">Running the Examples</h2>
 <p>To run these examples, you&#39;ll need a terminal and &quot;make&quot; installed. For each example, put the contents in a file called <code>Makefile</code>, and in that directory run the command <code>make</code>. Let&#39;s start with the simplest of Makefiles:</p>
 <pre><code class="hljs makefile"><span class="hljs-section">hello:</span>
@@ -534,7 +573,7 @@ f1.o f2.o:
 
 <h2 id="multiple-targets-via-wildcards">Multiple targets via wildcards</h2>
 <!--  (Section 4.8) -->
-<p>We can use the wildcard % in targets, that captures zero or more of any character. Note we do not use <em>.o, because that is just the string </em>.o, which might be useful in the commands,<br>but is only one target and does not expand.<br><!--
+<p>We can use the wildcard % in targets, that captures zero or more of any character. Note we do not use <em>.o, because that is just the string </em>.o, which might be useful in the commands, but is only one target and does not expand.<br><!--
 TODO why was this not a problem when I didn't use the % wildcard?
 --></p>
 <pre><code class="hljs makefile"><span class="hljs-section">all: f1.o f2.o</span>
@@ -543,32 +582,48 @@ TODO why was this not a problem when I didn't use the % wildcard?
     echo <span class="hljs-variable">$@</span></code></pre>
 
 <h1 id="automatic-variables-and-wildcards">Automatic Variables and Wildcards</h1>
-<h2 id="wildcard">Wildcard</h2>
+<h2 id="-wildcard">* Wildcard</h2>
 <!--  (Section 4.2) -->
-<p>We can use wildcards in the target, prerequisites, or commands.<br>Valid wildcards are <code>*, ?, [...]</code>  </p>
-<pre><code class="hljs makefile"><span class="hljs-section">some_file: *.c</span>
-    <span class="hljs-comment"># create the binary</span>
+<p>Both <code>*</code> and <code>%</code> are called wildcards in Make, but they mean entirely different things. <code>*</code> search your filesystem for matching filenames. I suggest that you always wrap it in the <code>wildcard</code> function, because otherwise you may fall into a common pitfall described below. It&#39;s oddly unhelpful and I find it more confusing than useful.</p>
+<pre><code class="hljs makefile"><span class="hljs-comment"># Print out file information about every .c file</span>
+<span class="hljs-section">print: $(wildcard *.c)</span>
+    ls -la  <span class="hljs-variable">$?</span></code></pre>
+`*` may be used in the target, prerequisites, or in the `wildcard` function.
+Danger: `*` may not be directly used in a variable definitions
+Danger: When `*` matches no files, it is left as it is (unless run in the `wildcard` function)
 
-<span class="hljs-section">*.c:</span>
-    touch f1.c
-    touch f2.c
+<pre><code class="hljs makefile">thing_wrong := *.o <span class="hljs-comment"># Don't do this! '*' will not get expanded</span>
+thing_right := <span class="hljs-variable">$(<span class="hljs-built_in">wildcard</span> *.o)</span>
 
-<span class="hljs-section">clean:</span>
-    rm -f *.c</code></pre>
+<span class="hljs-section">all: one two three four</span>
 
-<!--  (Section 4.2.3) -->
-<p>We CANNOT use wildcards in other places, like variable declarations or function arguments<br>Use the wildcard function instead.  </p>
-<pre><code class="hljs makefile">wrong = *.o <span class="hljs-comment"># Wrong</span>
-objects := <span class="hljs-variable">$(<span class="hljs-built_in">wildcard</span> *.c)</span> <span class="hljs-comment"># Right</span>
-<span class="hljs-section">some_binary: </span>
-    touch f1.c
-    touch f2.c
-    echo <span class="hljs-variable">$(wrong)</span>
-    echo <span class="hljs-variable">$(objects)</span>
+<span class="hljs-comment"># Fails, because $(thing_wrong) is the string "*.o"</span>
+<span class="hljs-section">one: <span class="hljs-variable">$(thing_wrong)</span></span>
 
-<span class="hljs-section">clean:</span>
-    rm -f *.c</code></pre>
+<span class="hljs-comment"># Stays as *.o if there are no files that match this pattern :(</span>
+<span class="hljs-section">two: *.o </span>
 
+<span class="hljs-comment"># Works as you would expect! In this case, it does nothing.</span>
+<span class="hljs-section">three: <span class="hljs-variable">$(thing_right)</span></span>
+
+<span class="hljs-comment"># Same as rule three</span>
+<span class="hljs-section">four: $(wildcard *.o)</span></code></pre>
+
+
+<h2 id="-wildcard">% Wildcard</h2>
+<p><code>%</code> is really useful, but is somewhat confusing because of the variety of situations it can be used in.</p>
+<ul>
+<li>When used in &quot;matching&quot; mode, it matches one or more characters in a string. This match is called the stem.</li>
+<li>When used in &quot;replacing&quot; mode, it takes the stem that was matched and replaces that in a string.</li>
+<li><code>%</code> is most often used in rule definitions and in some specific functions.</li>
+</ul>
+<p>See these sections on examples of it being used:</p>
+<ul>
+<li><a href="#static-pattern-rules">Static Pattern Rules</a></li>
+<li><a href="#pattern-rules">Pattern Rules</a></li>
+<li><a href="#string-substitution">String Substitution</a></li>
+<li><a href="#the-vpath-directive">The vpath Directive</a></li>
+</ul>
 <h2 id="automatic-variables">Automatic Variables</h2>
 <!--  (Section 10.5) -->
 <p>There are many <a href="https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html">automatic variables</a>, but often only a few show up:</p>
@@ -602,42 +657,45 @@ objects := <span class="hljs-variable">$(<span class="hljs-built_in">wildcard</s
 
 <p>The essence is that the a given target is matched by the target-pattern (via a <code>%</code> wildcard). Whatever was matched is called the <em>stem</em>. The stem is then substituted into the prereq-pattern, to generate the target&#39;s prereqs.</p>
 <p>A typical use case is to compile <code>.c</code> files into <code>.o</code> files. Here&#39;s the <em>manual way</em>:</p>
-<pre><code class="hljs makefile"><span class="hljs-section">all: foo.o bar.o</span>
-
-<span class="hljs-comment"># The automatic variable $@ matches the target, and $&lt; matches the prerequisite</span>
-<span class="hljs-section">foo.o: foo.c</span>
-    echo <span class="hljs-string">"Call gcc to generate <span class="hljs-variable">$@</span> from <span class="hljs-variable">$&lt;</span>"</span>
-
-<span class="hljs-section">bar.o: bar.c</span>
-    echo <span class="hljs-string">"Call gcc to generate bar.o from bar.c"</span>
-
-<span class="hljs-comment"># Matches all .c files and creates them if they don't exist</span>
-<span class="hljs-section">%.c:</span>
-    touch <span class="hljs-variable">$@</span>
-
-<span class="hljs-section">clean:</span>
-    rm -f foo.c bar.c</code></pre>
-
-<p>Here&#39;s the more <em>efficient way</em>, using a static pattern rule:</p>
-<pre><code class="hljs makefile"><span class="hljs-comment"># This Makefile uses less hard coded rules, via static pattern rules</span>
-objects = foo.o bar.o
+<pre><code class="hljs makefile">objects = foo.o bar.o all.o
 <span class="hljs-section">all: <span class="hljs-variable">$(objects)</span></span>
 
-<span class="hljs-comment"># Syntax - targets ...: target-pattern: prereq-patterns ...</span>
-<span class="hljs-comment"># In the case of the first target, foo.o, the target-pattern matches foo.o and sets the "stem" to be "foo".</span>
-<span class="hljs-comment">#   It then replaces that stem with the wilecard pattern in prereq-patterns</span>
-<span class="hljs-variable">$(objects)</span>: %.o: %.c
-    echo <span class="hljs-string">"Call gcc to generate <span class="hljs-variable">$@</span> from <span class="hljs-variable">$&lt;</span>"</span>
+<span class="hljs-comment"># These files compile via implicit rules</span>
+<span class="hljs-section">foo.o: foo.c</span>
+<span class="hljs-section">bar.o: bar.c</span>
+<span class="hljs-section">all.o: all.c</span>
+
+<span class="hljs-section">all.c:</span>
+    echo <span class="hljs-string">"int main() { return 0; }"</span> &gt; all.c
 
 <span class="hljs-section">%.c:</span>
     touch <span class="hljs-variable">$@</span>
 
 <span class="hljs-section">clean:</span>
-    rm -f foo.c bar.c</code></pre>
+    rm -f *.c *.o all</code></pre>
+
+<p>Here&#39;s the more <em>efficient way</em>, using a static pattern rule:</p>
+<pre><code class="hljs makefile">objects = foo.o bar.o all.o
+<span class="hljs-section">all: <span class="hljs-variable">$(objects)</span></span>
+
+<span class="hljs-comment"># These files compile via implicit rules</span>
+<span class="hljs-comment"># Syntax - targets ...: target-pattern: prereq-patterns ...</span>
+<span class="hljs-comment"># In the case of the first target, foo.o, the target-pattern matches foo.o and sets the "stem" to be "foo".</span>
+<span class="hljs-comment"># It then replaces the '%' in prereq-patterns with that stem</span>
+<span class="hljs-variable">$(objects)</span>: %.o: %.c
+
+<span class="hljs-section">all.c:</span>
+    echo <span class="hljs-string">"int main() { return 0; }"</span> &gt; all.c
+
+<span class="hljs-section">%.c:</span>
+    touch <span class="hljs-variable">$@</span>
+
+<span class="hljs-section">clean:</span>
+    rm -f *.c *.o all</code></pre>
 
 <h2 id="static-pattern-rules-and-filter">Static Pattern Rules and Filter</h2>
 <!--  (Section 4.10) -->
-<p><code>filter</code> can be used in Static pattern rules to match the correct files. In this example, I made up the <code>.raw</code> and <code>.result</code> extensions.</p>
+<p>While I introduce functions later on, I&#39;ll forshadow what you can do with them. The <code>filter</code> function can be used in Static pattern rules to match the correct files. In this example, I made up the <code>.raw</code> and <code>.result</code> extensions.</p>
 <pre><code class="hljs makefile">obj_files = foo.result bar.o lose.o
 src_files = foo.raw bar.c lose.c
 
@@ -654,19 +712,6 @@ src_files = foo.raw bar.c lose.c
 <span class="hljs-section">clean:</span>
     rm -f <span class="hljs-variable">$(src_files)</span></code></pre>
 
-<h2 id="double-colon-rules">Double-Colon Rules</h2>
-<!--  (Section 4.11) -->
-<p>Double-Colon Rules are rarely used, but allow the same target to run commands from multiple targets. If these were single colons, an warning would be printed and only the second set of commands would run.</p>
-<pre><code class="hljs makefile"><span class="hljs-section">all: blah</span>
-
-<span class="hljs-section">blah::</span>
-    echo <span class="hljs-string">"hello"</span>
-
-<span class="hljs-section">blah::</span>
-    echo <span class="hljs-string">"hello again"</span>
-
-<span class="hljs-section">clean:</span>
-    rm -f <span class="hljs-variable">$(src_files)</span></code></pre>
 
 <h2 id="implicit-rules">Implicit Rules</h2>
 <!--  (Section 10) -->
@@ -698,8 +743,37 @@ CFLAGS = -g <span class="hljs-comment"># Flag for implicit rules. Turn on debug 
 <span class="hljs-section">clean:</span>
     rm -f blah*</code></pre>
 
+<h2 id="pattern-rules">Pattern Rules</h2>
+<p>Pattern rules are often used but quite confusing. You can look at them as two ways:</p>
+<ul>
+<li>A way to define your own implicit rules</li>
+<li>A simpler form of static pattern rules</li>
+</ul>
+<p>Let&#39;s start with an example first:</p>
+<pre><code class="hljs makefile"><span class="hljs-comment"># Define a pattern rule that compiles every .c file into a .o file</span>
+%.o : %.c
+        <span class="hljs-variable">$(CC)</span> -c <span class="hljs-variable">$(CFLAGS)</span> <span class="hljs-variable">$(CPPFLAGS)</span> <span class="hljs-variable">$&lt;</span> -o <span class="hljs-variable">$@</span></code></pre>
 
+<p>Pattern rules contain a &#39;%&#39; in the target. This &#39;%&#39; matches any nonempty string, and the other characters match themselves. ‘%’ in a prerequisite of a pattern rule stands for the same stem that was matched by the ‘%’ in the target.</p>
+<p>Here&#39;s another example:</p>
+<pre><code class="hljs makefile"><span class="hljs-comment"># Define a pattern rule that has no pattern in the prerequisites.</span>
+<span class="hljs-comment"># This just creates empty .c files when needed.</span>
+<span class="hljs-section">%.c:</span>
+   touch <span class="hljs-variable">$@</span></code></pre>
 
+<h2 id="double-colon-rules">Double-Colon Rules</h2>
+<!--  (Section 4.11) -->
+<p>Double-Colon Rules are rarely used, but allow multiple rules to be defined for the same target. If these were single colons, an warning would be printed and only the second set of commands would run.</p>
+<pre><code class="hljs makefile"><span class="hljs-section">all: blah</span>
+
+<span class="hljs-section">blah::</span>
+    echo <span class="hljs-string">"hello"</span>
+
+<span class="hljs-section">blah::</span>
+    echo <span class="hljs-string">"hello again"</span>
+
+<span class="hljs-section">clean:</span>
+    rm -f <span class="hljs-variable">$(src_files)</span></code></pre>
 
 
 <h1 id="commands-and-execution">Commands and execution</h1>
@@ -1024,6 +1098,23 @@ bar := <span class="hljs-variable">$(<span class="hljs-built_in">subst</span> <s
 <!-- # 8.2, 8.3, 8.9 TODO do something about the fns   
 # TODO 8.7 origin fn? Better in documentation?
 -->
+<h2 id="string-substitution">String Substitution</h2>
+<p><code>$(patsubst pattern,replacement,text)</code> does the following:</p>
+<p>&quot;Finds whitespace-separated words in text that match pattern and replaces them with replacement. Here pattern may contain a ‘%’ which acts as a wildcard, matching any number of any characters within a word. If replacement also contains a ‘%’, the ‘%’ is replaced by the text that matched the ‘%’ in pattern. Only the first ‘%’ in the pattern and replacement is treated this way; any subsequent ‘%’ is unchanged.&quot; (<a href="https://www.gnu.org/software/make/manual/html_node/Text-Functions.html#Text-Functions">GNU docs</a>)</p>
+<p>The substitution reference <code>$(text:pattern=replacement)</code> is a shorthand for this.</p>
+<p>There&#39;s another shorthand that that replaces only suffixes: <code>$(text:suffix=replacement)</code>. No <code>%</code> wildcard is used here.</p>
+<pre><code class="hljs makefile">foo := a.o b.o l.a c.o
+one := <span class="hljs-variable">$(<span class="hljs-built_in">patsubst</span> %.o,%.c,<span class="hljs-variable">$(foo)</span>)</span>
+<span class="hljs-comment"># This is a shorthand for the above</span>
+two := $(foo:%.o=%.c)
+<span class="hljs-comment"># This is the suffix-only shorthand, and is also equivalent to the above.</span>
+three := $(foo:.o=.c)
+
+<span class="hljs-section">all:</span>
+    echo <span class="hljs-variable">$(one)</span>
+    echo <span class="hljs-variable">$(two)</span>
+    echo <span class="hljs-variable">$(three)</span></code></pre>
+
 <h2 id="the-foreach-function">The foreach function</h2>
 <!--  (Section 8.4) -->
 <p>The foreach function looks like this: <code>$(foreach var,list,text)</code>. It converts one list of words (seperated by speces) to another. <code>var</code> is set to each word in list, and <code>text</code> is expanded for each word.<br>This appends an exclamation after each word:</p>

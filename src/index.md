@@ -9,15 +9,27 @@ autotoc: true
 
 <b>I built this guide because I could never quite wrap my head around Makefiles.</b> They seemed awash with hidden rules and esoteric symbols, and asking simple questions didn’t yield simple answers. To solve this, I sat down for several weekends and read everything I could about Makefiles. I've condensed the most critical knowledge into this guide. Each topic has a brief description and a self contained example that you can run yourself.
 
-If you mostly understand Make, consider checking out the Makefile Cookbook, which has a <b>template for medium sized projects</b> with ample comments about what each part of the Makefile is doing.
+If you mostly understand Make, consider checking out the Makefile Cookbook, which has a template for medium sized projects with ample comments about what each part of the Makefile is doing.
 
 Good luck, and I hope you are able to slay the confusing world of Makefiles!
 
 # Getting Started
-Makefiles are used to help decide which parts of a large program need to be recompiled. Typically C or C++ files are compiled, but any language that can be compiled with shell commands will work. It can be used beyond programs too, when you need a series of instructions to run depending on what files have changed.
+
+## Why do Makefiles exist?
+
+Makefiles are used to help decide which parts of a large program need to be recompiled. In the vast majority of cases, C or C++ files are compiled. Other languages typically have their own tools that serve a similar purpose as Make. It can be used beyond programs too, when you need a series of instructions to run depending on what files have changed. This tutorial will focus on the C/C++ compilation use case.
+
+Here's an example dependency graph that you might build with Make. If any file's dependencies changes, then the file will get recompiled:
+<div class='center'>
+<img src="/assets/dependency_graph.png"/>
+</div>
+
+## What alternatives are there to Make?
+Popular C/C++ alternative build systems are [SCons](https://scons.org/), [CMake](https://cmake.org/), [Bazel](https://bazel.build/), and [Ninja](https://ninja-build.org/). Some code editors like [Microsoft Visual Studio](https://visualstudio.microsoft.com/) have their own built in build tools. For Java, there's [Ant](https://ant.apache.org/), [Maven](https://maven.apache.org/what-is-maven.html), and [Gradle](https://gradle.org/). Other languages like Go and Rust have their own build tools.
+
+Interpreted languages like Python, Ruby, and Javascript don't require an analogue to Makefiles. The goal of Makefiles is to compile whatever files need to be compiled, based on what files have changed. But when files in interpreted languages change, nothing needs to get recompiled. When the program runs, the most recent version of the file is used.
 
 ## Running the Examples
-
 
 To run these examples, you'll need a terminal and "make" installed. For each example, put the contents in a file called `Makefile`, and in that directory run the command `make`. Let's start with the simplest of Makefiles:
 ```makefile
@@ -185,8 +197,7 @@ f1.o f2.o:
 
 ## Multiple targets via wildcards
 <!--  (Section 4.8) -->
-We can use the wildcard % in targets, that captures zero or more of any character. Note we do not use *.o, because that is just the string *.o, which might be useful in the commands,  
-but is only one target and does not expand.  
+We can use the wildcard % in targets, that captures zero or more of any character. Note we do not use *.o, because that is just the string *.o, which might be useful in the commands, but is only one target and does not expand.  
 <!--
 TODO why was this not a problem when I didn't use the % wildcard?
 -->
@@ -200,40 +211,51 @@ all: f1.o f2.o
 ```
 
 # Automatic Variables and Wildcards
-## Wildcard
+## * Wildcard
 <!--  (Section 4.2) -->
-We can use wildcards in the target, prerequisites, or commands.  
-Valid wildcards are `*, ?, [...]`  
+Both `*` and `%` are called wildcards in Make, but they mean entirely different things. `*` search your filesystem for matching filenames. I suggest that you always wrap it in the `wildcard` function, because otherwise you may fall into a common pitfall described below. It's oddly unhelpful and I find it more confusing than useful.
+
 ```makefile
-some_file: *.c
-	# create the binary
+# Print out file information about every .c file
+print: $(wildcard *.c)
+	ls -la  $?
+```
+`*` may be used in the target, prerequisites, or in the `wildcard` function.
+Danger: `*` may not be directly used in a variable definitions
+Danger: When `*` matches no files, it is left as it is (unless run in the `wildcard` function)
 
-*.c:
-	touch f1.c
-	touch f2.c
- 
-clean:
-	rm -f *.c
+```makefile
+thing_wrong := *.o # Don't do this! '*' will not get expanded
+thing_right := $(wildcard *.o)
 
+all: one two three four
+
+# Fails, because $(thing_wrong) is the string "*.o"
+one: $(thing_wrong)
+
+# Stays as *.o if there are no files that match this pattern :(
+two: *.o 
+
+# Works as you would expect! In this case, it does nothing.
+three: $(thing_right)
+
+# Same as rule three
+four: $(wildcard *.o)
 ```
 
-<!--  (Section 4.2.3) -->
-We CANNOT use wildcards in other places, like variable declarations or function arguments  
-Use the wildcard function instead.  
-```makefile
-wrong = *.o # Wrong
-objects := $(wildcard *.c) # Right
-some_binary: 
-	touch f1.c
-	touch f2.c
-	echo $(wrong)
-	echo $(objects)
 
-clean:
-	rm -f *.c
+## % Wildcard
+`%` is really useful, but is somewhat confusing because of the variety of situations it can be used in.
+- When used in "matching" mode, it matches one or more characters in a string. This match is called the stem.
+- When used in "replacing" mode, it takes the stem that was matched and replaces that in a string.
+- `%` is most often used in rule definitions and in some specific functions.
 
+See these sections on examples of it being used:
+- [Static Pattern Rules](#static-pattern-rules)
+- [Pattern Rules](#pattern-rules)
+- [String Substitution](#string-substitution)
+- [The vpath Directive](#the-vpath-directive)
 
-```
 
 ## Automatic Variables
 <!--  (Section 10.5) -->
@@ -275,46 +297,48 @@ The essence is that the a given target is matched by the target-pattern (via a `
 
 A typical use case is to compile `.c` files into `.o` files. Here's the *manual way*:
 ```makefile
-all: foo.o bar.o
+objects = foo.o bar.o all.o
+all: $(objects)
 
-# The automatic variable $@ matches the target, and $< matches the prerequisite
+# These files compile via implicit rules
 foo.o: foo.c
-	echo "Call gcc to generate $@ from $<"
-
 bar.o: bar.c
-	echo "Call gcc to generate bar.o from bar.c"
+all.o: all.c
 
-# Matches all .c files and creates them if they don't exist
+all.c:
+	echo "int main() { return 0; }" > all.c
+
 %.c:
 	touch $@
 
 clean:
-	rm -f foo.c bar.c
+	rm -f *.c *.o all
 ```
 
 Here's the more *efficient way*, using a static pattern rule:
 ```makefile
-# This Makefile uses less hard coded rules, via static pattern rules
-objects = foo.o bar.o
+objects = foo.o bar.o all.o
 all: $(objects)
 
+# These files compile via implicit rules
 # Syntax - targets ...: target-pattern: prereq-patterns ...
 # In the case of the first target, foo.o, the target-pattern matches foo.o and sets the "stem" to be "foo".
-#   It then replaces that stem with the wilecard pattern in prereq-patterns
+# It then replaces the '%' in prereq-patterns with that stem
 $(objects): %.o: %.c
-	echo "Call gcc to generate $@ from $<"
+
+all.c:
+	echo "int main() { return 0; }" > all.c
 
 %.c:
 	touch $@
 
 clean:
-	rm -f foo.c bar.c
-
+	rm -f *.c *.o all
 ```
 
 ## Static Pattern Rules and Filter
 <!--  (Section 4.10) -->
-`filter` can be used in Static pattern rules to match the correct files. In this example, I made up the `.raw` and `.result` extensions.
+While I introduce functions later on, I'll forshadow what you can do with them. The `filter` function can be used in Static pattern rules to match the correct files. In this example, I made up the `.raw` and `.result` extensions.
 ```makefile
 
 obj_files = foo.result bar.o lose.o
@@ -334,22 +358,6 @@ clean:
 	rm -f $(src_files)
 ```
 
-## Double-Colon Rules
-<!--  (Section 4.11) -->
-Double-Colon Rules are rarely used, but allow the same target to run commands from multiple targets. If these were single colons, an warning would be printed and only the second set of commands would run.
-```makefile
-all: blah
-
-blah::
-	echo "hello"
-
-blah::
-	echo "hello again"
-
-clean:
-	rm -f $(src_files)
-
-```
 
 ## Implicit Rules
 <!--  (Section 10) -->
@@ -382,8 +390,44 @@ clean:
 	rm -f blah*
 ```
 
+## Pattern Rules
+Pattern rules are often used but quite confusing. You can look at them as two ways:
+- A way to define your own implicit rules
+- A simpler form of static pattern rules
 
+Let's start with an example first:
+```makefile
+# Define a pattern rule that compiles every .c file into a .o file
+%.o : %.c
+        $(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
+```
 
+Pattern rules contain a '%' in the target. This '%' matches any nonempty string, and the other characters match themselves. ‘%’ in a prerequisite of a pattern rule stands for the same stem that was matched by the ‘%’ in the target.
+
+Here's another example:
+```makefile
+# Define a pattern rule that has no pattern in the prerequisites.
+# This just creates empty .c files when needed.
+%.c:
+   touch $@
+```
+
+## Double-Colon Rules
+<!--  (Section 4.11) -->
+Double-Colon Rules are rarely used, but allow multiple rules to be defined for the same target. If these were single colons, an warning would be printed and only the second set of commands would run.
+```makefile
+all: blah
+
+blah::
+	echo "hello"
+
+blah::
+	echo "hello again"
+
+clean:
+	rm -f $(src_files)
+
+```
 
 
 # Commands and execution
@@ -791,6 +835,29 @@ all:
 <!-- # 8.2, 8.3, 8.9 TODO do something about the fns   
 # TODO 8.7 origin fn? Better in documentation?
 -->
+
+## String Substitution
+`$(patsubst pattern,replacement,text)` does the following:
+
+"Finds whitespace-separated words in text that match pattern and replaces them with replacement. Here pattern may contain a ‘%’ which acts as a wildcard, matching any number of any characters within a word. If replacement also contains a ‘%’, the ‘%’ is replaced by the text that matched the ‘%’ in pattern. Only the first ‘%’ in the pattern and replacement is treated this way; any subsequent ‘%’ is unchanged." ([GNU docs](https://www.gnu.org/software/make/manual/html_node/Text-Functions.html#Text-Functions))
+
+The substitution reference `$(text:pattern=replacement)` is a shorthand for this.
+
+There's another shorthand that that replaces only suffixes: `$(text:suffix=replacement)`. No `%` wildcard is used here.
+
+```makefile
+foo := a.o b.o l.a c.o
+one := $(patsubst %.o,%.c,$(foo))
+# This is a shorthand for the above
+two := $(foo:%.o=%.c)
+# This is the suffix-only shorthand, and is also equivalent to the above.
+three := $(foo:.o=.c)
+
+all:
+	echo $(one)
+	echo $(two)
+	echo $(three)
+```
 
 ## The foreach function
 <!--  (Section 8.4) -->

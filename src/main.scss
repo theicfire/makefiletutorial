@@ -206,6 +206,9 @@ body {
 
 #right {
   margin-left: calc(32px + #{$sidebar-width});
+  a {
+    color: #2aa198;
+  }
 }
 
 
@@ -251,6 +254,11 @@ pre code {
     border-radius: 8px;
     font-size: 16px;
     padding: 0px;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
 }
 
 @media (max-width: 1100px) {
