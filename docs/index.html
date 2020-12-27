@@ -645,7 +645,7 @@ thing_right := <span class="hljs-variable">$(<span class="hljs-built_in">wildcar
 <pre><code class="hljs makefile">targets ...: target-pattern: prereq-patterns ...
    commands</code></pre>
 
-<p>The essence is that the a given target is matched by the target-pattern (via a <code>%</code> wildcard). Whatever was matched is called the <em>stem</em>. The stem is then substituted into the prereq-pattern, to generate the target&#39;s prereqs.</p>
+<p>The essence is that the given target is matched by the target-pattern (via a <code>%</code> wildcard). Whatever was matched is called the <em>stem</em>. The stem is then substituted into the prereq-pattern, to generate the target&#39;s prereqs.</p>
 <p>A typical use case is to compile <code>.c</code> files into <code>.o</code> files. Here&#39;s the <em>manual way</em>:</p>
 <pre><code class="hljs makefile">objects = foo.o bar.o all.o
 <span class="hljs-section">all: <span class="hljs-variable">$(objects)</span></span>
@@ -753,7 +753,7 @@ CFLAGS = -g <span class="hljs-comment"># Flag for implicit rules. Turn on debug 
 
 <h2 id="double-colon-rules">Double-Colon Rules</h2>
 <!--  (Section 4.11) -->
-<p>Double-Colon Rules are rarely used, but allow multiple rules to be defined for the same target. If these were single colons, an warning would be printed and only the second set of commands would run.</p>
+<p>Double-Colon Rules are rarely used, but allow multiple rules to be defined for the same target. If these were single colons, a warning would be printed and only the second set of commands would run.</p>
 <pre><code class="hljs makefile"><span class="hljs-section">all: blah</span>
 
 <span class="hljs-section">blah::</span>
@@ -966,7 +966,8 @@ option_two = not_override
 
 <h2 id="list-of-commands-and-define">List of commands and define</h2>
 <!--  (Section 6.8) -->
-<p>&quot;define&quot; is actually just a list of commands. It has nothing with being a function.<br>Note here that it&#39;s a bit different than having a semi-colon between commands, because each is run
+<p>&quot;define&quot; is actually just a list of commands. It has nothing to do with being a function.
+Note here that it&#39;s a bit different than having a semi-colon between commands, because each is run
 in a seperate shell, as expected.</p>
 <pre><code class="hljs makefile">one = <span class="hljs-keyword">export</span> blah=<span class="hljs-string">"I was set!"</span>; echo $$blah
 
