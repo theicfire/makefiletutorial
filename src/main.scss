@@ -108,6 +108,7 @@ body {
     }
     .title-pic {
         width: 600px;
+        height: 257px; // Hmm, Safari also needs height
     }
     .title-wrapper {
         display: flex;
