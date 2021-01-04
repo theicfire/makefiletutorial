@@ -60,12 +60,12 @@ targets: prerequisites
    command
 ```
 
-- The *targets* are file names, seperated by spaces. Typically, there is only one per rule.
+- The *targets* are file names, separated by spaces. Typically, there is only one per rule.
 - The *commands* are a series of steps typically used to make the target(s). These *need to start with a tab character*, not spaces.
-- The *prerequisites* are also file names, seperated by spaces. These files need to exist before the commands for the target are run. These are also called *dependencies*
+- The *prerequisites* are also file names, separated by spaces. These files need to exist before the commands for the target are run. These are also called *dependencies*
 
 ## Beginner Examples
-The following Makefile has three seperate *rules*. When you run `make blah` in the terminal, it will build a program called `blah` in a series of steps:
+The following Makefile has three separate *rules*. When you run `make blah` in the terminal, it will build a program called `blah` in a series of steps:
 - Make is given `blah` as the target, so it first searches for this target
 - `blah` requires `blah.o`, so make searches for the `blah.o` target
 - `blah.o` requires `blah.c`, so make searches for the `blah.c` target
@@ -118,7 +118,7 @@ other_file:
 	echo "nothing"
 ```
 
-`clean` is often used as a target that removes the output of other targets, but it is not a special work in `make`.
+`clean` is often used as a target that removes the output of other targets, but it is not a special word in `make`.
 ```makefile
 some_file: 
 	touch some_file
@@ -145,7 +145,7 @@ clean:
 	rm -f file1 file2 some_file
 ```
 
-Call variables using ${} or $()
+Reference variables using ${} or $()
 ```makefile
 
 x = dude
@@ -368,7 +368,7 @@ CC = gcc # Flag for implicit rules
 CFLAGS = -g # Flag for implicit rules. Turn on debug info
 
 # Implicit rule #1: blah is built via the C linker implicit rule
-# Implicit rule #2:  blah.o is built via the C++ compilation implicit rule, because blah.cpp exists
+# Implicit rule #2: blah.o is built via the C++ compilation implicit rule, because blah.cpp exists
 blah: blah.o
 
 blah.c:
@@ -431,7 +431,7 @@ all:
 
 ## Command Execution
 <!--  (Section 5.2) -->
-Each command is run in a new shell (or at least the affect is as such)
+Each command is run in a new shell (or at least the effect is as such)
 ```makefile
 all: 
 	cd ..
@@ -652,7 +652,7 @@ all:
 <!--  (Section 6.8) -->
 "define" is actually just a list of commands. It has nothing to do with being a function.
 Note here that it's a bit different than having a semi-colon between commands, because each is run
-in a seperate shell, as expected.
+in a separate shell, as expected.
 ```makefile
 
 one = export blah="I was set!"; echo $$blah
@@ -667,7 +667,7 @@ endef
 all: 
 	@echo "This prints 'I was set'"
 	@$(one)
-	@echo "This does not print 'I was set' because each command runs in a seperate shell"
+	@echo "This does not print 'I was set' because each command runs in a separate shell"
 	@$(two)
 ```
 
@@ -830,7 +830,7 @@ all:
 
 ## The foreach function
 <!--  (Section 8.4) -->
-The foreach function looks like this: `$(foreach var,list,text)`. It converts one list of words (seperated by speces) to another. `var` is set to each word in list, and `text` is expanded for each word.  
+The foreach function looks like this: `$(foreach var,list,text)`. It converts one list of words (separated by spaces) to another. `var` is set to each word in list, and `text` is expanded for each word.  
 This appends an exclamation after each word:
 ```makefile
 foo := who are you
@@ -888,7 +888,7 @@ This is particularly useful when you use compiler flags like `-M` that create Ma
 
 ## The vpath Directive
 <!--  (Section 4.3.2) -->
-Use vpath to specify where some set of prerequisites exist. The format is `vpath <pattern> <directories, space/colon seperated>`  
+Use vpath to specify where some set of prerequisites exist. The format is `vpath <pattern> <directories, space/colon separated>`  
 `<pattern>` can have a `%`, which matches any zero or more characters.  
 You can also do this globallyish with the variable VPATH  
 ```makefile
