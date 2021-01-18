@@ -857,9 +857,8 @@ all:
 
 ## The call function
 <!--  (Section 8.6) -->
-`Call`: $(call variable,param,param)  
-Sets each of the params as $(1), $(2), etc.  
-$(0) is set as the variable name
+Make supports creating basic functions. You "define" the function just by creating a variable, but use the parameters `$(0)`, `$(1)`, etc. You then call the function with the special `call` function. The syntax is `$(call variable,param,param)`. `$(0)` is the variable, while `$(1)`, `$(2)`, etc. are the params.
+
 ```makefile
 sweet_new_fn = Variable Name: $(0) First: $(1) Second: $(2) Empty Variable: $(3)
 
@@ -885,7 +884,6 @@ include filenames...
 
 This is particularly useful when you use compiler flags like `-M` that create Makefiles based on the source. For example, if some c files includes a header, that header will be added to a Makefile that's written by gcc. I talk about this more in the [Makefile Cookbook](#makefile-cookbook)
 
-
 ## The vpath Directive
 <!--  (Section 4.3.2) -->
 Use vpath to specify where some set of prerequisites exist. The format is `vpath <pattern> <directories, space/colon separated>`  
@@ -909,6 +907,7 @@ clean:
 	rm -f some_binary
 
 ```
+
 ## Multiline
 The backslash ("\\") character gives us the ability to use multiple lines when the commands are too long
 ```makefile

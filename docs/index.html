@@ -396,6 +396,12 @@
 </ol>
 
 <ol>
+    <li><a class="toc-item" href="#multiline">Multiline</a>
+    </li>
+    
+</ol>
+
+<ol>
     <li><a class="toc-item" href="#-phony">.phony</a>
     </li>
     
@@ -1116,7 +1122,7 @@ bar := <span class="hljs-variable">$(<span class="hljs-built_in">if</span> <span
 
 <h2 id="the-call-function">The call function</h2>
 <!--  (Section 8.6) -->
-<p><code>Call</code>: $(call variable,param,param)<br>Sets each of the params as $(1), $(2), etc.<br>$(0) is set as the variable name</p>
+<p>Make supports creating basic functions. You &quot;define&quot; the function just by creating a variable, but use the parameters <code>$(0)</code>, <code>$(1)</code>, etc. You then call the function with the special <code>call</code> function. The syntax is <code>$(call variable,param,param)</code>. <code>$(0)</code> is the variable, while <code>$(1)</code>, <code>$(2)</code>, etc. are the params.</p>
 <pre><code class="hljs makefile">sweet_new_fn = Variable Name: $(0) First: $(1) Second: $(2) Empty Variable: $(3)
 
 <span class="hljs-section">all:</span>
@@ -1152,8 +1158,9 @@ bar := <span class="hljs-variable">$(<span class="hljs-built_in">if</span> <span
 <span class="hljs-section">clean:</span>
     rm -rf ../headers
     rm -f some_binary</code></pre>
-## Multiline
-The backslash ("\\") character gives us the ability to use multiple lines when the commands are too long
+
+<h2 id="multiline">Multiline</h2>
+<p>The backslash (&quot;\&quot;) character gives us the ability to use multiple lines when the commands are too long</p>
 <pre><code class="hljs makefile"><span class="hljs-section">some_file: </span>
     echo This line is too long, so \
         it is broken up into multiple lines</code></pre>
