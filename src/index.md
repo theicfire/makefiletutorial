@@ -253,7 +253,7 @@ hey: one two
 	# Outputs "hey", since this is the first target
 	echo $@
 
-	# Outputs all prerequisites older than the target
+	# Outputs all prerequisites newer than the target
 	echo $?
 
 	# Outputs all prerequisites
