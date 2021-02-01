@@ -479,7 +479,7 @@ To recursively call a makefile, use the special `$(MAKE)` instead of `make` beca
 new_contents = "hello:\n\ttouch inside_file"
 all:
 	mkdir -p subdir
-	echo $(new_contents) | sed -e 's/^ //' > subdir/makefile
+	printf $(new_contents) | sed -e 's/^ //' > subdir/makefile
 	cd subdir && $(MAKE)
 
 clean:
