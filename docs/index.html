@@ -466,12 +466,12 @@ hello world</code></pre>
    command</code></pre>
 
 <ul>
-<li>The <em>targets</em> are file names, seperated by spaces. Typically, there is only one per rule.</li>
+<li>The <em>targets</em> are file names, separated by spaces. Typically, there is only one per rule.</li>
 <li>The <em>commands</em> are a series of steps typically used to make the target(s). These <em>need to start with a tab character</em>, not spaces.</li>
-<li>The <em>prerequisites</em> are also file names, seperated by spaces. These files need to exist before the commands for the target are run. These are also called <em>dependencies</em></li>
+<li>The <em>prerequisites</em> are also file names, separated by spaces. These files need to exist before the commands for the target are run. These are also called <em>dependencies</em></li>
 </ul>
 <h2 id="beginner-examples">Beginner Examples</h2>
-<p>The following Makefile has three seperate <em>rules</em>. When you run <code>make blah</code> in the terminal, it will build a program called <code>blah</code> in a series of steps:</p>
+<p>The following Makefile has three separate <em>rules</em>. When you run <code>make blah</code> in the terminal, it will build a program called <code>blah</code> in a series of steps:</p>
 <ul>
 <li>Make is given <code>blah</code> as the target, so it first searches for this target</li>
 <li><code>blah</code> requires <code>blah.o</code>, so make searches for the <code>blah.o</code> target</li>
@@ -515,7 +515,7 @@ hello world</code></pre>
 <span class="hljs-section">other_file:</span>
     echo <span class="hljs-string">"nothing"</span></code></pre>
 
-<p><code>clean</code> is often used as a target that removes the output of other targets, but it is not a special work in <code>make</code>.</p>
+<p><code>clean</code> is often used as a target that removes the output of other targets, but it is not a special word in <code>make</code>.</p>
 <pre><code class="hljs makefile"><span class="hljs-section">some_file: </span>
     touch some_file
 
@@ -538,7 +538,7 @@ hello world</code></pre>
 <span class="hljs-section">clean:</span>
     rm -f file1 file2 some_file</code></pre>
 
-<p>Call variables using ${} or $()</p>
+<p>Reference variables using ${} or $()</p>
 <pre><code class="hljs makefile">x = dude
 
 <span class="hljs-section">all:</span>
@@ -627,7 +627,7 @@ thing_right := <span class="hljs-variable">$(<span class="hljs-built_in">wildcar
     <span class="hljs-comment"># Outputs "hey", since this is the first target</span>
     echo <span class="hljs-variable">$@</span>
 
-    <span class="hljs-comment"># Outputs all prerequisites older than the target</span>
+    <span class="hljs-comment"># Outputs all prerequisites newer than the target</span>
     echo <span class="hljs-variable">$?</span>
 
     <span class="hljs-comment"># Outputs all prerequisites</span>
@@ -730,7 +730,7 @@ src_files = foo.raw bar.c lose.c
 CFLAGS = -g <span class="hljs-comment"># Flag for implicit rules. Turn on debug info</span>
 
 <span class="hljs-comment"># Implicit rule #1: blah is built via the C linker implicit rule</span>
-<span class="hljs-comment"># Implicit rule #2:  blah.o is built via the C++ compilation implicit rule, because blah.cpp exists</span>
+<span class="hljs-comment"># Implicit rule #2: blah.o is built via the C++ compilation implicit rule, because blah.cpp exists</span>
 <span class="hljs-section">blah: blah.o</span>
 
 <span class="hljs-section">blah.c:</span>
@@ -782,7 +782,7 @@ CFLAGS = -g <span class="hljs-comment"># Flag for implicit rules. Turn on debug 
 
 <h2 id="command-execution">Command Execution</h2>
 <!--  (Section 5.2) -->
-<p>Each command is run in a new shell (or at least the affect is as such)</p>
+<p>Each command is run in a new shell (or at least the effect is as such)</p>
 <pre><code class="hljs makefile"><span class="hljs-section">all: </span>
     cd ..
     <span class="hljs-comment"># The cd above does not affect this line, because each command is effectively run in a new shell</span>
@@ -959,7 +959,7 @@ option_two = not_override
 <!--  (Section 6.8) -->
 <p>&quot;define&quot; is actually just a list of commands. It has nothing to do with being a function.
 Note here that it&#39;s a bit different than having a semi-colon between commands, because each is run
-in a seperate shell, as expected.</p>
+in a separate shell, as expected.</p>
 <pre><code class="hljs makefile">one = <span class="hljs-keyword">export</span> blah=<span class="hljs-string">"I was set!"</span>; echo $$blah
 
 <span class="hljs-keyword">define</span> two
@@ -972,7 +972,7 @@ echo $$blah
 <span class="hljs-section">all: </span>
     @echo <span class="hljs-string">"This prints 'I was set'"</span>
     @<span class="hljs-variable">$(one)</span>
-    @echo <span class="hljs-string">"This does not print 'I was set' because each command runs in a seperate shell"</span>
+    @echo <span class="hljs-string">"This does not print 'I was set' because each command runs in a separate shell"</span>
     @<span class="hljs-variable">$(two)</span></code></pre>
 
 <h2 id="target-specific-variables">Target-specific variables</h2>
@@ -1100,7 +1100,7 @@ three := $(foo:.o=.c)
 
 <h2 id="the-foreach-function">The foreach function</h2>
 <!--  (Section 8.4) -->
-<p>The foreach function looks like this: <code>$(foreach var,list,text)</code>. It converts one list of words (seperated by speces) to another. <code>var</code> is set to each word in list, and <code>text</code> is expanded for each word.<br>This appends an exclamation after each word:</p>
+<p>The foreach function looks like this: <code>$(foreach var,list,text)</code>. It converts one list of words (separated by spaces) to another. <code>var</code> is set to each word in list, and <code>text</code> is expanded for each word.<br>This appends an exclamation after each word:</p>
 <pre><code class="hljs makefile">foo := who are you
 <span class="hljs-comment"># For each "word" in foo, output that same word with an exclamation after</span>
 bar := <span class="hljs-variable">$(<span class="hljs-built_in">foreach</span> wrd,<span class="hljs-variable">$(foo)</span>,<span class="hljs-variable">$(wrd)</span>!)</span>
@@ -1143,7 +1143,7 @@ bar := <span class="hljs-variable">$(<span class="hljs-built_in">if</span> <span
 <p>This is particularly useful when you use compiler flags like <code>-M</code> that create Makefiles based on the source. For example, if some c files includes a header, that header will be added to a Makefile that&#39;s written by gcc. I talk about this more in the <a href="#makefile-cookbook">Makefile Cookbook</a></p>
 <h2 id="the-vpath-directive">The vpath Directive</h2>
 <!--  (Section 4.3.2) -->
-<p>Use vpath to specify where some set of prerequisites exist. The format is <code>vpath &lt;pattern&gt; &lt;directories, space/colon seperated&gt;</code><br><code>&lt;pattern&gt;</code> can have a <code>%</code>, which matches any zero or more characters.<br>You can also do this globallyish with the variable VPATH  </p>
+<p>Use vpath to specify where some set of prerequisites exist. The format is <code>vpath &lt;pattern&gt; &lt;directories, space/colon separated&gt;</code><br><code>&lt;pattern&gt;</code> can have a <code>%</code>, which matches any zero or more characters.<br>You can also do this globallyish with the variable VPATH  </p>
 <pre><code class="hljs makefile"><span class="hljs-keyword">vpath</span> %.h ../headers ../other-directory
 
 <span class="hljs-section">some_binary: ../headers blah.h</span>
