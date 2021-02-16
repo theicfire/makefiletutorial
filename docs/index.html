@@ -730,7 +730,7 @@ src_files = foo.raw bar.c lose.c
 CFLAGS = -g <span class="hljs-comment"># Flag for implicit rules. Turn on debug info</span>
 
 <span class="hljs-comment"># Implicit rule #1: blah is built via the C linker implicit rule</span>
-<span class="hljs-comment"># Implicit rule #2: blah.o is built via the C++ compilation implicit rule, because blah.cpp exists</span>
+<span class="hljs-comment"># Implicit rule #2: blah.o is built via the C compilation implicit rule, because blah.c exists</span>
 <span class="hljs-section">blah: blah.o</span>
 
 <span class="hljs-section">blah.c:</span>
@@ -766,10 +766,7 @@ CFLAGS = -g <span class="hljs-comment"># Flag for implicit rules. Turn on debug 
     echo <span class="hljs-string">"hello"</span>
 
 <span class="hljs-section">blah::</span>
-    echo <span class="hljs-string">"hello again"</span>
-
-<span class="hljs-section">clean:</span>
-    rm -f <span class="hljs-variable">$(src_files)</span></code></pre>
+    echo <span class="hljs-string">"hello again"</span></code></pre>
 
 
 <h1 id="commands-and-execution">Commands and execution</h1>
@@ -821,7 +818,7 @@ CFLAGS = -g <span class="hljs-comment"># Flag for implicit rules. Turn on debug 
 <pre><code class="hljs makefile">new_contents = <span class="hljs-string">"hello:\n\ttouch inside_file"</span>
 <span class="hljs-section">all:</span>
     mkdir -p subdir
-    echo <span class="hljs-variable">$(new_contents)</span> | sed -e 's/^ //' &gt; subdir/makefile
+    printf <span class="hljs-variable">$(new_contents)</span> | sed -e 's/^ //' &gt; subdir/makefile
     cd subdir &amp;&amp; <span class="hljs-variable">$(MAKE)</span>
 
 <span class="hljs-section">clean:</span>
