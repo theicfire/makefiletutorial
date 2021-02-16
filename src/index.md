@@ -368,7 +368,7 @@ CC = gcc # Flag for implicit rules
 CFLAGS = -g # Flag for implicit rules. Turn on debug info
 
 # Implicit rule #1: blah is built via the C linker implicit rule
-# Implicit rule #2: blah.o is built via the C++ compilation implicit rule, because blah.cpp exists
+# Implicit rule #2: blah.o is built via the C compilation implicit rule, because blah.c exists
 blah: blah.o
 
 blah.c:
@@ -411,10 +411,6 @@ blah::
 
 blah::
 	echo "hello again"
-
-clean:
-	rm -f $(src_files)
-
 ```
 
 
@@ -483,7 +479,7 @@ To recursively call a makefile, use the special `$(MAKE)` instead of `make` beca
 new_contents = "hello:\n\ttouch inside_file"
 all:
 	mkdir -p subdir
-	echo $(new_contents) | sed -e 's/^ //' > subdir/makefile
+	printf $(new_contents) | sed -e 's/^ //' > subdir/makefile
 	cd subdir && $(MAKE)
 
 clean:
