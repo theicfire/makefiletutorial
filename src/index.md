@@ -161,7 +161,7 @@ all:
 # Targets
 ## The all target
 <!--  (Section 4.4) -->
-Making multiple targets and you want all of them to run? Make a `all` target.
+Making multiple targets and you want all of them to run? Make an `all` target.
 ```makefile
 all: one two three
 
@@ -198,7 +198,7 @@ f1.o f2.o:
 # Automatic Variables and Wildcards
 ## * Wildcard
 <!--  (Section 4.2) -->
-Both `*` and `%` are called wildcards in Make, but they mean entirely different things. `*` search your filesystem for matching filenames. I suggest that you always wrap it in the `wildcard` function, because otherwise you may fall into a common pitfall described below. It's oddly unhelpful and I find it more confusing than useful.
+Both `*` and `%` are called wildcards in Make, but they mean entirely different things. `*` searches your filesystem for matching filenames. I suggest that you always wrap it in the `wildcard` function, because otherwise you may fall into a common pitfall described below. It's oddly unhelpful and I find it more confusing than useful.
 
 ```makefile
 # Print out file information about every .c file
