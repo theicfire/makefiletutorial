@@ -551,7 +551,7 @@ hello world</code></pre>
 <h1 id="targets">Targets</h1>
 <h2 id="the-all-target">The all target</h2>
 <!--  (Section 4.4) -->
-<p>Making multiple targets and you want all of them to run? Make a <code>all</code> target.</p>
+<p>Making multiple targets and you want all of them to run? Make an <code>all</code> target.</p>
 <pre><code class="hljs makefile"><span class="hljs-section">all: one two three</span>
 
 <span class="hljs-section">one:</span>
@@ -580,7 +580,7 @@ f1.o f2.o:
 <h1 id="automatic-variables-and-wildcards">Automatic Variables and Wildcards</h1>
 <h2 id="-wildcard">* Wildcard</h2>
 <!--  (Section 4.2) -->
-<p>Both <code>*</code> and <code>%</code> are called wildcards in Make, but they mean entirely different things. <code>*</code> search your filesystem for matching filenames. I suggest that you always wrap it in the <code>wildcard</code> function, because otherwise you may fall into a common pitfall described below. It&#39;s oddly unhelpful and I find it more confusing than useful.</p>
+<p>Both <code>*</code> and <code>%</code> are called wildcards in Make, but they mean entirely different things. <code>*</code> searches your filesystem for matching filenames. I suggest that you always wrap it in the <code>wildcard</code> function, because otherwise you may fall into a common pitfall described below. It&#39;s oddly unhelpful and I find it more confusing than useful.</p>
 <pre><code class="hljs makefile"><span class="hljs-comment"># Print out file information about every .c file</span>
 <span class="hljs-section">print: $(wildcard *.c)</span>
     ls -la  <span class="hljs-variable">$?</span></code></pre>
