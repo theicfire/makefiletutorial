@@ -359,7 +359,7 @@ As such, the important variables used by implicit rules are:
 - `CXX`: Program for compiling C++ programs; default G++
 - `CFLAGS`: Extra flags to give to the C compiler
 - `CXXFLAGS`: Extra flags to give to the C++ compiler
-- `CPPFLAGS`: Extra flags to give to the C preprosessor
+- `CPPFLAGS`: Extra flags to give to the C preprocessor
 - `LDFLAGS`: Extra flags to give to compilers when they are supposed to invoke the linker
 
 
