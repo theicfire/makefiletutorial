@@ -957,7 +957,8 @@ BUILD_DIR := ./build
 SRC_DIRS := ./src
 
 # Find all the C and C++ files we want to compile
-SRCS := $(shell find $(SRC_DIRS) -name *.cpp -or -name *.c)
+# Note the single quotes around the * expressions. Make will incorrectly expand these otherwise.
+SRCS := $(shell find $(SRC_DIRS) -name '*.cpp' -or -name '*.c' -or -name '*.s')
 
 # String substitution for every C/C++ file.
 # As an example, hello.cpp turns into ./build/hello.cpp.o
