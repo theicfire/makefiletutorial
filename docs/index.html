@@ -1197,7 +1197,8 @@ BUILD_DIR := ./build
 SRC_DIRS := ./src
 
 <span class="hljs-comment"># Find all the C and C++ files we want to compile</span>
-SRCS := <span class="hljs-variable">$(<span class="hljs-built_in">shell</span> find <span class="hljs-variable">$(SRC_DIRS)</span> -name *.cpp -<span class="hljs-built_in">or</span> -name *.c)</span>
+<span class="hljs-comment"># Note the single quotes around the * expressions. Make will incorrectly expand these otherwise.</span>
+SRCS := <span class="hljs-variable">$(<span class="hljs-built_in">shell</span> find <span class="hljs-variable">$(SRC_DIRS)</span> -name '*.cpp' -<span class="hljs-built_in">or</span> -name '*.c' -<span class="hljs-built_in">or</span> -name '*.s')</span>
 
 <span class="hljs-comment"># String substitution for every C/C++ file.</span>
 <span class="hljs-comment"># As an example, hello.cpp turns into ./build/hello.cpp.o</span>
