@@ -1134,7 +1134,7 @@ bar := <span class="hljs-variable">$(<span class="hljs-built_in">if</span> <span
 
 <h1 id="other-features">Other Features</h1>
 <h2 id="include-makefiles">Include Makefiles</h2>
-<p>The include directive tells make to read one or more other makefiles. It&#39;s a line in the makefile that looks like this:</p>
+<p>The include directive tells make to read one or more other makefiles. It&#39;s a line in the makefile makefile that looks like this:</p>
 <pre><code class="hljs makefile"><span class="hljs-keyword">include</span> filenames...</code></pre>
 
 <p>This is particularly useful when you use compiler flags like <code>-M</code> that create Makefiles based on the source. For example, if some c files includes a header, that header will be added to a Makefile that&#39;s written by gcc. I talk about this more in the <a href="#makefile-cookbook">Makefile Cookbook</a></p>
