@@ -326,7 +326,7 @@ clean:
 
 ## Static Pattern Rules and Filter
 <!--  (Section 4.10) -->
-While I introduce functions later on, I'll forshadow what you can do with them. The `filter` function can be used in Static pattern rules to match the correct files. In this example, I made up the `.raw` and `.result` extensions.
+While I introduce functions later on, I'll foreshadow what you can do with them. The `filter` function can be used in Static pattern rules to match the correct files. In this example, I made up the `.raw` and `.result` extensions.
 ```makefile
 
 obj_files = foo.result bar.o lose.o
