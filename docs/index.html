@@ -82,6 +82,12 @@
 </ol>
 
 <ol>
+    <li><a class="toc-item" href="#the-versions-and-types-of-make">The versions and types of Make</a>
+    </li>
+    
+</ol>
+
+<ol>
     <li><a class="toc-item" href="#running-the-examples">Running the Examples</a>
     </li>
     
@@ -443,6 +449,8 @@
 <h2 id="what-alternatives-are-there-to-make-">What alternatives are there to Make?</h2>
 <p>Popular C/C++ alternative build systems are <a href="https://scons.org/">SCons</a>, <a href="https://cmake.org/">CMake</a>, <a href="https://bazel.build/">Bazel</a>, and <a href="https://ninja-build.org/">Ninja</a>. Some code editors like <a href="https://visualstudio.microsoft.com/">Microsoft Visual Studio</a> have their own built in build tools. For Java, there&#39;s <a href="https://ant.apache.org/">Ant</a>, <a href="https://maven.apache.org/what-is-maven.html">Maven</a>, and <a href="https://gradle.org/">Gradle</a>. Other languages like Go and Rust have their own build tools.</p>
 <p>Interpreted languages like Python, Ruby, and Javascript don&#39;t require an analogue to Makefiles. The goal of Makefiles is to compile whatever files need to be compiled, based on what files have changed. But when files in interpreted languages change, nothing needs to get recompiled. When the program runs, the most recent version of the file is used.</p>
+<h2 id="the-versions-and-types-of-make">The versions and types of Make</h2>
+<p>There are a variety of implementations of Make, but most of this guide will work on whatever version you&#39;re using. However, it&#39;s specifically written for GNU Make, which is the standard implementation on Linux and MacOS. All the examples work for Make versions 3 and 4, which are nearly equivalent other than some esoteric differences.</p>
 <h2 id="running-the-examples">Running the Examples</h2>
 <p>To run these examples, you&#39;ll need a terminal and &quot;make&quot; installed. For each example, put the contents in a file called <code>Makefile</code>, and in that directory run the command <code>make</code>. Let&#39;s start with the simplest of Makefiles:</p>
 <pre><code class="hljs makefile"><span class="hljs-section">hello:</span>
