@@ -703,6 +703,7 @@ thing_right := <span class="hljs-variable">$(<span class="hljs-built_in">wildcar
 <pre><code class="hljs makefile">obj_files = foo.result bar.o lose.o
 src_files = foo.raw bar.c lose.c
 
+<span class="hljs-meta"><span class="hljs-meta-keyword">.PHONY</span>: all</span>
 <span class="hljs-section">all: <span class="hljs-variable">$(obj_files)</span></span>
 
 <span class="hljs-variable">$(<span class="hljs-built_in">filter</span> %.o,<span class="hljs-variable">$(obj_files)</span>)</span>: %.o: %.c

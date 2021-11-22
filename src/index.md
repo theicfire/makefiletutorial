@@ -335,6 +335,7 @@ While I introduce functions later on, I'll foreshadow what you can do with them.
 obj_files = foo.result bar.o lose.o
 src_files = foo.raw bar.c lose.c
 
+.PHONY: all
 all: $(obj_files)
 
 $(filter %.o,$(obj_files)): %.o: %.c
