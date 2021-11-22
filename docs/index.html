@@ -172,6 +172,12 @@
     
 
 <ol>
+    <li><a class="toc-item" href="#implicit-rules">Implicit Rules</a>
+    </li>
+    
+</ol>
+
+<ol>
     <li><a class="toc-item" href="#static-pattern-rules">Static Pattern Rules</a>
     </li>
     
@@ -179,12 +185,6 @@
 
 <ol>
     <li><a class="toc-item" href="#static-pattern-rules-and-filter">Static Pattern Rules and Filter</a>
-    </li>
-    
-</ol>
-
-<ol>
-    <li><a class="toc-item" href="#implicit-rules">Implicit Rules</a>
     </li>
     
 </ol>
@@ -653,13 +653,44 @@ thing_right := <span class="hljs-variable">$(<span class="hljs-built_in">wildcar
     rm -f hey one two</code></pre>
 
 <h1 id="fancy-rules">Fancy Rules</h1>
+<h2 id="implicit-rules">Implicit Rules</h2>
+<!--  (Section 10) -->
+<p>Make loves c compilation. And every time it expresses its love, things get confusing. Perhaps the most confusing part of Make is the magic/automatic rules that are made. Make calls these &quot;implicit&quot; rules. I don&#39;t personally agree with this design decision, and I don&#39;t recommend using them, but they&#39;re often used and are thus useful to know. Here&#39;s a list of implicit rules:</p>
+<ul>
+<li>Compiling a C program: <code>n.o</code> is made automatically from <code>n.c</code> with a command of the form <code>$(CC) -c $(CPPFLAGS) $(CFLAGS)</code></li>
+<li>Compiling a C++ program: <code>n.o</code> is made automatically from <code>n.cc</code> or <code>n.cpp</code> with a command of the form <code>$(CXX) -c $(CPPFLAGS) $(CXXFLAGS)</code></li>
+<li>Linking a single object file: <code>n</code> is made automatically from <code>n.o</code> by running the command <code>$(CC) $(LDFLAGS) n.o $(LOADLIBES) $(LDLIBS)</code></li>
+</ul>
+<p>The important variables used by implicit rules are:</p>
+<ul>
+<li><code>CC</code>: Program for compiling C programs; default <code>cc</code></li>
+<li><code>CXX</code>: Program for compiling C++ programs; default <code>g++</code></li>
+<li><code>CFLAGS</code>: Extra flags to give to the C compiler</li>
+<li><code>CXXFLAGS</code>: Extra flags to give to the C++ compiler</li>
+<li><code>CPPFLAGS</code>: Extra flags to give to the C preprocessor</li>
+<li><code>LDFLAGS</code>: Extra flags to give to compilers when they are supposed to invoke the linker</li>
+</ul>
+<p>Let&#39;s see how we can now build a C program without ever explicitly telling Make how to do the compililation:</p>
+<pre><code class="hljs makefile">CC = gcc <span class="hljs-comment"># Flag for implicit rules</span>
+CFLAGS = -g <span class="hljs-comment"># Flag for implicit rules. Turn on debug info</span>
+
+<span class="hljs-comment"># Implicit rule #1: blah is built via the C linker implicit rule</span>
+<span class="hljs-comment"># Implicit rule #2: blah.o is built via the C compilation implicit rule, because blah.c exists</span>
+<span class="hljs-section">blah: blah.o</span>
+
+<span class="hljs-section">blah.c:</span>
+    echo <span class="hljs-string">"int main() { return 0; }"</span> &gt; blah.c
+
+<span class="hljs-section">clean:</span>
+    rm -f blah*</code></pre>
+
 <h2 id="static-pattern-rules">Static Pattern Rules</h2>
 <!--  (Section 4.10) -->
-<p>Make loves c compilation. And every time it expresses its love, things get confusing. Here&#39;s the syntax for a new type of rule called a static pattern:</p>
+<p>Static pattern rules are another way to write less in a Makefile, but I&#39;d say are more useful and a bit less &quot;magic&quot;. Here&#39;s their syntax:</p>
 <pre><code class="hljs makefile">targets ...: target-pattern: prereq-patterns ...
    commands</code></pre>
 
-<p>The essence is that the given target is matched by the target-pattern (via a <code>%</code> wildcard). Whatever was matched is called the <em>stem</em>. The stem is then substituted into the prereq-pattern, to generate the target&#39;s prereqs.</p>
+<p>The essence is that the given <code>target</code> is matched by the <code>target-pattern</code> (via a <code>%</code> wildcard). Whatever was matched is called the <em>stem</em>. The stem is then substituted into the <code>prereq-pattern</code>, to generate the target&#39;s prereqs.</p>
 <p>A typical use case is to compile <code>.c</code> files into <code>.o</code> files. Here&#39;s the <em>manual way</em>:</p>
 <pre><code class="hljs makefile">objects = foo.o bar.o all.o
 <span class="hljs-section">all: <span class="hljs-variable">$(objects)</span></span>
@@ -717,36 +748,6 @@ src_files = foo.raw bar.c lose.c
 <span class="hljs-section">clean:</span>
     rm -f <span class="hljs-variable">$(src_files)</span></code></pre>
 
-
-<h2 id="implicit-rules">Implicit Rules</h2>
-<!--  (Section 10) -->
-<p>Perhaps the most confusing part of make is the magic rules and variables that are made. Here&#39;s a list of implicit rules:</p>
-<ul>
-<li>Compiling a C program: <code>n.o</code> is made automatically from <code>n.c</code> with a command of the form <code>$(CC) -c $(CPPFLAGS) $(CFLAGS)</code></li>
-<li>Compiling a C++ program: <code>n.o</code> is made automatically from <code>n.cc</code> or <code>n.cpp</code> with a command of the form <code>$(CXX) -c $(CPPFLAGS) $(CXXFLAGS)</code></li>
-<li>Linking a single object file: <code>n</code> is made automatically from <code>n.o</code> by running the command <code>$(CC) $(LDFLAGS) n.o $(LOADLIBES) $(LDLIBS)</code></li>
-</ul>
-<p>As such, the important variables used by implicit rules are:</p>
-<ul>
-<li><code>CC</code>: Program for compiling C programs; default cc</li>
-<li><code>CXX</code>: Program for compiling C++ programs; default G++</li>
-<li><code>CFLAGS</code>: Extra flags to give to the C compiler</li>
-<li><code>CXXFLAGS</code>: Extra flags to give to the C++ compiler</li>
-<li><code>CPPFLAGS</code>: Extra flags to give to the C preprocessor</li>
-<li><code>LDFLAGS</code>: Extra flags to give to compilers when they are supposed to invoke the linker</li>
-</ul>
-<pre><code class="hljs makefile">CC = gcc <span class="hljs-comment"># Flag for implicit rules</span>
-CFLAGS = -g <span class="hljs-comment"># Flag for implicit rules. Turn on debug info</span>
-
-<span class="hljs-comment"># Implicit rule #1: blah is built via the C linker implicit rule</span>
-<span class="hljs-comment"># Implicit rule #2: blah.o is built via the C compilation implicit rule, because blah.c exists</span>
-<span class="hljs-section">blah: blah.o</span>
-
-<span class="hljs-section">blah.c:</span>
-    echo <span class="hljs-string">"int main() { return 0; }"</span> &gt; blah.c
-
-<span class="hljs-section">clean:</span>
-    rm -f blah*</code></pre>
 
 <h2 id="pattern-rules">Pattern Rules</h2>
 <p>Pattern rules are often used but quite confusing. You can look at them as two ways:</p>

@@ -276,15 +276,46 @@ clean:
 ```
 
 # Fancy Rules
+## Implicit Rules
+<!--  (Section 10) -->
+Make loves c compilation. And every time it expresses its love, things get confusing. Perhaps the most confusing part of Make is the magic/automatic rules that are made. Make calls these "implicit" rules. I don't personally agree with this design decision, and I don't recommend using them, but they're often used and are thus useful to know. Here's a list of implicit rules:
+- Compiling a C program: `n.o` is made automatically from `n.c` with a command of the form `$(CC) -c $(CPPFLAGS) $(CFLAGS)`
+- Compiling a C++ program: `n.o` is made automatically from `n.cc` or `n.cpp` with a command of the form `$(CXX) -c $(CPPFLAGS) $(CXXFLAGS)`
+- Linking a single object file: `n` is made automatically from `n.o` by running the command `$(CC) $(LDFLAGS) n.o $(LOADLIBES) $(LDLIBS)`
+
+The important variables used by implicit rules are:
+- `CC`: Program for compiling C programs; default `cc`
+- `CXX`: Program for compiling C++ programs; default `g++`
+- `CFLAGS`: Extra flags to give to the C compiler
+- `CXXFLAGS`: Extra flags to give to the C++ compiler
+- `CPPFLAGS`: Extra flags to give to the C preprocessor
+- `LDFLAGS`: Extra flags to give to compilers when they are supposed to invoke the linker
+
+Let's see how we can now build a C program without ever explicitly telling Make how to do the compililation:
+```makefile
+CC = gcc # Flag for implicit rules
+CFLAGS = -g # Flag for implicit rules. Turn on debug info
+
+# Implicit rule #1: blah is built via the C linker implicit rule
+# Implicit rule #2: blah.o is built via the C compilation implicit rule, because blah.c exists
+blah: blah.o
+
+blah.c:
+	echo "int main() { return 0; }" > blah.c
+
+clean:
+	rm -f blah*
+```
+
 ## Static Pattern Rules
 <!--  (Section 4.10) -->
-Make loves c compilation. And every time it expresses its love, things get confusing. Here's the syntax for a new type of rule called a static pattern:
+Static pattern rules are another way to write less in a Makefile, but I'd say are more useful and a bit less "magic". Here's their syntax:
 ```makefile
 targets ...: target-pattern: prereq-patterns ...
    commands
 ```
 
-The essence is that the given target is matched by the target-pattern (via a `%` wildcard). Whatever was matched is called the *stem*. The stem is then substituted into the prereq-pattern, to generate the target's prereqs.
+The essence is that the given `target` is matched by the `target-pattern` (via a `%` wildcard). Whatever was matched is called the *stem*. The stem is then substituted into the `prereq-pattern`, to generate the target's prereqs.
 
 A typical use case is to compile `.c` files into `.o` files. Here's the *manual way*:
 ```makefile
@@ -350,37 +381,6 @@ clean:
 	rm -f $(src_files)
 ```
 
-
-## Implicit Rules
-<!--  (Section 10) -->
-Perhaps the most confusing part of make is the magic rules and variables that are made. Here's a list of implicit rules:
-- Compiling a C program: `n.o` is made automatically from `n.c` with a command of the form `$(CC) -c $(CPPFLAGS) $(CFLAGS)`
-- Compiling a C++ program: `n.o` is made automatically from `n.cc` or `n.cpp` with a command of the form `$(CXX) -c $(CPPFLAGS) $(CXXFLAGS)`
-- Linking a single object file: `n` is made automatically from `n.o` by running the command `$(CC) $(LDFLAGS) n.o $(LOADLIBES) $(LDLIBS)`
-
-As such, the important variables used by implicit rules are:
-- `CC`: Program for compiling C programs; default cc
-- `CXX`: Program for compiling C++ programs; default G++
-- `CFLAGS`: Extra flags to give to the C compiler
-- `CXXFLAGS`: Extra flags to give to the C++ compiler
-- `CPPFLAGS`: Extra flags to give to the C preprocessor
-- `LDFLAGS`: Extra flags to give to compilers when they are supposed to invoke the linker
-
-
-```makefile
-CC = gcc # Flag for implicit rules
-CFLAGS = -g # Flag for implicit rules. Turn on debug info
-
-# Implicit rule #1: blah is built via the C linker implicit rule
-# Implicit rule #2: blah.o is built via the C compilation implicit rule, because blah.c exists
-blah: blah.o
-
-blah.c:
-	echo "int main() { return 0; }" > blah.c
-
-clean:
-	rm -f blah*
-```
 
 ## Pattern Rules
 Pattern rules are often used but quite confusing. You can look at them as two ways:
