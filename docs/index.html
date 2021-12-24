@@ -454,13 +454,11 @@
 <h2 id="running-the-examples">Running the Examples</h2>
 <p>To run these examples, you&#39;ll need a terminal and &quot;make&quot; installed. For each example, put the contents in a file called <code>Makefile</code>, and in that directory run the command <code>make</code>. Let&#39;s start with the simplest of Makefiles:</p>
 <pre><code class="hljs makefile"><span class="hljs-section">hello:</span>
-    echo <span class="hljs-string">"hello world"</span></code></pre>
-
+	echo <span class="hljs-string">"hello world"</span></code></pre>
 <p>Here is the output of running the above example:</p>
 <pre><code class="hljs shell"><span class="hljs-meta">$</span><span class="bash"> make</span>
 echo "hello world"
 hello world</code></pre>
-
 <p>That&#39;s it! If you&#39;re a bit confused, here&#39;s a video that goes through these steps, along with describing the basic structure of Makefiles.</p>
 <div class="yt-video">
 <iframe width="560" height="315" src="https://www.youtube.com/embed/zeEMISsjO38" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -469,10 +467,9 @@ hello world</code></pre>
 <h2 id="makefile-syntax">Makefile Syntax</h2>
 <p>A Makefile consists of a set of <em>rules</em>. A rule generally looks like this:</p>
 <pre><code class="hljs makefile"><span class="hljs-section">targets: prerequisites</span>
-   command
-   command
-   command</code></pre>
-
+	command
+	command
+	command</code></pre>
 <ul>
 <li>The <em>targets</em> are file names, separated by spaces. Typically, there is only one per rule.</li>
 <li>The <em>commands</em> are a series of steps typically used to make the target(s). These <em>need to start with a tab character</em>, not spaces.</li>
@@ -490,72 +487,63 @@ hello world</code></pre>
 <li>That&#39;s it: <code>blah</code> is a compiled c program</li>
 </ul>
 <pre><code class="hljs makefile"><span class="hljs-section">blah: blah.o</span>
-    cc blah.o -o blah <span class="hljs-comment"># Runs third</span>
+	cc blah.o -o blah <span class="hljs-comment"># Runs third</span>
 
 <span class="hljs-section">blah.o: blah.c</span>
-    cc -c blah.c -o blah.o <span class="hljs-comment"># Runs second</span>
+	cc -c blah.c -o blah.o <span class="hljs-comment"># Runs second</span>
 
 <span class="hljs-section">blah.c:</span>
-    echo <span class="hljs-string">"int main() { return 0; }"</span> &gt; blah.c <span class="hljs-comment"># Runs first</span></code></pre>
-
+	echo <span class="hljs-string">"int main() { return 0; }"</span> &gt; blah.c <span class="hljs-comment"># Runs first</span></code></pre>
 <p>This makefile has a single target, called <code>some_file</code>. The default target is the first target, so in this case <code>some_file</code> will run.</p>
 <pre><code class="hljs makefile"><span class="hljs-section">some_file:</span>
-    echo <span class="hljs-string">"This line will always print"</span></code></pre>
-
+	echo <span class="hljs-string">"This line will always print"</span></code></pre>
 <p>This file will make <code>some_file</code> the first time, and the second time notice it&#39;s already made, resulting in <code>make: &#39;some_file&#39; is up to date.</code></p>
 <pre><code class="hljs makefile"><span class="hljs-section">some_file:</span>
-    echo <span class="hljs-string">"This line will only print once"</span>
-    touch some_file</code></pre>
-
+	echo <span class="hljs-string">"This line will only print once"</span>
+	touch some_file</code></pre>
 <p>Here, the target <code>some_file</code> &quot;depends&quot; on <code>other_file</code>. When we run <code>make</code>, the default target (<code>some_file</code>, since it&#39;s first) will get called. It will first look at its list of <em>dependencies</em>, and if any of them are older, it will first run the targets for those dependencies, and then run itself. The second time this is run, neither target will run because both targets exist.</p>
 <pre><code class="hljs makefile"><span class="hljs-section">some_file: other_file</span>
-    echo <span class="hljs-string">"This will run second, because it depends on other_file"</span>
-    touch some_file
+	echo <span class="hljs-string">"This will run second, because it depends on other_file"</span>
+	touch some_file
 
 <span class="hljs-section">other_file:</span>
-    echo <span class="hljs-string">"This will run first"</span>
-    touch other_file</code></pre>
-
+	echo <span class="hljs-string">"This will run first"</span>
+	touch other_file</code></pre>
 <p>This will always run both targets, because <code>some_file</code> depends on other_file, which is never created.</p>
 <pre><code class="hljs makefile"><span class="hljs-section">some_file: other_file</span>
-    touch some_file
+	touch some_file
 
 <span class="hljs-section">other_file:</span>
-    echo <span class="hljs-string">"nothing"</span></code></pre>
-
+	echo <span class="hljs-string">"nothing"</span></code></pre>
 <p><code>clean</code> is often used as a target that removes the output of other targets, but it is not a special word in <code>make</code>.</p>
 <pre><code class="hljs makefile"><span class="hljs-section">some_file: </span>
-    touch some_file
+	touch some_file
 
 <span class="hljs-section">clean:</span>
-    rm -f some_file</code></pre>
-
-
+	rm -f some_file</code></pre>
 <h2 id="variables">Variables</h2>
 <p>Variables can only be strings. Here&#39;s an example of using them:</p>
 <pre><code class="hljs makefile">files = file1 file2
 <span class="hljs-section">some_file: <span class="hljs-variable">$(files)</span></span>
-    echo <span class="hljs-string">"Look at this variable: "</span> <span class="hljs-variable">$(files)</span>
-    touch some_file
+	echo <span class="hljs-string">"Look at this variable: "</span> <span class="hljs-variable">$(files)</span>
+	touch some_file
 
 <span class="hljs-section">file1:</span>
-    touch file1
+	touch file1
 <span class="hljs-section">file2:</span>
-    touch file2
+	touch file2
 
 <span class="hljs-section">clean:</span>
-    rm -f file1 file2 some_file</code></pre>
-
+	rm -f file1 file2 some_file</code></pre>
 <p>Reference variables using ${} or $()</p>
 <pre><code class="hljs makefile">x = dude
 
 <span class="hljs-section">all:</span>
-    echo <span class="hljs-variable">$(x)</span>
-    echo ${x}
+	echo <span class="hljs-variable">$(x)</span>
+	echo ${x}
 
-    <span class="hljs-comment"># Bad practice, but works</span>
-    echo $x</code></pre>
-
+	<span class="hljs-comment"># Bad practice, but works</span>
+	echo $x </code></pre>
 <h1 id="targets">Targets</h1>
 <h2 id="the-all-target">The all target</h2>
 <!--  (Section 4.4) -->
@@ -563,36 +551,35 @@ hello world</code></pre>
 <pre><code class="hljs makefile"><span class="hljs-section">all: one two three</span>
 
 <span class="hljs-section">one:</span>
-    touch one
+	touch one
 <span class="hljs-section">two:</span>
-    touch two
+	touch two
 <span class="hljs-section">three:</span>
-    touch three
+	touch three
 
 <span class="hljs-section">clean:</span>
-    rm -f one two three</code></pre>
-
+	rm -f one two three
+</code></pre>
 <h2 id="multiple-targets">Multiple targets</h2>
 <!--  (Section 4.8) -->
 <p>When there are multiple targets for a rule, the commands will be run for each target<br><code>$@</code> is an <a href="#automatic-variables">automatic variable</a> that contains the target name.</p>
 <pre><code class="hljs makefile"><span class="hljs-section">all: f1.o f2.o</span>
 
 f1.o f2.o:
-    echo <span class="hljs-variable">$@</span>
+	echo <span class="hljs-variable">$@</span>
 <span class="hljs-comment"># Equivalent to:</span>
 <span class="hljs-comment"># f1.o</span>
-<span class="hljs-comment">#     echo $@</span>
+<span class="hljs-comment">#	 echo $@</span>
 <span class="hljs-comment"># f2.o</span>
-<span class="hljs-comment">#     echo $@</span></code></pre>
-
+<span class="hljs-comment">#	 echo $@</span>
+</code></pre>
 <h1 id="automatic-variables-and-wildcards">Automatic Variables and Wildcards</h1>
 <h2 id="-wildcard">* Wildcard</h2>
 <!--  (Section 4.2) -->
 <p>Both <code>*</code> and <code>%</code> are called wildcards in Make, but they mean entirely different things. <code>*</code> searches your filesystem for matching filenames. I suggest that you always wrap it in the <code>wildcard</code> function, because otherwise you may fall into a common pitfall described below. It&#39;s oddly unhelpful and I find it more confusing than useful.</p>
 <pre><code class="hljs makefile"><span class="hljs-comment"># Print out file information about every .c file</span>
 <span class="hljs-section">print: $(wildcard *.c)</span>
-    ls -la  <span class="hljs-variable">$?</span></code></pre>
-
+	ls -la  <span class="hljs-variable">$?</span></code></pre>
 <p><code>*</code> may be used in the target, prerequisites, or in the <code>wildcard</code> function.</p>
 <p>Danger: <code>*</code> may not be directly used in a variable definitions</p>
 <p>Danger: When <code>*</code> matches no files, it is left as it is (unless run in the <code>wildcard</code> function)</p>
@@ -612,8 +599,6 @@ thing_right := <span class="hljs-variable">$(<span class="hljs-built_in">wildcar
 
 <span class="hljs-comment"># Same as rule three</span>
 <span class="hljs-section">four: $(wildcard *.o)</span></code></pre>
-
-
 <h2 id="-wildcard-1">% Wildcard</h2>
 <p><code>%</code> is really useful, but is somewhat confusing because of the variety of situations it can be used in.</p>
 <ul>
@@ -632,26 +617,26 @@ thing_right := <span class="hljs-variable">$(<span class="hljs-built_in">wildcar
 <!--  (Section 10.5) -->
 <p>There are many <a href="https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html">automatic variables</a>, but often only a few show up:</p>
 <pre><code class="hljs makefile"><span class="hljs-section">hey: one two</span>
-    <span class="hljs-comment"># Outputs "hey", since this is the first target</span>
-    echo <span class="hljs-variable">$@</span>
+	<span class="hljs-comment"># Outputs "hey", since this is the first target</span>
+	echo <span class="hljs-variable">$@</span>
 
-    <span class="hljs-comment"># Outputs all prerequisites newer than the target</span>
-    echo <span class="hljs-variable">$?</span>
+	<span class="hljs-comment"># Outputs all prerequisites newer than the target</span>
+	echo <span class="hljs-variable">$?</span>
 
-    <span class="hljs-comment"># Outputs all prerequisites</span>
-    echo <span class="hljs-variable">$^</span>
+	<span class="hljs-comment"># Outputs all prerequisites</span>
+	echo <span class="hljs-variable">$^</span>
 
-    touch hey
+	touch hey
 
 <span class="hljs-section">one:</span>
-    touch one
+	touch one
 
 <span class="hljs-section">two:</span>
-    touch two
+	touch two
 
 <span class="hljs-section">clean:</span>
-    rm -f hey one two</code></pre>
-
+	rm -f hey one two
+</code></pre>
 <h1 id="fancy-rules">Fancy Rules</h1>
 <h2 id="implicit-rules">Implicit Rules</h2>
 <!--  (Section 10) -->
@@ -679,17 +664,15 @@ CFLAGS = -g <span class="hljs-comment"># Flag for implicit rules. Turn on debug 
 <span class="hljs-section">blah: blah.o</span>
 
 <span class="hljs-section">blah.c:</span>
-    echo <span class="hljs-string">"int main() { return 0; }"</span> &gt; blah.c
+	echo <span class="hljs-string">"int main() { return 0; }"</span> &gt; blah.c
 
 <span class="hljs-section">clean:</span>
-    rm -f blah*</code></pre>
-
+	rm -f blah*</code></pre>
 <h2 id="static-pattern-rules">Static Pattern Rules</h2>
 <!--  (Section 4.10) -->
 <p>Static pattern rules are another way to write less in a Makefile, but I&#39;d say are more useful and a bit less &quot;magic&quot;. Here&#39;s their syntax:</p>
-<pre><code class="hljs makefile">targets ...: target-pattern: prereq-patterns ...
+<pre><code class="hljs makefile"><span class="hljs-section">targets...: target-pattern: prereq-patterns ...</span>
    commands</code></pre>
-
 <p>The essence is that the given <code>target</code> is matched by the <code>target-pattern</code> (via a <code>%</code> wildcard). Whatever was matched is called the <em>stem</em>. The stem is then substituted into the <code>prereq-pattern</code>, to generate the target&#39;s prereqs.</p>
 <p>A typical use case is to compile <code>.c</code> files into <code>.o</code> files. Here&#39;s the <em>manual way</em>:</p>
 <pre><code class="hljs makefile">objects = foo.o bar.o all.o
@@ -701,14 +684,13 @@ CFLAGS = -g <span class="hljs-comment"># Flag for implicit rules. Turn on debug 
 <span class="hljs-section">all.o: all.c</span>
 
 <span class="hljs-section">all.c:</span>
-    echo <span class="hljs-string">"int main() { return 0; }"</span> &gt; all.c
+	echo <span class="hljs-string">"int main() { return 0; }"</span> &gt; all.c
 
 <span class="hljs-section">%.c:</span>
-    touch <span class="hljs-variable">$@</span>
+	touch <span class="hljs-variable">$@</span>
 
 <span class="hljs-section">clean:</span>
-    rm -f *.c *.o all</code></pre>
-
+	rm -f *.c *.o all</code></pre>
 <p>Here&#39;s the more <em>efficient way</em>, using a static pattern rule:</p>
 <pre><code class="hljs makefile">objects = foo.o bar.o all.o
 <span class="hljs-section">all: <span class="hljs-variable">$(objects)</span></span>
@@ -720,14 +702,13 @@ CFLAGS = -g <span class="hljs-comment"># Flag for implicit rules. Turn on debug 
 <span class="hljs-variable">$(objects)</span>: %.o: %.c
 
 <span class="hljs-section">all.c:</span>
-    echo <span class="hljs-string">"int main() { return 0; }"</span> &gt; all.c
+	echo <span class="hljs-string">"int main() { return 0; }"</span> &gt; all.c
 
 <span class="hljs-section">%.c:</span>
-    touch <span class="hljs-variable">$@</span>
+	touch <span class="hljs-variable">$@</span>
 
 <span class="hljs-section">clean:</span>
-    rm -f *.c *.o all</code></pre>
-
+	rm -f *.c *.o all</code></pre>
 <h2 id="static-pattern-rules-and-filter">Static Pattern Rules and Filter</h2>
 <!--  (Section 4.10) -->
 <p>While I introduce functions later on, I&#39;ll foreshadow what you can do with them. The <code>filter</code> function can be used in Static pattern rules to match the correct files. In this example, I made up the <code>.raw</code> and <code>.result</code> extensions.</p>
@@ -738,17 +719,15 @@ src_files = foo.raw bar.c lose.c
 <span class="hljs-section">all: <span class="hljs-variable">$(obj_files)</span></span>
 
 <span class="hljs-variable">$(<span class="hljs-built_in">filter</span> %.o,<span class="hljs-variable">$(obj_files)</span>)</span>: %.o: %.c
-    echo <span class="hljs-string">"target: <span class="hljs-variable">$@</span> prereq: <span class="hljs-variable">$&lt;</span>"</span>
+	echo <span class="hljs-string">"target: <span class="hljs-variable">$@</span> prereq: <span class="hljs-variable">$&lt;</span>"</span>
 <span class="hljs-variable">$(<span class="hljs-built_in">filter</span> %.result,<span class="hljs-variable">$(obj_files)</span>)</span>: %.result: %.raw
-    echo <span class="hljs-string">"target: <span class="hljs-variable">$@</span> prereq: <span class="hljs-variable">$&lt;</span>"</span> 
+	echo <span class="hljs-string">"target: <span class="hljs-variable">$@</span> prereq: <span class="hljs-variable">$&lt;</span>"</span> 
 
 %.c %.raw:
-    touch <span class="hljs-variable">$@</span>
+	touch <span class="hljs-variable">$@</span>
 
 <span class="hljs-section">clean:</span>
-    rm -f <span class="hljs-variable">$(src_files)</span></code></pre>
-
-
+	rm -f <span class="hljs-variable">$(src_files)</span></code></pre>
 <h2 id="pattern-rules">Pattern Rules</h2>
 <p>Pattern rules are often used but quite confusing. You can look at them as two ways:</p>
 <ul>
@@ -758,67 +737,61 @@ src_files = foo.raw bar.c lose.c
 <p>Let&#39;s start with an example first:</p>
 <pre><code class="hljs makefile"><span class="hljs-comment"># Define a pattern rule that compiles every .c file into a .o file</span>
 %.o : %.c
-        <span class="hljs-variable">$(CC)</span> -c <span class="hljs-variable">$(CFLAGS)</span> <span class="hljs-variable">$(CPPFLAGS)</span> <span class="hljs-variable">$&lt;</span> -o <span class="hljs-variable">$@</span></code></pre>
-
+		<span class="hljs-variable">$(CC)</span> -c <span class="hljs-variable">$(CFLAGS)</span> <span class="hljs-variable">$(CPPFLAGS)</span> <span class="hljs-variable">$&lt;</span> -o <span class="hljs-variable">$@</span></code></pre>
 <p>Pattern rules contain a &#39;%&#39; in the target. This &#39;%&#39; matches any nonempty string, and the other characters match themselves. ‘%’ in a prerequisite of a pattern rule stands for the same stem that was matched by the ‘%’ in the target.</p>
 <p>Here&#39;s another example:</p>
 <pre><code class="hljs makefile"><span class="hljs-comment"># Define a pattern rule that has no pattern in the prerequisites.</span>
 <span class="hljs-comment"># This just creates empty .c files when needed.</span>
 <span class="hljs-section">%.c:</span>
    touch <span class="hljs-variable">$@</span></code></pre>
-
 <h2 id="double-colon-rules">Double-Colon Rules</h2>
 <!--  (Section 4.11) -->
 <p>Double-Colon Rules are rarely used, but allow multiple rules to be defined for the same target. If these were single colons, a warning would be printed and only the second set of commands would run.</p>
 <pre><code class="hljs makefile"><span class="hljs-section">all: blah</span>
 
 <span class="hljs-section">blah::</span>
-    echo <span class="hljs-string">"hello"</span>
+	echo <span class="hljs-string">"hello"</span>
 
 <span class="hljs-section">blah::</span>
-    echo <span class="hljs-string">"hello again"</span></code></pre>
-
-
+	echo <span class="hljs-string">"hello again"</span></code></pre>
 <h1 id="commands-and-execution">Commands and execution</h1>
 <h2 id="command-echoingsilencing">Command Echoing/Silencing</h2>
 <!--  (Section 5.1) -->
 <p>Add an <code>@</code> before a command to stop it from being printed<br>You can also run make with <code>-s</code> to add an <code>@</code> before each line  </p>
 <pre><code class="hljs makefile"><span class="hljs-section">all: </span>
-    @echo <span class="hljs-string">"This make line will not be printed"</span>
-    echo <span class="hljs-string">"But this will"</span></code></pre>
-
+	@echo <span class="hljs-string">"This make line will not be printed"</span>
+	echo <span class="hljs-string">"But this will"</span></code></pre>
 <h2 id="command-execution">Command Execution</h2>
 <!--  (Section 5.2) -->
 <p>Each command is run in a new shell (or at least the effect is as such)</p>
 <pre><code class="hljs makefile"><span class="hljs-section">all: </span>
-    cd ..
-    <span class="hljs-comment"># The cd above does not affect this line, because each command is effectively run in a new shell</span>
-    echo `pwd`
+	cd ..
+	<span class="hljs-comment"># The cd above does not affect this line, because each command is effectively run in a new shell</span>
+	echo `pwd`
 
-    <span class="hljs-comment"># This cd command affects the next because they are on the same line</span>
-    cd ..;echo `pwd`
+	<span class="hljs-comment"># This cd command affects the next because they are on the same line</span>
+	cd ..;echo `pwd`
 
-    <span class="hljs-comment"># Same as above</span>
-    cd ..; \
-    echo `pwd`</code></pre>
-
+	<span class="hljs-comment"># Same as above</span>
+	cd ..; \
+	echo `pwd`
+</code></pre>
 <h2 id="default-shell">Default Shell</h2>
 <!--  (Section 5.2) -->
 <p>The default shell is <code>/bin/sh</code>. You can change this by changing the variable SHELL:</p>
 <pre><code class="hljs makefile">SHELL=/bin/bash
 
 <span class="hljs-section">cool:</span>
-    echo <span class="hljs-string">"Hello from bash"</span></code></pre>
-
+	echo <span class="hljs-string">"Hello from bash"</span></code></pre>
 <h2 id="error-handling-with--k--i-and--">Error handling with <code>-k</code>, <code>-i</code>, and <code>-</code></h2>
 <!--  (Section 5.4) -->
 <p>Add <code>-k</code> when running make to continue running even in the face of errors. Helpful if you want to see all the errors of Make at once.<br>Add a <code>-</code> before a command to suppress the error<br>Add <code>-i</code> to make to have this happen for every command.</p>
 <!--  (Section 5.4) -->
 <pre><code class="hljs makefile"><span class="hljs-section">one:</span>
-    <span class="hljs-comment"># This error will be printed but ignored, and make will continue to run</span>
-    -false
-    touch one</code></pre>
-
+	<span class="hljs-comment"># This error will be printed but ignored, and make will continue to run</span>
+	-false
+	touch one
+</code></pre>
 <h2 id="interrupting-or-killing-make">Interrupting or killing make</h2>
 <!--  (Section 5.5) -->
 <p>Note only: If you <code>ctrl+c</code> make, it will delete the newer targets it just made.</p>
@@ -827,13 +800,13 @@ src_files = foo.raw bar.c lose.c
 <p>To recursively call a makefile, use the special <code>$(MAKE)</code> instead of <code>make</code> because it will pass the make flags for you and won&#39;t itself be affected by them.</p>
 <pre><code class="hljs makefile">new_contents = <span class="hljs-string">"hello:\n\ttouch inside_file"</span>
 <span class="hljs-section">all:</span>
-    mkdir -p subdir
-    printf <span class="hljs-variable">$(new_contents)</span> | sed -e 's/^ //' &gt; subdir/makefile
-    cd subdir &amp;&amp; <span class="hljs-variable">$(MAKE)</span>
+	mkdir -p subdir
+	printf <span class="hljs-variable">$(new_contents)</span> | sed -e 's/^ //' &gt; subdir/makefile
+	cd subdir &amp;&amp; <span class="hljs-variable">$(MAKE)</span>
 
 <span class="hljs-section">clean:</span>
-    rm -rf subdir</code></pre>
-
+	rm -rf subdir
+</code></pre>
 <h2 id="use-export-for-recursive-make">Use export for recursive make</h2>
 <!--  (Section 5.6) -->
 <p>The export directive takes a variable and makes it accessible to sub-make commands. In this example, <code>cooly</code> is exported such that the makefile in subdir can use it.  </p>
@@ -841,12 +814,12 @@ src_files = foo.raw bar.c lose.c
 <pre><code class="hljs makefile">new_contents = <span class="hljs-string">"hello:\n\\techo \$<span class="hljs-variable">$(cooly)</span>"</span>
 
 <span class="hljs-section">all:</span>
-    mkdir -p subdir
-    echo <span class="hljs-variable">$(new_contents)</span> | sed -e 's/^ //' &gt; subdir/makefile
-    @echo <span class="hljs-string">"---MAKEFILE CONTENTS---"</span>
-    @cd subdir &amp;&amp; cat makefile
-    @echo <span class="hljs-string">"---END MAKEFILE CONTENTS---"</span>
-    cd subdir &amp;&amp; <span class="hljs-variable">$(MAKE)</span>
+	mkdir -p subdir
+	echo <span class="hljs-variable">$(new_contents)</span> | sed -e 's/^ //' &gt; subdir/makefile
+	@echo <span class="hljs-string">"---MAKEFILE CONTENTS---"</span>
+	@cd subdir &amp;&amp; cat makefile
+	@echo <span class="hljs-string">"---END MAKEFILE CONTENTS---"</span>
+	cd subdir &amp;&amp; <span class="hljs-variable">$(MAKE)</span>
 
 <span class="hljs-comment"># Note that variables and exports. They are set/affected globally.</span>
 cooly = <span class="hljs-string">"The subdirectory can see me!"</span>
@@ -854,19 +827,17 @@ cooly = <span class="hljs-string">"The subdirectory can see me!"</span>
 <span class="hljs-comment"># This would nullify the line above: unexport cooly</span>
 
 <span class="hljs-section">clean:</span>
-    rm -rf subdir</code></pre>
-
+	rm -rf subdir</code></pre>
 <!--  (Section 5.6) -->
 <p>You need to export variables to have them run in the shell as well.  </p>
 <pre><code class="hljs makefile">one=this will only work locally
 <span class="hljs-keyword">export</span> two=we can run subcommands with this
 
 <span class="hljs-section">all: </span>
-    @echo <span class="hljs-variable">$(one)</span>
-    @echo $$one
-    @echo <span class="hljs-variable">$(two)</span>
-    @echo $$two</code></pre>
-
+	@echo <span class="hljs-variable">$(one)</span>
+	@echo $$one
+	@echo <span class="hljs-variable">$(two)</span>
+	@echo $$two</code></pre>
 <!--  (Section 5.6) -->
 <p><code>.EXPORT_ALL_VARIABLES</code> exports all variables for you.</p>
 <pre><code class="hljs makefile"><span class="hljs-section">.EXPORT_ALL_VARIABLES:</span>
@@ -876,16 +847,15 @@ cooly = <span class="hljs-string">"The subdirectory can see me!"</span>
 <span class="hljs-comment"># This would nullify the line above: unexport cooly</span>
 
 <span class="hljs-section">all:</span>
-    mkdir -p subdir
-    echo <span class="hljs-variable">$(new_contents)</span> | sed -e 's/^ //' &gt; subdir/makefile
-    @echo <span class="hljs-string">"---MAKEFILE CONTENTS---"</span>
-    @cd subdir &amp;&amp; cat makefile
-    @echo <span class="hljs-string">"---END MAKEFILE CONTENTS---"</span>
-    cd subdir &amp;&amp; <span class="hljs-variable">$(MAKE)</span>
+	mkdir -p subdir
+	echo <span class="hljs-variable">$(new_contents)</span> | sed -e 's/^ //' &gt; subdir/makefile
+	@echo <span class="hljs-string">"---MAKEFILE CONTENTS---"</span>
+	@cd subdir &amp;&amp; cat makefile
+	@echo <span class="hljs-string">"---END MAKEFILE CONTENTS---"</span>
+	cd subdir &amp;&amp; <span class="hljs-variable">$(MAKE)</span>
 
 <span class="hljs-section">clean:</span>
-    rm -rf subdir</code></pre>
-
+	rm -rf subdir</code></pre>
 <h2 id="arguments-to-make">Arguments to make</h2>
 <!--  (Section 9) -->
 
@@ -907,26 +877,23 @@ two := two ${later_variable}
 later_variable = later
 
 <span class="hljs-section">all: </span>
-    echo <span class="hljs-variable">$(one)</span>
-    echo <span class="hljs-variable">$(two)</span></code></pre>
-
+	echo <span class="hljs-variable">$(one)</span>
+	echo <span class="hljs-variable">$(two)</span></code></pre>
 <p>Simply expanded (using <code>:=</code>) allows you to append to a variable. Recursive definitions will give an infinite loop error.  </p>
 <pre><code class="hljs makefile">one = hello
 <span class="hljs-comment"># one gets defined as a simply expanded variable (:=) and thus can handle appending</span>
 one := ${one} there
 
 <span class="hljs-section">all: </span>
-    echo <span class="hljs-variable">$(one)</span></code></pre>
-
+	echo <span class="hljs-variable">$(one)</span></code></pre>
 <p><code>?=</code> only sets variables if they have not yet been set</p>
 <pre><code class="hljs makefile">one = hello
 one ?= will not be set
 two ?= will be set
 
 <span class="hljs-section">all: </span>
-    echo <span class="hljs-variable">$(one)</span>
-    echo <span class="hljs-variable">$(two)</span></code></pre>
-
+	echo <span class="hljs-variable">$(one)</span>
+	echo <span class="hljs-variable">$(two)</span></code></pre>
 <p>Spaces at the end of a line are not stripped, but those at the start are. To make a variable with a single space, use <code>$(nullstring)</code></p>
 <pre><code class="hljs makefile">with_spaces = hello   <span class="hljs-comment"># with_spaces has many spaces after "hello"</span>
 after = <span class="hljs-variable">$(with_spaces)</span>there
@@ -935,21 +902,18 @@ nullstring =
 space = <span class="hljs-variable">$(nullstring)</span> <span class="hljs-comment"># Make a variable with a single space.</span>
 
 <span class="hljs-section">all: </span>
-    echo <span class="hljs-string">"<span class="hljs-variable">$(after)</span>"</span>
-    echo start<span class="hljs-string">"<span class="hljs-variable">$(space)</span>"</span>end</code></pre>
-
+	echo <span class="hljs-string">"<span class="hljs-variable">$(after)</span>"</span>
+	echo start<span class="hljs-string">"<span class="hljs-variable">$(space)</span>"</span>end</code></pre>
 <p>An undefined variable is actually an empty string!</p>
 <pre><code class="hljs makefile"><span class="hljs-section">all: </span>
-    <span class="hljs-comment"># Undefined variables are just empty strings!</span>
-    echo <span class="hljs-variable">$(nowhere)</span></code></pre>
-
+	<span class="hljs-comment"># Undefined variables are just empty strings!</span>
+	echo <span class="hljs-variable">$(nowhere)</span></code></pre>
 <p>Use <code>+=</code> to append</p>
 <pre><code class="hljs makefile">foo := start
 foo += more
 
 <span class="hljs-section">all: </span>
-    echo <span class="hljs-variable">$(foo)</span></code></pre>
-
+	echo <span class="hljs-variable">$(foo)</span></code></pre>
 <p><a href="#string-substitution">String Substitution</a> is also a really common and useful way to modify variables. Also check out <a href="https://www.gnu.org/software/make/manual/html_node/Text-Functions.html#Text-Functions">Text Functions</a> and <a href="https://www.gnu.org/software/make/manual/html_node/File-Name-Functions.html#File-Name-Functions">Filename Functions</a>.</p>
 <h2 id="command-line-arguments-and-override">Command line arguments and override</h2>
 <!--  (Section 6.7) -->
@@ -960,9 +924,8 @@ Here we ran make with <code>make option_one=hi</code></p>
 <span class="hljs-comment"># Does not override command line arguments</span>
 option_two = not_override
 <span class="hljs-section">all: </span>
-    echo <span class="hljs-variable">$(option_one)</span>
-    echo <span class="hljs-variable">$(option_two)</span></code></pre>
-
+	echo <span class="hljs-variable">$(option_one)</span>
+	echo <span class="hljs-variable">$(option_two)</span></code></pre>
 <h2 id="list-of-commands-and-define">List of commands and define</h2>
 <!--  (Section 6.8) -->
 <p>&quot;define&quot; is actually just a list of commands. It has nothing to do with being a function.
@@ -978,33 +941,30 @@ echo $$blah
 <span class="hljs-comment"># One and two are different.</span>
 
 <span class="hljs-section">all: </span>
-    @echo <span class="hljs-string">"This prints 'I was set'"</span>
-    @<span class="hljs-variable">$(one)</span>
-    @echo <span class="hljs-string">"This does not print 'I was set' because each command runs in a separate shell"</span>
-    @<span class="hljs-variable">$(two)</span></code></pre>
-
+	@echo <span class="hljs-string">"This prints 'I was set'"</span>
+	@<span class="hljs-variable">$(one)</span>
+	@echo <span class="hljs-string">"This does not print 'I was set' because each command runs in a separate shell"</span>
+	@<span class="hljs-variable">$(two)</span></code></pre>
 <h2 id="target-specific-variables">Target-specific variables</h2>
 <!--  (Section 6.10) -->
 <p>Variables can be assigned for specific targets</p>
 <pre><code class="hljs makefile"><span class="hljs-section">all: one = cool</span>
 
 <span class="hljs-section">all: </span>
-    echo one is defined: <span class="hljs-variable">$(one)</span>
+	echo one is defined: <span class="hljs-variable">$(one)</span>
 
 <span class="hljs-section">other:</span>
-    echo one is nothing: <span class="hljs-variable">$(one)</span></code></pre>
-
+	echo one is nothing: <span class="hljs-variable">$(one)</span></code></pre>
 <h2 id="pattern-specific-variables">Pattern-specific variables</h2>
 <!--  (Section 6.11) -->
 <p>You can assign variables for specific target <em>patterns</em></p>
 <pre><code class="hljs makefile"><span class="hljs-section">%.c: one = cool</span>
 
 <span class="hljs-section">blah.c: </span>
-    echo one is defined: <span class="hljs-variable">$(one)</span>
+	echo one is defined: <span class="hljs-variable">$(one)</span>
 
 <span class="hljs-section">other:</span>
-    echo one is nothing: <span class="hljs-variable">$(one)</span></code></pre>
-
+	echo one is nothing: <span class="hljs-variable">$(one)</span></code></pre>
 <h1 id="conditional-part-of-makefiles">Conditional part of Makefiles</h1>
 <h2 id="conditional-ifelse">Conditional if/else</h2>
 <!--  (Section 7.1) -->
@@ -1012,11 +972,10 @@ echo $$blah
 
 <span class="hljs-section">all:</span>
 <span class="hljs-keyword">ifeq</span> (<span class="hljs-variable">$(foo)</span>, ok)
-    echo <span class="hljs-string">"foo equals ok"</span>
+	echo <span class="hljs-string">"foo equals ok"</span>
 <span class="hljs-keyword">else</span>
-    echo <span class="hljs-string">"nope"</span>
+	echo <span class="hljs-string">"nope"</span>
 <span class="hljs-keyword">endif</span></code></pre>
-
 <h2 id="check-if-a-variable-is-empty">Check if a variable is empty</h2>
 <!--  (Section 7.2) -->
 <pre><code class="hljs makefile">nullstring =
@@ -1024,12 +983,11 @@ foo = <span class="hljs-variable">$(nullstring)</span> <span class="hljs-comment
 
 <span class="hljs-section">all:</span>
 <span class="hljs-keyword">ifeq</span> (<span class="hljs-variable">$(<span class="hljs-built_in">strip</span> <span class="hljs-variable">$(foo)</span>)</span>,)
-    echo <span class="hljs-string">"foo is empty after being stripped"</span>
+	echo <span class="hljs-string">"foo is empty after being stripped"</span>
 <span class="hljs-keyword">endif</span>
 <span class="hljs-keyword">ifeq</span> (<span class="hljs-variable">$(nullstring)</span>,)
-    echo <span class="hljs-string">"nullstring doesn't even have spaces"</span>
+	echo <span class="hljs-string">"nullstring doesn't even have spaces"</span>
 <span class="hljs-keyword">endif</span></code></pre>
-
 <h2 id="check-if-a-variable-is-defined">Check if a variable is defined</h2>
 <!--  (Section 7.2) -->
 <p>ifdef does not expand variable references; it just sees if something is defined at all</p>
@@ -1038,12 +996,12 @@ foo = <span class="hljs-variable">$(bar)</span>
 
 <span class="hljs-section">all:</span>
 <span class="hljs-keyword">ifdef</span> foo
-    echo <span class="hljs-string">"foo is defined"</span>
+	echo <span class="hljs-string">"foo is defined"</span>
 <span class="hljs-keyword">endif</span>
 <span class="hljs-keyword">ifdef</span> bar
-    echo <span class="hljs-string">"but bar is not"</span>
-<span class="hljs-keyword">endif</span></code></pre>
-
+	echo <span class="hljs-string">"but bar is not"</span>
+<span class="hljs-keyword">endif</span>
+</code></pre>
 <h2 id="makeflags">$(makeflags)</h2>
 <!-- `(Section 7.3) -->
 <p>This example shows you how to test make flags with <code>findstring</code> and <code>MAKEFLAGS</code>. Run this example with <code>make -i</code> to see it print out the echo statement.</p>
@@ -1053,17 +1011,16 @@ foo = <span class="hljs-variable">$(bar)</span>
 <span class="hljs-section">all:</span>
 <span class="hljs-comment"># Search for the "-i" flag. MAKEFLAGS is just a list of single characters, one per flag. So look for "i" in this case.</span>
 <span class="hljs-keyword">ifneq</span> (,<span class="hljs-variable">$(<span class="hljs-built_in">findstring</span> i, <span class="hljs-variable">$(MAKEFLAGS)</span>)</span>)
-    echo <span class="hljs-string">"i was passed to MAKEFLAGS"</span>
+	echo <span class="hljs-string">"i was passed to MAKEFLAGS"</span>
 <span class="hljs-keyword">endif</span></code></pre>
-
 <h1 id="functions">Functions</h1>
 <h2 id="first-functions">First Functions</h2>
 <!--  (Section 8.1) -->
 <p><em>Functions</em> are mainly just for text processing. Call functions with <code>$(fn, arguments)</code> or <code>${fn, arguments}</code>. You can make your own using the <a href="https://www.gnu.org/software/make/manual/html_node/Call-Function.html#Call-Function">call</a> builtin function. Make has a decent amount of <a href="https://www.gnu.org/software/make/manual/html_node/Functions.html">builtin functions</a>.</p>
 <pre><code class="hljs makefile">bar := ${subst not, totally, <span class="hljs-string">"I am not superman"</span>}
 <span class="hljs-section">all: </span>
-    @echo <span class="hljs-variable">$(bar)</span></code></pre>
-
+	@echo <span class="hljs-variable">$(bar)</span>
+</code></pre>
 <p>If you want to replace spaces or commas, use variables</p>
 <pre><code class="hljs makefile">comma := ,
 empty:=
@@ -1072,8 +1029,7 @@ foo := a b c
 bar := <span class="hljs-variable">$(<span class="hljs-built_in">subst</span> <span class="hljs-variable">$(space)</span>,<span class="hljs-variable">$(comma)</span>,<span class="hljs-variable">$(foo)</span>)</span>
 
 <span class="hljs-section">all: </span>
-    @echo <span class="hljs-variable">$(bar)</span></code></pre>
-
+	@echo <span class="hljs-variable">$(bar)</span></code></pre>
 <p>Do NOT include spaces in the arguments after the first. That will be seen as part of the string.</p>
 <pre><code class="hljs makefile">comma := ,
 empty:=
@@ -1082,9 +1038,9 @@ foo := a b c
 bar := <span class="hljs-variable">$(<span class="hljs-built_in">subst</span> <span class="hljs-variable">$(space)</span>, <span class="hljs-variable">$(comma)</span> , <span class="hljs-variable">$(foo)</span>)</span>
 
 <span class="hljs-section">all: </span>
-    <span class="hljs-comment"># Output is ", a , b , c". Notice the spaces introduced</span>
-    @echo <span class="hljs-variable">$(bar)</span></code></pre>
-
+	<span class="hljs-comment"># Output is ", a , b , c". Notice the spaces introduced</span>
+	@echo <span class="hljs-variable">$(bar)</span>
+</code></pre>
 <!-- # 8.2, 8.3, 8.9 TODO do something about the fns   
 # TODO 8.7 origin fn? Better in documentation?
 -->
@@ -1103,10 +1059,9 @@ two := $(foo:%.o=%.c)
 three := $(foo:.o=.c)
 
 <span class="hljs-section">all:</span>
-    echo <span class="hljs-variable">$(one)</span>
-    echo <span class="hljs-variable">$(two)</span>
-    echo <span class="hljs-variable">$(three)</span></code></pre>
-
+	echo <span class="hljs-variable">$(one)</span>
+	echo <span class="hljs-variable">$(two)</span>
+	echo <span class="hljs-variable">$(three)</span></code></pre>
 <h2 id="the-foreach-function">The foreach function</h2>
 <!--  (Section 8.4) -->
 <p>The foreach function looks like this: <code>$(foreach var,list,text)</code>. It converts one list of words (separated by spaces) to another. <code>var</code> is set to each word in list, and <code>text</code> is expanded for each word.<br>This appends an exclamation after each word:</p>
@@ -1115,9 +1070,8 @@ three := $(foo:.o=.c)
 bar := <span class="hljs-variable">$(<span class="hljs-built_in">foreach</span> wrd,<span class="hljs-variable">$(foo)</span>,<span class="hljs-variable">$(wrd)</span>!)</span>
 
 <span class="hljs-section">all:</span>
-    <span class="hljs-comment"># Output is "who! are! you!"</span>
-    @echo <span class="hljs-variable">$(bar)</span></code></pre>
-
+	<span class="hljs-comment"># Output is "who! are! you!"</span>
+	@echo <span class="hljs-variable">$(bar)</span></code></pre>
 <h2 id="the-if-function">The if function</h2>
 <!--  (Section 8.5) -->
 <p><code>if</code> checks if the first argument is nonempty. If so runs the second argument, otherwise runs the third.</p>
@@ -1126,29 +1080,25 @@ empty :=
 bar := <span class="hljs-variable">$(<span class="hljs-built_in">if</span> <span class="hljs-variable">$(empty)</span>,then!,else!)</span>
 
 <span class="hljs-section">all:</span>
-    @echo <span class="hljs-variable">$(foo)</span>
-    @echo <span class="hljs-variable">$(bar)</span></code></pre>
-
+	@echo <span class="hljs-variable">$(foo)</span>
+	@echo <span class="hljs-variable">$(bar)</span></code></pre>
 <h2 id="the-call-function">The call function</h2>
 <!--  (Section 8.6) -->
 <p>Make supports creating basic functions. You &quot;define&quot; the function just by creating a variable, but use the parameters <code>$(0)</code>, <code>$(1)</code>, etc. You then call the function with the special <code>call</code> function. The syntax is <code>$(call variable,param,param)</code>. <code>$(0)</code> is the variable, while <code>$(1)</code>, <code>$(2)</code>, etc. are the params.</p>
 <pre><code class="hljs makefile">sweet_new_fn = Variable Name: $(0) First: $(1) Second: $(2) Empty Variable: $(3)
 
 <span class="hljs-section">all:</span>
-    <span class="hljs-comment"># Outputs "Variable Name: sweet_new_fn First: go Second: tigers Empty Variable:"</span>
-    @echo <span class="hljs-variable">$(<span class="hljs-built_in">call</span> sweet_new_fn, go, tigers)</span></code></pre>
-
+	<span class="hljs-comment"># Outputs "Variable Name: sweet_new_fn First: go Second: tigers Empty Variable:"</span>
+	@echo <span class="hljs-variable">$(<span class="hljs-built_in">call</span> sweet_new_fn, go, tigers)</span></code></pre>
 <h2 id="the-shell-function">The shell function</h2>
 <!--  (Section 8.8) -->
 <p>shell - This calls the shell, but it replaces newlines with spaces!</p>
 <pre><code class="hljs makefile"><span class="hljs-section">all: </span>
-    @echo <span class="hljs-variable">$(<span class="hljs-built_in">shell</span> ls -la)</span> <span class="hljs-comment"># Very ugly because the newlines are gone!</span></code></pre>
-
+	@echo <span class="hljs-variable">$(<span class="hljs-built_in">shell</span> ls -la)</span> <span class="hljs-comment"># Very ugly because the newlines are gone!</span></code></pre>
 <h1 id="other-features">Other Features</h1>
 <h2 id="include-makefiles">Include Makefiles</h2>
 <p>The include directive tells make to read one or more other makefiles. It&#39;s a line in the makefile makefile that looks like this:</p>
 <pre><code class="hljs makefile"><span class="hljs-keyword">include</span> filenames...</code></pre>
-
 <p>This is particularly useful when you use compiler flags like <code>-M</code> that create Makefiles based on the source. For example, if some c files includes a header, that header will be added to a Makefile that&#39;s written by gcc. I talk about this more in the <a href="#makefile-cookbook">Makefile Cookbook</a></p>
 <h2 id="the-vpath-directive">The vpath Directive</h2>
 <!--  (Section 4.3.2) -->
@@ -1156,35 +1106,33 @@ bar := <span class="hljs-variable">$(<span class="hljs-built_in">if</span> <span
 <pre><code class="hljs makefile"><span class="hljs-keyword">vpath</span> %.h ../headers ../other-directory
 
 <span class="hljs-section">some_binary: ../headers blah.h</span>
-    touch some_binary
+	touch some_binary
 
 <span class="hljs-section">../headers:</span>
-    mkdir ../headers
+	mkdir ../headers
 
 <span class="hljs-section">blah.h:</span>
-    touch ../headers/blah.h
+	touch ../headers/blah.h
 
 <span class="hljs-section">clean:</span>
-    rm -rf ../headers
-    rm -f some_binary</code></pre>
-
+	rm -rf ../headers
+	rm -f some_binary
+</code></pre>
 <h2 id="multiline">Multiline</h2>
 <p>The backslash (&quot;\&quot;) character gives us the ability to use multiple lines when the commands are too long</p>
 <pre><code class="hljs makefile"><span class="hljs-section">some_file: </span>
-    echo This line is too long, so \
-        it is broken up into multiple lines</code></pre>
-
+	echo This line is too long, so \
+		it is broken up into multiple lines</code></pre>
 <h2 id="phony">.phony</h2>
 <p>Adding <code>.PHONY</code> to a target will prevent make from confusing the phony target with a file name. In this example, if the file <code>clean</code> is created, make clean will still be run. <code>.PHONY</code> is great to use, but I&#39;ll skip it in the rest of the examples for simplicity.</p>
 <pre><code class="hljs makefile"><span class="hljs-section">some_file:</span>
-    touch some_file
-    touch clean
+	touch some_file
+	touch clean
 
 <span class="hljs-meta"><span class="hljs-meta-keyword">.PHONY</span>: clean</span>
 <span class="hljs-section">clean:</span>
-    rm -f some_file
-    rm -f clean</code></pre>
-
+	rm -f some_file
+	rm -f clean</code></pre>
 <h2 id="delete_on_error">.delete_on_error</h2>
 <!-- (Section 5.4) -->
 
@@ -1193,13 +1141,12 @@ bar := <span class="hljs-variable">$(<span class="hljs-built_in">if</span> <span
 <span class="hljs-section">all: one two</span>
 
 <span class="hljs-section">one:</span>
-    touch one
-    false
+	touch one
+	false
 
 <span class="hljs-section">two:</span>
-    touch two
-    false</code></pre>
-
+	touch two
+	false</code></pre>
 <h1 id="makefile-cookbook">Makefile Cookbook</h1>
 <p>Let&#39;s go through a really juicy Make example that works well for medium sized projects.</p>
 <p>The neat thing about this makefile is it automatically determines dependencies for you. All you have to do is put your C/C++ files in the <code>src/</code> folder.</p>
@@ -1232,28 +1179,27 @@ CPPFLAGS := <span class="hljs-variable">$(INC_FLAGS)</span> -MMD -MP
 
 <span class="hljs-comment"># The final build step.</span>
 <span class="hljs-variable">$(BUILD_DIR)</span>/<span class="hljs-variable">$(TARGET_EXEC)</span>: <span class="hljs-variable">$(OBJS)</span>
-    <span class="hljs-variable">$(CC)</span> <span class="hljs-variable">$(OBJS)</span> -o <span class="hljs-variable">$@</span> <span class="hljs-variable">$(LDFLAGS)</span>
+	<span class="hljs-variable">$(CC)</span> <span class="hljs-variable">$(OBJS)</span> -o <span class="hljs-variable">$@</span> <span class="hljs-variable">$(LDFLAGS)</span>
 
 <span class="hljs-comment"># Build step for C source</span>
 <span class="hljs-variable">$(BUILD_DIR)</span>/%.c.o: %.c
-    mkdir -p <span class="hljs-variable">$(<span class="hljs-built_in">dir</span> <span class="hljs-variable">$@</span>)</span>
-    <span class="hljs-variable">$(CC)</span> <span class="hljs-variable">$(CPPFLAGS)</span> <span class="hljs-variable">$(CFLAGS)</span> -c <span class="hljs-variable">$&lt;</span> -o <span class="hljs-variable">$@</span>
+	mkdir -p <span class="hljs-variable">$(<span class="hljs-built_in">dir</span> <span class="hljs-variable">$@</span>)</span>
+	<span class="hljs-variable">$(CC)</span> <span class="hljs-variable">$(CPPFLAGS)</span> <span class="hljs-variable">$(CFLAGS)</span> -c <span class="hljs-variable">$&lt;</span> -o <span class="hljs-variable">$@</span>
 
 <span class="hljs-comment"># Build step for C++ source</span>
 <span class="hljs-variable">$(BUILD_DIR)</span>/%.cpp.o: %.cpp
-    mkdir -p <span class="hljs-variable">$(<span class="hljs-built_in">dir</span> <span class="hljs-variable">$@</span>)</span>
-    <span class="hljs-variable">$(CXX)</span> <span class="hljs-variable">$(CPPFLAGS)</span> <span class="hljs-variable">$(CXXFLAGS)</span> -c <span class="hljs-variable">$&lt;</span> -o <span class="hljs-variable">$@</span>
+	mkdir -p <span class="hljs-variable">$(<span class="hljs-built_in">dir</span> <span class="hljs-variable">$@</span>)</span>
+	<span class="hljs-variable">$(CXX)</span> <span class="hljs-variable">$(CPPFLAGS)</span> <span class="hljs-variable">$(CXXFLAGS)</span> -c <span class="hljs-variable">$&lt;</span> -o <span class="hljs-variable">$@</span>
 
 
 <span class="hljs-meta"><span class="hljs-meta-keyword">.PHONY</span>: clean</span>
 <span class="hljs-section">clean:</span>
-    rm -r <span class="hljs-variable">$(BUILD_DIR)</span>
+	rm -r <span class="hljs-variable">$(BUILD_DIR)</span>
 
 <span class="hljs-comment"># Include the .d makefiles. The - at the front suppresses the errors of missing</span>
 <span class="hljs-comment"># Makefiles. Initially, all the .d files will be missing, and we don't want those</span>
 <span class="hljs-comment"># errors to show up.</span>
 <span class="hljs-keyword">-include</span> <span class="hljs-variable">$(DEPS)</span></code></pre>
-
 <!--
 TODO: This example fails initially because blah.d doesn't exist. I'm not sure how to fix this example, there are probably better ones out there..
 
@@ -1269,26 +1215,28 @@ Notes:
     into:  
     main.o main.d : main.c defs.h  
 4) Running `make clean` will rerun the rm -f ... rule because the include line wants to include an up to date version of the file. There is such a target that updates it, so it runs that rule before including the file.  
-<pre><code class="hljs makefile"><span class="hljs-comment"># Run make init first, then run make</span>
-<span class="hljs-comment"># This outputs</span>
-<span class="hljs-section">all: blah.d</span>
+```makefile
+# Run make init first, then run make
+# This outputs
+all: blah.d
 
-<span class="hljs-section">clean:</span>
+clean:
     rm -f blah.d blah.c blah.h blah.o blah
 
-<span class="hljs-section">%.d: %.c</span>
-    rm -f <span class="hljs-variable">$@</span>; \
-     <span class="hljs-variable">$(CC)</span> -MM <span class="hljs-variable">$(CPPFLAGS)</span> <span class="hljs-variable">$&lt;</span> &gt; <span class="hljs-variable">$@</span>.$$$$; \
-     sed 's,\(<span class="hljs-variable">$*</span>\)\.o[ :]*,\1.o <span class="hljs-variable">$@</span> : ,g' &lt; <span class="hljs-variable">$@</span>.$$$$ &gt; <span class="hljs-variable">$@</span>; \
-     rm -f <span class="hljs-variable">$@</span>.$$$$
+%.d: %.c
+    rm -f $@; \
+     $(CC) -MM $(CPPFLAGS) $< > $@.$$$$; \
+     sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+     rm -f $@.$$$$
 
-<span class="hljs-section">init:</span>
-    echo <span class="hljs-string">"#include \"blah.h\"; int main() { return 0; }"</span> &gt; blah.c
+init:
+    echo "#include \"blah.h\"; int main() { return 0; }" > blah.c
     touch blah.h
 
 sources = blah.c
 
-<span class="hljs-keyword">include</span> $(sources:.c=.d)</code></pre>
+include $(sources:.c=.d)
+```
 -->
 
             </div>

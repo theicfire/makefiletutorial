@@ -58,9 +58,9 @@ That's it! If you're a bit confused, here's a video that goes through these step
 A Makefile consists of a set of *rules*. A rule generally looks like this:
 ```makefile
 targets: prerequisites
-   command
-   command
-   command
+	command
+	command
+	command
 ```
 
 - The *targets* are file names, separated by spaces. Typically, there is only one per rule.
@@ -150,7 +150,6 @@ clean:
 
 Reference variables using ${} or $()
 ```makefile
-
 x = dude
 
 all:
@@ -185,7 +184,6 @@ clean:
 When there are multiple targets for a rule, the commands will be run for each target  
 `$@` is an [automatic variable](#automatic-variables) that contains the target name.
 ```makefile
-
 all: f1.o f2.o
 
 f1.o f2.o:
@@ -311,7 +309,7 @@ clean:
 <!--  (Section 4.10) -->
 Static pattern rules are another way to write less in a Makefile, but I'd say are more useful and a bit less "magic". Here's their syntax:
 ```makefile
-targets ...: target-pattern: prereq-patterns ...
+targets...: target-pattern: prereq-patterns ...
    commands
 ```
 
@@ -362,7 +360,6 @@ clean:
 <!--  (Section 4.10) -->
 While I introduce functions later on, I'll foreshadow what you can do with them. The `filter` function can be used in Static pattern rules to match the correct files. In this example, I made up the `.raw` and `.result` extensions.
 ```makefile
-
 obj_files = foo.result bar.o lose.o
 src_files = foo.raw bar.c lose.c
 
@@ -519,7 +516,6 @@ clean:
 <!--  (Section 5.6) -->
 You need to export variables to have them run in the shell as well.  
 ```makefile
-
 one=this will only work locally
 export two=we can run subcommands with this
 
@@ -566,7 +562,6 @@ There are two flavors of variables:
 - simply expanded (use `:=`) - like normal imperative programming -- only those defined so far get expanded
 
 ```makefile
-
 # Recursive variable. This will print "later" below
 one = one ${later_variable}
 # Simply expanded variable. This will not print "later" below
@@ -581,7 +576,6 @@ all:
 
 Simply expanded (using `:=`) allows you to append to a variable. Recursive definitions will give an infinite loop error.  
 ```makefile
-
 one = hello
 # one gets defined as a simply expanded variable (:=) and thus can handle appending
 one := ${one} there
@@ -592,7 +586,6 @@ all:
 
 `?=` only sets variables if they have not yet been set
 ```makefile
-
 one = hello
 one ?= will not be set
 two ?= will be set
@@ -617,7 +610,6 @@ all:
 
 An undefined variable is actually an empty string!
 ```makefile
-
 all: 
 	# Undefined variables are just empty strings!
 	echo $(nowhere)
@@ -654,7 +646,6 @@ all:
 Note here that it's a bit different than having a semi-colon between commands, because each is run
 in a separate shell, as expected.
 ```makefile
-
 one = export blah="I was set!"; echo $$blah
 
 define two
@@ -675,7 +666,6 @@ all:
 <!--  (Section 6.10) -->
 Variables can be assigned for specific targets
 ```makefile
-
 all: one = cool
 
 all: 
@@ -689,7 +679,6 @@ other:
 <!--  (Section 6.11) -->
 You can assign variables for specific target *patterns*
 ```makefile
-
 %.c: one = cool
 
 blah.c: 
@@ -703,7 +692,6 @@ other:
 ## Conditional if/else
 <!--  (Section 7.1) -->
 ```makefile
-
 foo = ok
 
 all:
@@ -733,7 +721,6 @@ endif
 <!--  (Section 7.2) -->
 ifdef does not expand variable references; it just sees if something is defined at all
 ```makefile
-
 bar =
 foo = $(bar)
 
@@ -751,7 +738,6 @@ endif
 <!-- `(Section 7.3) -->
 This example shows you how to test make flags with `findstring` and `MAKEFLAGS`. Run this example with `make -i` to see it print out the echo statement.
 ```makefile
-
 bar =
 foo = $(bar)
 
@@ -890,7 +876,6 @@ Use vpath to specify where some set of prerequisites exist. The format is `vpath
 `<pattern>` can have a `%`, which matches any zero or more characters.  
 You can also do this globallyish with the variable VPATH  
 ```makefile
-
 vpath %.h ../headers ../other-directory
 
 some_binary: ../headers blah.h

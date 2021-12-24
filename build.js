@@ -1,5 +1,4 @@
 var Metalsmith = require('metalsmith'),
-  metallic = require('metalsmith-metallic'),
   drafts = require('metalsmith-drafts'),
   layouts = require('metalsmith-layouts'),
   markdown = require('metalsmith-markdown'),
@@ -10,6 +9,40 @@ var Metalsmith = require('metalsmith'),
 var serve = require('metalsmith-serve');
 var watch = require('metalsmith-watch');
 var sass = require('metalsmith-sass');
+const hljs = require('highlight.js');
+const marked = require('marked');
+
+var renderer = new marked.Renderer();
+
+renderer.code = function (code, infostring, escaped) {
+  /**  Copied from the default implementation, with the following changes.
+   * 1. Find a series of 4 spaces and convert it into tabs
+   * 2. Add "hljs" to the code class. I don't get why, but metalsmith-metallic was doing this, so I copied the pattern.
+   * 3. Remove this.options.langPrefix, because metalsmith-metallic didn't have this.
+   */
+  code = code.replace(/ {4}/g, '\t'); // Convert spaces back into tabs
+  var lang = (infostring || '').match(/\S*/)[0];
+  if (this.options.highlight) {
+    var out = this.options.highlight(code, lang);
+    if (out != null && out !== code) {
+      escaped = true;
+      code = out;
+    }
+  }
+
+  if (!lang) {
+    return '<pre><code>' + (escaped ? code : escape(code, true)) + '</code></pre>';
+  }
+
+  return (
+    '<pre><code class="hljs ' +
+    // this.options.langPrefix +
+    escape(lang, true) +
+    '">' +
+    (escaped ? code : escape(code, true)) +
+    '</code></pre>\n'
+  );
+};
 
 build(function () {
   console.log('Done building.');
@@ -29,14 +62,16 @@ function build(callback) {
     // Use the drafts plugin
     .use(drafts())
 
-    // Use metallic plugin to add syntax highlighting
-    .use(metallic())
-
     // Use Github Flavored Markdown for content
     .use(
       markdown({
         gfm: true,
         tables: true,
+        highlight: function (code, lang) {
+          // TODO what if there is no lang? highlightAuto..
+          return hljs.highlight(lang, code).value;
+        },
+        renderer,
       }),
     )
 
