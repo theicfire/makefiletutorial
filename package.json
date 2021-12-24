@@ -6,8 +6,7 @@
     "dev": "node build.js --dev",
     "build": "node build.js"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "ejs": "^3.1.5",
     "handlebars": "^4.7.6",

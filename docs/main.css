@@ -1,5 +1,6 @@
 html {
   scroll-behavior: smooth;
+  tab-size: 2;
 }
 
 #left {
