@@ -132,9 +132,11 @@ clean:
 
 
 ## Variables
-Variables can only be strings. Here's an example of using them:
+Variables can only be strings. You'll typically want to use `:=`, but `=` also works. See [Variables Pt 2](#variables-pt-2).
+
+Here's an example of using variables:
 ```makefile
-files = file1 file2
+files := file1 file2
 some_file: $(files)
 	echo "Look at this variable: " $(files)
 	touch some_file
@@ -148,9 +150,9 @@ clean:
 	rm -f file1 file2 some_file
 ```
 
-Reference variables using ${} or $()
+Reference variables using either `${}` or `$()`
 ```makefile
-x = dude
+x := dude
 
 all:
 	echo $(x)
@@ -199,7 +201,7 @@ f1.o f2.o:
 # Automatic Variables and Wildcards
 ## * Wildcard
 <!--  (Section 4.2) -->
-Both `*` and `%` are called wildcards in Make, but they mean entirely different things. `*` searches your filesystem for matching filenames. I suggest that you always wrap it in the `wildcard` function, because otherwise you may fall into a common pitfall described below. It's oddly unhelpful and I find it more confusing than useful.
+Both `*` and `%` are called wildcards in Make, but they mean entirely different things. `*` searches your filesystem for matching filenames. I suggest that you always wrap it in the `wildcard` function, because otherwise you may fall into a common pitfall described below.
 
 ```makefile
 # Print out file information about every .c file

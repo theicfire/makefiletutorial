@@ -522,8 +522,9 @@ hello world</code></pre>
 <span class="hljs-section">clean:</span>
 	rm -f some_file</code></pre>
 <h2 id="variables">Variables</h2>
-<p>Variables can only be strings. Here&#39;s an example of using them:</p>
-<pre><code class="hljs makefile">files = file1 file2
+<p>Variables can only be strings. You&#39;ll typically want to use <code>:=</code>, but <code>=</code> also works. See <a href="#variables-pt-2">Variables Pt 2</a>.</p>
+<p>Here&#39;s an example of using variables:</p>
+<pre><code class="hljs makefile">files := file1 file2
 <span class="hljs-section">some_file: <span class="hljs-variable">$(files)</span></span>
 	echo <span class="hljs-string">"Look at this variable: "</span> <span class="hljs-variable">$(files)</span>
 	touch some_file
@@ -535,8 +536,8 @@ hello world</code></pre>
 
 <span class="hljs-section">clean:</span>
 	rm -f file1 file2 some_file</code></pre>
-<p>Reference variables using ${} or $()</p>
-<pre><code class="hljs makefile">x = dude
+<p>Reference variables using either <code>${}</code> or <code>$()</code></p>
+<pre><code class="hljs makefile">x := dude
 
 <span class="hljs-section">all:</span>
 	echo <span class="hljs-variable">$(x)</span>
@@ -576,7 +577,7 @@ f1.o f2.o:
 <h1 id="automatic-variables-and-wildcards">Automatic Variables and Wildcards</h1>
 <h2 id="-wildcard">* Wildcard</h2>
 <!--  (Section 4.2) -->
-<p>Both <code>*</code> and <code>%</code> are called wildcards in Make, but they mean entirely different things. <code>*</code> searches your filesystem for matching filenames. I suggest that you always wrap it in the <code>wildcard</code> function, because otherwise you may fall into a common pitfall described below. It&#39;s oddly unhelpful and I find it more confusing than useful.</p>
+<p>Both <code>*</code> and <code>%</code> are called wildcards in Make, but they mean entirely different things. <code>*</code> searches your filesystem for matching filenames. I suggest that you always wrap it in the <code>wildcard</code> function, because otherwise you may fall into a common pitfall described below.</p>
 <pre><code class="hljs makefile"><span class="hljs-comment"># Print out file information about every .c file</span>
 <span class="hljs-section">print: $(wildcard *.c)</span>
 	ls -la  <span class="hljs-variable">$?</span></code></pre>
