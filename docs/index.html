@@ -70,13 +70,13 @@
     
 
 <ol>
-    <li><a class="toc-item" href="#why-do-makefiles-exist-">Why do Makefiles exist?</a>
+    <li><a class="toc-item" href="#why-do-makefiles-exist">Why do Makefiles exist?</a>
     </li>
     
 </ol>
 
 <ol>
-    <li><a class="toc-item" href="#what-alternatives-are-there-to-make-">What alternatives are there to Make?</a>
+    <li><a class="toc-item" href="#what-alternatives-are-there-to-make">What alternatives are there to Make?</a>
     </li>
     
 </ol>
@@ -150,7 +150,7 @@
 </ol>
 
 <ol>
-    <li><a class="toc-item" href="#-wildcard">% Wildcard</a>
+    <li><a class="toc-item" href="#-wildcard-1">% Wildcard</a>
     </li>
     
 </ol>
@@ -212,7 +212,7 @@
     
 
 <ol>
-    <li><a class="toc-item" href="#command-echoing-silencing">Command Echoing/Silencing</a>
+    <li><a class="toc-item" href="#command-echoingsilencing">Command Echoing/Silencing</a>
     </li>
     
 </ol>
@@ -230,7 +230,7 @@
 </ol>
 
 <ol>
-    <li><a class="toc-item" href="#error-handling-with-k-i-and-">Error handling with -k, -i, and -</a>
+    <li><a class="toc-item" href="#error-handling-with--k--i-and--">Error handling with -k, -i, and -</a>
     </li>
     
 </ol>
@@ -310,7 +310,7 @@
     
 
 <ol>
-    <li><a class="toc-item" href="#conditional-if-else">Conditional if/else</a>
+    <li><a class="toc-item" href="#conditional-ifelse">Conditional if/else</a>
     </li>
     
 </ol>
@@ -328,7 +328,7 @@
 </ol>
 
 <ol>
-    <li><a class="toc-item" href="#-makeflags-">$(makeflags)</a>
+    <li><a class="toc-item" href="#makeflags">$(makeflags)</a>
     </li>
     
 </ol>
@@ -408,13 +408,13 @@
 </ol>
 
 <ol>
-    <li><a class="toc-item" href="#-phony">.phony</a>
+    <li><a class="toc-item" href="#phony">.phony</a>
     </li>
     
 </ol>
 
 <ol>
-    <li><a class="toc-item" href="#-delete_on_error">.delete_on_error</a>
+    <li><a class="toc-item" href="#delete_on_error">.delete_on_error</a>
     </li>
     
 </ol>
@@ -439,14 +439,14 @@
 <p>If you mostly understand Make, consider checking out the Makefile Cookbook, which has a template for medium sized projects with ample comments about what each part of the Makefile is doing.</p>
 <p>Good luck, and I hope you are able to slay the confusing world of Makefiles!</p>
 <h1 id="getting-started">Getting Started</h1>
-<h2 id="why-do-makefiles-exist-">Why do Makefiles exist?</h2>
+<h2 id="why-do-makefiles-exist">Why do Makefiles exist?</h2>
 <p>Makefiles are used to help decide which parts of a large program need to be recompiled. In the vast majority of cases, C or C++ files are compiled. Other languages typically have their own tools that serve a similar purpose as Make. It can be used beyond programs too, when you need a series of instructions to run depending on what files have changed. This tutorial will focus on the C/C++ compilation use case.</p>
 <p>Here&#39;s an example dependency graph that you might build with Make. If any file&#39;s dependencies changes, then the file will get recompiled:</p>
 <div class="center">
 <img src="/assets/dependency_graph.png">
 </div>
 
-<h2 id="what-alternatives-are-there-to-make-">What alternatives are there to Make?</h2>
+<h2 id="what-alternatives-are-there-to-make">What alternatives are there to Make?</h2>
 <p>Popular C/C++ alternative build systems are <a href="https://scons.org/">SCons</a>, <a href="https://cmake.org/">CMake</a>, <a href="https://bazel.build/">Bazel</a>, and <a href="https://ninja-build.org/">Ninja</a>. Some code editors like <a href="https://visualstudio.microsoft.com/">Microsoft Visual Studio</a> have their own built in build tools. For Java, there&#39;s <a href="https://ant.apache.org/">Ant</a>, <a href="https://maven.apache.org/what-is-maven.html">Maven</a>, and <a href="https://gradle.org/">Gradle</a>. Other languages like Go and Rust have their own build tools.</p>
 <p>Interpreted languages like Python, Ruby, and Javascript don&#39;t require an analogue to Makefiles. The goal of Makefiles is to compile whatever files need to be compiled, based on what files have changed. But when files in interpreted languages change, nothing needs to get recompiled. When the program runs, the most recent version of the file is used.</p>
 <h2 id="the-versions-and-types-of-make">The versions and types of Make</h2>
@@ -614,7 +614,7 @@ thing_right := <span class="hljs-variable">$(<span class="hljs-built_in">wildcar
 <span class="hljs-section">four: $(wildcard *.o)</span></code></pre>
 
 
-<h2 id="-wildcard">% Wildcard</h2>
+<h2 id="-wildcard-1">% Wildcard</h2>
 <p><code>%</code> is really useful, but is somewhat confusing because of the variety of situations it can be used in.</p>
 <ul>
 <li>When used in &quot;matching&quot; mode, it matches one or more characters in a string. This match is called the stem.</li>
@@ -780,7 +780,7 @@ src_files = foo.raw bar.c lose.c
 
 
 <h1 id="commands-and-execution">Commands and execution</h1>
-<h2 id="command-echoing-silencing">Command Echoing/Silencing</h2>
+<h2 id="command-echoingsilencing">Command Echoing/Silencing</h2>
 <!--  (Section 5.1) -->
 <p>Add an <code>@</code> before a command to stop it from being printed<br>You can also run make with <code>-s</code> to add an <code>@</code> before each line  </p>
 <pre><code class="hljs makefile"><span class="hljs-section">all: </span>
@@ -810,7 +810,7 @@ src_files = foo.raw bar.c lose.c
 <span class="hljs-section">cool:</span>
     echo <span class="hljs-string">"Hello from bash"</span></code></pre>
 
-<h2 id="error-handling-with-k-i-and-">Error handling with <code>-k</code>, <code>-i</code>, and <code>-</code></h2>
+<h2 id="error-handling-with--k--i-and--">Error handling with <code>-k</code>, <code>-i</code>, and <code>-</code></h2>
 <!--  (Section 5.4) -->
 <p>Add <code>-k</code> when running make to continue running even in the face of errors. Helpful if you want to see all the errors of Make at once.<br>Add a <code>-</code> before a command to suppress the error<br>Add <code>-i</code> to make to have this happen for every command.</p>
 <!--  (Section 5.4) -->
@@ -888,6 +888,7 @@ cooly = <span class="hljs-string">"The subdirectory can see me!"</span>
 
 <h2 id="arguments-to-make">Arguments to make</h2>
 <!--  (Section 9) -->
+
 <p>There&#39;s a nice <a href="http://www.gnu.org/software/make/manual/make.html#Options-Summary">list of options</a> that can be run from make. Check out <code>--dry-run</code>, <code>--touch</code>, <code>--old-file</code>. </p>
 <p>You can have multiple targets to make, i.e. <code>make clean run test</code> runs the <code>clean</code> goal, then <code>run</code>, and then <code>test</code>.</p>
 <h1 id="variables-pt-2">Variables Pt. 2</h1>
@@ -1005,7 +1006,7 @@ echo $$blah
     echo one is nothing: <span class="hljs-variable">$(one)</span></code></pre>
 
 <h1 id="conditional-part-of-makefiles">Conditional part of Makefiles</h1>
-<h2 id="conditional-if-else">Conditional if/else</h2>
+<h2 id="conditional-ifelse">Conditional if/else</h2>
 <!--  (Section 7.1) -->
 <pre><code class="hljs makefile">foo = ok
 
@@ -1043,7 +1044,7 @@ foo = <span class="hljs-variable">$(bar)</span>
     echo <span class="hljs-string">"but bar is not"</span>
 <span class="hljs-keyword">endif</span></code></pre>
 
-<h2 id="-makeflags-">$(makeflags)</h2>
+<h2 id="makeflags">$(makeflags)</h2>
 <!-- `(Section 7.3) -->
 <p>This example shows you how to test make flags with <code>findstring</code> and <code>MAKEFLAGS</code>. Run this example with <code>make -i</code> to see it print out the echo statement.</p>
 <pre><code class="hljs makefile">bar =
@@ -1087,6 +1088,7 @@ bar := <span class="hljs-variable">$(<span class="hljs-built_in">subst</span> <s
 <!-- # 8.2, 8.3, 8.9 TODO do something about the fns   
 # TODO 8.7 origin fn? Better in documentation?
 -->
+
 <h2 id="string-substitution">String Substitution</h2>
 <p><code>$(patsubst pattern,replacement,text)</code> does the following:</p>
 <p>&quot;Finds whitespace-separated words in text that match pattern and replaces them with replacement. Here pattern may contain a ‘%’ which acts as a wildcard, matching any number of any characters within a word. If replacement also contains a ‘%’, the ‘%’ is replaced by the text that matched the ‘%’ in pattern. Only the first ‘%’ in the pattern and replacement is treated this way; any subsequent ‘%’ is unchanged.&quot; (<a href="https://www.gnu.org/software/make/manual/html_node/Text-Functions.html#Text-Functions">GNU docs</a>)</p>
@@ -1172,7 +1174,7 @@ bar := <span class="hljs-variable">$(<span class="hljs-built_in">if</span> <span
     echo This line is too long, so \
         it is broken up into multiple lines</code></pre>
 
-<h2 id="-phony">.phony</h2>
+<h2 id="phony">.phony</h2>
 <p>Adding <code>.PHONY</code> to a target will prevent make from confusing the phony target with a file name. In this example, if the file <code>clean</code> is created, make clean will still be run. <code>.PHONY</code> is great to use, but I&#39;ll skip it in the rest of the examples for simplicity.</p>
 <pre><code class="hljs makefile"><span class="hljs-section">some_file:</span>
     touch some_file
@@ -1183,8 +1185,9 @@ bar := <span class="hljs-variable">$(<span class="hljs-built_in">if</span> <span
     rm -f some_file
     rm -f clean</code></pre>
 
-<h2 id="-delete_on_error">.delete_on_error</h2>
+<h2 id="delete_on_error">.delete_on_error</h2>
 <!-- (Section 5.4) -->
+
 <p>The make tool will stop running a rule (and will propogate back to prerequisites) if a command returns a nonzero exit status.<br><code>DELETE_ON_ERROR</code> will delete the target of a rule if the rule fails in this manner. This will happen for all targets, not just the one it is before like PHONY. It&#39;s a good idea to always use this, even though make does not for historical reasons.  </p>
 <pre><code class="hljs makefile"><span class="hljs-section">.DELETE_ON_ERROR:</span>
 <span class="hljs-section">all: one two</span>
