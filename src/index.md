@@ -40,6 +40,8 @@ hello:
 	echo "hello world"
 ```
 
+> Note: Makefiles **must** be indented using TABs and not spaces or `make` will fail.
+
 Here is the output of running the above example:
 ```shell
 $ make
