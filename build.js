@@ -116,7 +116,7 @@ function build(callback) {
     smith
       .use(
         serve({
-          port: 8000,
+          port: 8001,
           verbose: true,
         }),
       )
