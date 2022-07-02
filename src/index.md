@@ -498,11 +498,11 @@ The export directive takes a variable and makes it accessible to sub-make comman
   
 Note: export has the same syntax as sh, but they aren't related (although similar in function)  
 ```makefile
-new_contents = "hello:\n\\techo \$$(cooly)"
+new_contents = "hello:\n\techo \$$(cooly)"
 
 all:
 	mkdir -p subdir
-	echo $(new_contents) | sed -e 's/^ //' > subdir/makefile
+	printf $(new_contents) | sed -e 's/^ //' > subdir/makefile
 	@echo "---MAKEFILE CONTENTS---"
 	@cd subdir && cat makefile
 	@echo "---END MAKEFILE CONTENTS---"
@@ -541,7 +541,7 @@ cooly = "The subdirectory can see me!"
 
 all:
 	mkdir -p subdir
-	echo $(new_contents) | sed -e 's/^ //' > subdir/makefile
+	printf $(new_contents) | sed -e 's/^ //' > subdir/makefile
 	@echo "---MAKEFILE CONTENTS---"
 	@cd subdir && cat makefile
 	@echo "---END MAKEFILE CONTENTS---"
