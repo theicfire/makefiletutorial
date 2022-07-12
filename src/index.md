@@ -732,7 +732,7 @@ all:
 ifdef foo
 	echo "foo is defined"
 endif
-ifdef bar
+ifndef bar
 	echo "but bar is not"
 endif
 
