@@ -103,7 +103,7 @@ some_file:
 	touch some_file
 ```
 
-Here, the target `some_file` "depends" on `other_file`. When we run `make`, the default target (`some_file`, since it's first) will get called. It will first look at its list of *dependencies*, and if any of them are older, it will first run the targets for those dependencies, and then run itself. The second time this is run, neither target will run because both targets exist.
+Here, the target `some_file` "depends" on `other_file`. When we run `make`, the default target (`some_file`, since it's first) will get called. It will first look at its list of *dependencies*, and if any of them are newer than the target file `some_file`, it will first run the targets for those dependencies, and then run itself. The second time this is run, neither target will run because both targets exist.
 ```makefile
 some_file: other_file
 	echo "This will run second, because it depends on other_file"
