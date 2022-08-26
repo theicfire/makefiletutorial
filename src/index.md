@@ -119,7 +119,7 @@ modified. But it's important to realize that this isn't always the case. You cou
 Whew, what a mouthful. **Make sure that you understand this. It's the crux of Makefiles, and might take you a few minutes to properly understand**. Play around with the above examples or watch the video above if things are still confusing.
 
 ## More quick examples
-The following Makefile ultimately runs all three targets. When you run `make blah` in the terminal, it will build a program called `blah` in a series of steps:
+The following Makefile ultimately runs all three targets. When you run `make` in the terminal, it will build a program called `blah` in a series of steps:
 - Make is given `blah` as the target, so it first searches for this target
 - `blah` requires `blah.o`, so make searches for the `blah.o` target
 - `blah.o` requires `blah.c`, so make searches for the `blah.c` target

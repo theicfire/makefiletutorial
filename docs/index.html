@@ -524,7 +524,7 @@ Hello, World</code></pre>
 modified. But it&#39;s important to realize that this isn&#39;t always the case. You could, for example, modify a file, and then change the modified timestamp of that file to something old. If you did, Make would incorrectly guess that the file hadn&#39;t changed and thus could be ignored.</p>
 <p>Whew, what a mouthful. <strong>Make sure that you understand this. It&#39;s the crux of Makefiles, and might take you a few minutes to properly understand</strong>. Play around with the above examples or watch the video above if things are still confusing.</p>
 <h2 id="more-quick-examples">More quick examples</h2>
-<p>The following Makefile ultimately runs all three targets. When you run <code>make blah</code> in the terminal, it will build a program called <code>blah</code> in a series of steps:</p>
+<p>The following Makefile ultimately runs all three targets. When you run <code>make</code> in the terminal, it will build a program called <code>blah</code> in a series of steps:</p>
 <ul>
 <li>Make is given <code>blah</code> as the target, so it first searches for this target</li>
 <li><code>blah</code> requires <code>blah.o</code>, so make searches for the <code>blah.o</code> target</li>
@@ -583,7 +583,8 @@ modified. But it&#39;s important to realize that this isn&#39;t always the case.
 <h1 id="targets">Targets</h1>
 <h2 id="the-all-target">The all target</h2>
 <!--  (Section 4.4) -->
-<p>Making multiple targets and you want all of them to run? Make an <code>all</code> target.</p>
+<p>Making multiple targets and you want all of them to run? Make an <code>all</code> target.
+Since this is the first rule listed, it will run by default if <code>make</code> is called without specifying a target.</p>
 <pre><code class="hljs makefile"><span class="hljs-section">all: one two three</span>
 
 <span class="hljs-section">one:</span>
