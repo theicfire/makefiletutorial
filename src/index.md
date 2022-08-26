@@ -37,7 +37,7 @@ There are a variety of implementations of Make, but most of this guide will work
 To run these examples, you'll need a terminal and "make" installed. For each example, put the contents in a file called `Makefile`, and in that directory run the command `make`. Let's start with the simplest of Makefiles:
 ```makefile
 hello:
-	echo "hello world"
+	echo "Hello, World"
 ```
 
 > Note: Makefiles **must** be indented using TABs and not spaces or `make` will fail.
@@ -45,8 +45,8 @@ hello:
 Here is the output of running the above example:
 ```shell
 $ make
-echo "hello world"
-hello world
+echo "Hello, World"
+Hello, World
 ```
 
 That's it! If you're a bit confused, here's a video that goes through these steps, along with describing the basic structure of Makefiles.
@@ -69,8 +69,58 @@ targets: prerequisites
 - The *commands* are a series of steps typically used to make the target(s). These *need to start with a tab character*, not spaces.
 - The *prerequisites* are also file names, separated by spaces. These files need to exist before the commands for the target are run. These are also called *dependencies*
 
-## Beginner Examples
-The following Makefile has three separate *rules*. When you run `make blah` in the terminal, it will build a program called `blah` in a series of steps:
+## The essence of Make
+
+Let's start with a hello world example:
+
+```makefile
+hello:
+	echo "Hello, World"
+	echo "This line will always print, because the file foobar does not exist."
+```
+There's already a lot to take in here. Let's break it down:
+- We have one *target* called `hello`
+- This target has no prerequisites
+- This target has two *commands*
+
+We'll then run `make hello`. As long as the `hello` file does not exist, the `commands` will run. If `hello` does exist, no commands will run.
+
+It's important to realize that I'm talking about `hello` as both a *target* and a *file*. That's because the two are directly tied together. Typically, when a target is run (aka when the commands of a target is run), the commands will create a file with the same name as the target. In this case, the `hello` *target* does not create the `hello` file.
+
+Let's create a more typical Makefile - one that compiles a single C file. But before we do, make a file called `blah.c` that has the following contents:
+```c
+// blah.c
+int main() { return 0; }
+```
+
+Now we can create this file called `Makefile`:
+
+```makefile
+blah:
+	cc blah.c -o blah
+```
+This time, try simply running `make`. Since there's no target supplied as an argument to the `make` command, the first target is run. In this case, there's only one target (`blah`). The first time you run this, `blah` will be created. The second time, you'll see `make: 'blah' is up to date`. But there's a problem: if we modify `blah.c` and then run `make`, nothing gets recompiled.
+
+We solve this by adding a prerequisite:
+```makefile
+blah: blah.c
+	cc blah.c -o blah
+```
+
+When we run `make` again, the following set of steps happens:
+- The first target is selected, because the first target is the default target
+- This has a prerequisite of `blah.c`
+- Make decides if it should run the `blah.c` target. It will only run if `blah.c` doesn't exist, or `blah.c` is *older than* `blah`
+
+This last step is critical, and is the **essence of make**. What it's attempting to do is decide if the prerequisites of `blah` have changed since `blah` was created. That is, if `blah.c` is modified, running `make` should recompile the file. And conversely, if `blah.c` has not changed, then it should be recompiled.
+
+To make this happen, it uses the filesystem timestamps as a proxy to determine if something has changed. This is a reasonable heuristic, because file timestamps typically will only change if the files are
+modified. But it's important to realize that this isn't always the case. You could, for example, modify a file, and then change the modified timestamp of that file to something old. If you did, Make would incorrectly guess that the file hadn't changed and thus could be ignored.
+
+Whew, what a mouthful. **Make sure that this makes sense. This is the crux of Makefiles, and might take you a few minutes to properly understand**. Play around with the above examples and make sure you understand when and why things are compiling.
+
+## More quick examples
+The following Makefile ultimately runs all three targets. When you run `make blah` in the terminal, it will build a program called `blah` in a series of steps:
 - Make is given `blah` as the target, so it first searches for this target
 - `blah` requires `blah.o`, so make searches for the `blah.o` target
 - `blah.o` requires `blah.c`, so make searches for the `blah.c` target
@@ -90,40 +140,18 @@ blah.c:
 	echo "int main() { return 0; }" > blah.c # Runs first
 ```
 
-This makefile has a single target, called `some_file`. The default target is the first target, so in this case `some_file` will run.
-```makefile
-some_file:
-	echo "This line will always print"
-```
-
-This file will make `some_file` the first time, and the second time notice it's already made, resulting in `make: 'some_file' is up to date.`
-```makefile
-some_file:
-	echo "This line will only print once"
-	touch some_file
-```
-
-Here, the target `some_file` "depends" on `other_file`. When we run `make`, the default target (`some_file`, since it's first) will get called. It will first look at its list of *dependencies*, and if any of them are older, it will first run the targets for those dependencies, and then run itself. The second time this is run, neither target will run because both targets exist.
+This next example doesn't do anything new, but is nontheless a good additional example. It will always run both targets, because `some_file` depends on `other_file`, which is never created.
 ```makefile
 some_file: other_file
-	echo "This will run second, because it depends on other_file"
+	echo "This will always run, and runs second"
 	touch some_file
 
 other_file:
-	echo "This will run first"
-	touch other_file
+	echo "This will always run, and runs first"
 ```
 
-This will always run both targets, because `some_file` depends on other_file, which is never created.
-```makefile
-some_file: other_file
-	touch some_file
-
-other_file:
-	echo "nothing"
-```
-
-`clean` is often used as a target that removes the output of other targets, but it is not a special word in `make`.
+## Make clean
+`clean` is often used as a target that removes the output of other targets, but it is not a special word in Make. You can run `make` and `make clean` on this to create and delete `some_file`.
 ```makefile
 some_file: 
 	touch some_file
