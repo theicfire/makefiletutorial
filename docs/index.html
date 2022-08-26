@@ -498,18 +498,18 @@ Hello, World</code></pre>
 <p>There&#39;s already a lot to take in here. Let&#39;s break it down:</p>
 <ul>
 <li>We have one <em>target</em> called <code>hello</code></li>
-<li>This target has no prerequisites</li>
 <li>This target has two <em>commands</em></li>
+<li>This target has no <em>prerequisites</em></li>
 </ul>
 <p>We&#39;ll then run <code>make hello</code>. As long as the <code>hello</code> file does not exist, the <code>commands</code> will run. If <code>hello</code> does exist, no commands will run.</p>
-<p>It&#39;s important to realize that I&#39;m talking about <code>hello</code> as both a <em>target</em> and a <em>file</em>. That&#39;s because the two are directly tied together. Typically, when a target is run (aka when the commands of a target is run), the commands will create a file with the same name as the target. In this case, the <code>hello</code> <em>target</em> does not create the <code>hello</code> file.</p>
+<p>It&#39;s important to realize that I&#39;m talking about <code>hello</code> as both a <em>target</em> and a <em>file</em>. That&#39;s because the two are directly tied together. Typically, when a target is run (aka when the commands of a target is run), the commands will create a file with the same name as the target. In this case, the <code>hello</code> <em>target</em> does not create the <code>hello</code> <em>file</em>.</p>
 <p>Let&#39;s create a more typical Makefile - one that compiles a single C file. But before we do, make a file called <code>blah.c</code> that has the following contents:</p>
 <pre><code class="hljs c"><span class="hljs-comment">// blah.c</span>
 <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; }</code></pre>
-<p>Now we can create this file called <code>Makefile</code>:</p>
+<p>Then create the Makefile (called <code>Makefile</code>, as always):</p>
 <pre><code class="hljs makefile"><span class="hljs-section">blah:</span>
 	cc blah.c -o blah</code></pre>
-<p>This time, try simply running <code>make</code>. Since there&#39;s no target supplied as an argument to the <code>make</code> command, the first target is run. In this case, there&#39;s only one target (<code>blah</code>). The first time you run this, <code>blah</code> will be created. The second time, you&#39;ll see <code>make: &#39;blah&#39; is up to date</code>. But there&#39;s a problem: if we modify <code>blah.c</code> and then run <code>make</code>, nothing gets recompiled.</p>
+<p>This time, try simply running <code>make</code>. Since there&#39;s no target supplied as an argument to the <code>make</code> command, the first target is run. In this case, there&#39;s only one target (<code>blah</code>). The first time you run this, <code>blah</code> will be created. The second time, you&#39;ll see <code>make: &#39;blah&#39; is up to date</code>. That&#39;s because the <code>blah</code> file already exists. But there&#39;s a problem: if we modify <code>blah.c</code> and then run <code>make</code>, nothing gets recompiled.</p>
 <p>We solve this by adding a prerequisite:</p>
 <pre><code class="hljs makefile"><span class="hljs-section">blah: blah.c</span>
 	cc blah.c -o blah</code></pre>
@@ -517,12 +517,12 @@ Hello, World</code></pre>
 <ul>
 <li>The first target is selected, because the first target is the default target</li>
 <li>This has a prerequisite of <code>blah.c</code></li>
-<li>Make decides if it should run the <code>blah.c</code> target. It will only run if <code>blah.c</code> doesn&#39;t exist, or <code>blah.c</code> is <em>older than</em> <code>blah</code></li>
+<li>Make decides if it should run the <code>blah</code> target. It will only run if <code>blah.c</code> doesn&#39;t exist, or <code>blah.c</code> is <em>newer than</em> <code>blah</code></li>
 </ul>
-<p>This last step is critical, and is the <strong>essence of make</strong>. What it&#39;s attempting to do is decide if the prerequisites of <code>blah</code> have changed since <code>blah</code> was created. That is, if <code>blah.c</code> is modified, running <code>make</code> should recompile the file. And conversely, if <code>blah.c</code> has not changed, then it should be recompiled.</p>
+<p>This last step is critical, and is the <strong>essence of make</strong>. What it&#39;s attempting to do is decide if the prerequisites of <code>blah</code> have changed since <code>blah</code> was last compiled. That is, if <code>blah.c</code> is modified, running <code>make</code> should recompile the file. And conversely, if <code>blah.c</code> has not changed, then it should be recompiled.</p>
 <p>To make this happen, it uses the filesystem timestamps as a proxy to determine if something has changed. This is a reasonable heuristic, because file timestamps typically will only change if the files are
 modified. But it&#39;s important to realize that this isn&#39;t always the case. You could, for example, modify a file, and then change the modified timestamp of that file to something old. If you did, Make would incorrectly guess that the file hadn&#39;t changed and thus could be ignored.</p>
-<p>Whew, what a mouthful. <strong>Make sure that this makes sense. This is the crux of Makefiles, and might take you a few minutes to properly understand</strong>. Play around with the above examples and make sure you understand when and why things are compiling.</p>
+<p>Whew, what a mouthful. <strong>Make sure that you understand this. It&#39;s the crux of Makefiles, and might take you a few minutes to properly understand</strong>. Play around with the above examples or watch the video above if things are still confusing.</p>
 <h2 id="more-quick-examples">More quick examples</h2>
 <p>The following Makefile ultimately runs all three targets. When you run <code>make blah</code> in the terminal, it will build a program called <code>blah</code> in a series of steps:</p>
 <ul>
@@ -847,11 +847,11 @@ src_files = foo.raw bar.c lose.c
 <!--  (Section 5.6) -->
 <p>The export directive takes a variable and makes it accessible to sub-make commands. In this example, <code>cooly</code> is exported such that the makefile in subdir can use it.  </p>
 <p>Note: export has the same syntax as sh, but they aren&#39;t related (although similar in function)  </p>
-<pre><code class="hljs makefile">new_contents = <span class="hljs-string">"hello:\n\\techo \$<span class="hljs-variable">$(cooly)</span>"</span>
+<pre><code class="hljs makefile">new_contents = <span class="hljs-string">"hello:\n\techo \$<span class="hljs-variable">$(cooly)</span>"</span>
 
 <span class="hljs-section">all:</span>
 	mkdir -p subdir
-	echo <span class="hljs-variable">$(new_contents)</span> | sed -e 's/^ //' &gt; subdir/makefile
+	printf <span class="hljs-variable">$(new_contents)</span> | sed -e 's/^ //' &gt; subdir/makefile
 	@echo <span class="hljs-string">"---MAKEFILE CONTENTS---"</span>
 	@cd subdir &amp;&amp; cat makefile
 	@echo <span class="hljs-string">"---END MAKEFILE CONTENTS---"</span>
@@ -884,7 +884,7 @@ cooly = <span class="hljs-string">"The subdirectory can see me!"</span>
 
 <span class="hljs-section">all:</span>
 	mkdir -p subdir
-	echo <span class="hljs-variable">$(new_contents)</span> | sed -e 's/^ //' &gt; subdir/makefile
+	printf <span class="hljs-variable">$(new_contents)</span> | sed -e 's/^ //' &gt; subdir/makefile
 	@echo <span class="hljs-string">"---MAKEFILE CONTENTS---"</span>
 	@cd subdir &amp;&amp; cat makefile
 	@echo <span class="hljs-string">"---END MAKEFILE CONTENTS---"</span>

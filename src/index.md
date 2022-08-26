@@ -80,12 +80,12 @@ hello:
 ```
 There's already a lot to take in here. Let's break it down:
 - We have one *target* called `hello`
-- This target has no prerequisites
 - This target has two *commands*
+- This target has no *prerequisites*
 
 We'll then run `make hello`. As long as the `hello` file does not exist, the `commands` will run. If `hello` does exist, no commands will run.
 
-It's important to realize that I'm talking about `hello` as both a *target* and a *file*. That's because the two are directly tied together. Typically, when a target is run (aka when the commands of a target is run), the commands will create a file with the same name as the target. In this case, the `hello` *target* does not create the `hello` file.
+It's important to realize that I'm talking about `hello` as both a *target* and a *file*. That's because the two are directly tied together. Typically, when a target is run (aka when the commands of a target is run), the commands will create a file with the same name as the target. In this case, the `hello` *target* does not create the `hello` *file*.
 
 Let's create a more typical Makefile - one that compiles a single C file. But before we do, make a file called `blah.c` that has the following contents:
 ```c
@@ -93,13 +93,12 @@ Let's create a more typical Makefile - one that compiles a single C file. But be
 int main() { return 0; }
 ```
 
-Now we can create this file called `Makefile`:
-
+Then create the Makefile (called `Makefile`, as always):
 ```makefile
 blah:
 	cc blah.c -o blah
 ```
-This time, try simply running `make`. Since there's no target supplied as an argument to the `make` command, the first target is run. In this case, there's only one target (`blah`). The first time you run this, `blah` will be created. The second time, you'll see `make: 'blah' is up to date`. But there's a problem: if we modify `blah.c` and then run `make`, nothing gets recompiled.
+This time, try simply running `make`. Since there's no target supplied as an argument to the `make` command, the first target is run. In this case, there's only one target (`blah`). The first time you run this, `blah` will be created. The second time, you'll see `make: 'blah' is up to date`. That's because the `blah` file already exists. But there's a problem: if we modify `blah.c` and then run `make`, nothing gets recompiled.
 
 We solve this by adding a prerequisite:
 ```makefile
@@ -110,14 +109,14 @@ blah: blah.c
 When we run `make` again, the following set of steps happens:
 - The first target is selected, because the first target is the default target
 - This has a prerequisite of `blah.c`
-- Make decides if it should run the `blah.c` target. It will only run if `blah.c` doesn't exist, or `blah.c` is *older than* `blah`
+- Make decides if it should run the `blah` target. It will only run if `blah.c` doesn't exist, or `blah.c` is *newer than* `blah`
 
-This last step is critical, and is the **essence of make**. What it's attempting to do is decide if the prerequisites of `blah` have changed since `blah` was created. That is, if `blah.c` is modified, running `make` should recompile the file. And conversely, if `blah.c` has not changed, then it should be recompiled.
+This last step is critical, and is the **essence of make**. What it's attempting to do is decide if the prerequisites of `blah` have changed since `blah` was last compiled. That is, if `blah.c` is modified, running `make` should recompile the file. And conversely, if `blah.c` has not changed, then it should be recompiled.
 
 To make this happen, it uses the filesystem timestamps as a proxy to determine if something has changed. This is a reasonable heuristic, because file timestamps typically will only change if the files are
 modified. But it's important to realize that this isn't always the case. You could, for example, modify a file, and then change the modified timestamp of that file to something old. If you did, Make would incorrectly guess that the file hadn't changed and thus could be ignored.
 
-Whew, what a mouthful. **Make sure that this makes sense. This is the crux of Makefiles, and might take you a few minutes to properly understand**. Play around with the above examples and make sure you understand when and why things are compiling.
+Whew, what a mouthful. **Make sure that you understand this. It's the crux of Makefiles, and might take you a few minutes to properly understand**. Play around with the above examples or watch the video above if things are still confusing.
 
 ## More quick examples
 The following Makefile ultimately runs all three targets. When you run `make blah` in the terminal, it will build a program called `blah` in a series of steps:
