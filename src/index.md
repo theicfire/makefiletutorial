@@ -196,6 +196,7 @@ all:
 ## The all target
 <!--  (Section 4.4) -->
 Making multiple targets and you want all of them to run? Make an `all` target.
+Since this is the first rule listed, it will run by default if `make` is called without specifying a target.
 ```makefile
 all: one two three
 
