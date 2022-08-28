@@ -606,7 +606,7 @@ Since this is the first rule listed, it will run by default if <code>make</code>
 </code></pre>
 <h2 id="multiple-targets">Multiple targets</h2>
 <!--  (Section 4.8) -->
-<p>When there are multiple targets for a rule, the commands will be run for each target<br><code>$@</code> is an <a href="#automatic-variables">automatic variable</a> that contains the target name.</p>
+<p>When there are multiple targets for a rule, the commands will be run for each target. <code>$@</code> is an <a href="#automatic-variables">automatic variable</a> that contains the target name.</p>
 <pre><code class="hljs makefile"><span class="hljs-section">all: f1.o f2.o</span>
 
 f1.o f2.o:
@@ -661,7 +661,7 @@ thing_right := <span class="hljs-variable">$(<span class="hljs-built_in">wildcar
 <!--  (Section 10.5) -->
 <p>There are many <a href="https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html">automatic variables</a>, but often only a few show up:</p>
 <pre><code class="hljs makefile"><span class="hljs-section">hey: one two</span>
-	<span class="hljs-comment"># Outputs "hey", since this is the first target</span>
+	<span class="hljs-comment"># Outputs "hey", since this is the target name</span>
 	echo <span class="hljs-variable">$@</span>
 
 	<span class="hljs-comment"># Outputs all prerequisites newer than the target</span>

@@ -221,8 +221,7 @@ clean:
 
 ## Multiple targets
 <!--  (Section 4.8) -->
-When there are multiple targets for a rule, the commands will be run for each target  
-`$@` is an [automatic variable](#automatic-variables) that contains the target name.
+When there are multiple targets for a rule, the commands will be run for each target. `$@` is an [automatic variable](#automatic-variables) that contains the target name.
 ```makefile
 all: f1.o f2.o
 
@@ -291,7 +290,7 @@ See these sections on examples of it being used:
 There are many [automatic variables](https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html), but often only a few show up:
 ```makefile
 hey: one two
-	# Outputs "hey", since this is the first target
+	# Outputs "hey", since this is the target name
 	echo $@
 
 	# Outputs all prerequisites newer than the target
