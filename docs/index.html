@@ -494,14 +494,14 @@ Hello, World</code></pre>
 <p>Let&#39;s start with a hello world example:</p>
 <pre><code class="hljs makefile"><span class="hljs-section">hello:</span>
 	echo <span class="hljs-string">"Hello, World"</span>
-	echo <span class="hljs-string">"This line will always print, because the file foobar does not exist."</span></code></pre>
+	echo <span class="hljs-string">"This line will always print, because the file hello does not exist."</span></code></pre>
 <p>There&#39;s already a lot to take in here. Let&#39;s break it down:</p>
 <ul>
 <li>We have one <em>target</em> called <code>hello</code></li>
 <li>This target has two <em>commands</em></li>
 <li>This target has no <em>prerequisites</em></li>
 </ul>
-<p>We&#39;ll then run <code>make hello</code>. As long as the <code>hello</code> file does not exist, the <code>commands</code> will run. If <code>hello</code> does exist, no commands will run.</p>
+<p>We&#39;ll then run <code>make hello</code>. As long as the <code>hello</code> file does not exist, the commands will run. If <code>hello</code> does exist, no commands will run.</p>
 <p>It&#39;s important to realize that I&#39;m talking about <code>hello</code> as both a <em>target</em> and a <em>file</em>. That&#39;s because the two are directly tied together. Typically, when a target is run (aka when the commands of a target is run), the commands will create a file with the same name as the target. In this case, the <code>hello</code> <em>target</em> does not create the <code>hello</code> <em>file</em>.</p>
 <p>Let&#39;s create a more typical Makefile - one that compiles a single C file. But before we do, make a file called <code>blah.c</code> that has the following contents:</p>
 <pre><code class="hljs c"><span class="hljs-comment">// blah.c</span>
@@ -540,6 +540,7 @@ modified. But it&#39;s important to realize that this isn&#39;t always the case.
 <span class="hljs-section">blah.o: blah.c</span>
 	cc -c blah.c -o blah.o <span class="hljs-comment"># Runs second</span>
 
+<span class="hljs-comment"># Typically blah.c would already exist, but I want to limit any additional required files</span>
 <span class="hljs-section">blah.c:</span>
 	echo <span class="hljs-string">"int main() { return 0; }"</span> &gt; blah.c <span class="hljs-comment"># Runs first</span></code></pre>
 <p>If you delete <code>blah.c</code>, all three targets will be rerun. If you edit it (and thus change the timestamp to newer than <code>blah.o</code>), the first two targets will run. If you run <code>touch blah.o</code> (and thus change the timestamp to newer than <code>blah</code>), then only the first target will run. If you change nothing, none of the targets will run. Try it out!</p>
