@@ -553,6 +553,11 @@ modified. But it&#39;s important to realize that this isn&#39;t always the case.
 	echo <span class="hljs-string">"This will always run, and runs first"</span></code></pre>
 <h2 id="make-clean">Make clean</h2>
 <p><code>clean</code> is often used as a target that removes the output of other targets, but it is not a special word in Make. You can run <code>make</code> and <code>make clean</code> on this to create and delete <code>some_file</code>.</p>
+<p>Note that <code>clean</code> is doing two new things here:</p>
+<ul>
+<li>It&#39;s a target that is not first (the default), and not a prerequisite. That means it&#39;ll never run unless you explicitly call <code>make clean</code></li>
+<li>It&#39;s not intended to be a filename. If you happen to have a file named <code>clean</code>, this target won&#39;t run, which is not what we want. See <code>.PHONY</code> later in this tutorial on how to fix this</li>
+</ul>
 <pre><code class="hljs makefile"><span class="hljs-section">some_file: </span>
 	touch some_file
 
