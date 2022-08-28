@@ -120,7 +120,7 @@ Whew, what a mouthful. **Make sure that you understand this. It's the crux of Ma
 
 ## More quick examples
 The following Makefile ultimately runs all three targets. When you run `make` in the terminal, it will build a program called `blah` in a series of steps:
-- Make is given `blah` as the target, so it first searches for this target
+- Make selects the target `blah`, because the first target is the default target
 - `blah` requires `blah.o`, so make searches for the `blah.o` target
 - `blah.o` requires `blah.c`, so make searches for the `blah.c` target
 - `blah.c` has no dependencies, so the `echo` command is run
@@ -138,6 +138,8 @@ blah.o: blah.c
 blah.c:
 	echo "int main() { return 0; }" > blah.c # Runs first
 ```
+
+If you delete `blah.c`, all three targets will be rerun. If you edit it (and thus change the timestamp to newer than `blah.o`), the first two targets will run. If you run `touch blah.o` (and thus change the timestamp to newer than `blah`), then only the first target will run. If you change nothing, none of the targets will run. Try it out!
 
 This next example doesn't do anything new, but is nontheless a good additional example. It will always run both targets, because `some_file` depends on `other_file`, which is never created.
 ```makefile
@@ -395,7 +397,6 @@ While I introduce functions later on, I'll foreshadow what you can do with them.
 obj_files = foo.result bar.o lose.o
 src_files = foo.raw bar.c lose.c
 
-.PHONY: all
 all: $(obj_files)
 
 $(filter %.o,$(obj_files)): %.o: %.c
@@ -934,7 +935,7 @@ some_file:
 ```
 
 ## .phony
-Adding `.PHONY` to a target will prevent make from confusing the phony target with a file name. In this example, if the file `clean` is created, make clean will still be run. `.PHONY` is great to use, but I'll skip it in the rest of the examples for simplicity.
+Adding `.PHONY` to a target will prevent Make from confusing the phony target with a file name. In this example, if the file `clean` is created, make clean will still be run. Technically, I should have have used it in every example with `all` or `clean`, but I didn't to keep the examples clean. Additionally, "phony" targets typically have names that are rarely file names, and in practice many people skip this.
 ```makefile
 some_file:
 	touch some_file

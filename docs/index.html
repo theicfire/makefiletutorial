@@ -526,7 +526,7 @@ modified. But it&#39;s important to realize that this isn&#39;t always the case.
 <h2 id="more-quick-examples">More quick examples</h2>
 <p>The following Makefile ultimately runs all three targets. When you run <code>make</code> in the terminal, it will build a program called <code>blah</code> in a series of steps:</p>
 <ul>
-<li>Make is given <code>blah</code> as the target, so it first searches for this target</li>
+<li>Make selects the target <code>blah</code>, because the first target is the default target</li>
 <li><code>blah</code> requires <code>blah.o</code>, so make searches for the <code>blah.o</code> target</li>
 <li><code>blah.o</code> requires <code>blah.c</code>, so make searches for the <code>blah.c</code> target</li>
 <li><code>blah.c</code> has no dependencies, so the <code>echo</code> command is run</li>
@@ -542,6 +542,7 @@ modified. But it&#39;s important to realize that this isn&#39;t always the case.
 
 <span class="hljs-section">blah.c:</span>
 	echo <span class="hljs-string">"int main() { return 0; }"</span> &gt; blah.c <span class="hljs-comment"># Runs first</span></code></pre>
+<p>If you delete <code>blah.c</code>, all three targets will be rerun. If you edit it (and thus change the timestamp to newer than <code>blah.o</code>), the first two targets will run. If you run <code>touch blah.o</code> (and thus change the timestamp to newer than <code>blah</code>), then only the first target will run. If you change nothing, none of the targets will run. Try it out!</p>
 <p>This next example doesn&#39;t do anything new, but is nontheless a good additional example. It will always run both targets, because <code>some_file</code> depends on <code>other_file</code>, which is never created.</p>
 <pre><code class="hljs makefile"><span class="hljs-section">some_file: other_file</span>
 	echo <span class="hljs-string">"This will always run, and runs second"</span>
@@ -752,7 +753,6 @@ CFLAGS = -g <span class="hljs-comment"># Flag for implicit rules. Turn on debug 
 <pre><code class="hljs makefile">obj_files = foo.result bar.o lose.o
 src_files = foo.raw bar.c lose.c
 
-<span class="hljs-meta"><span class="hljs-meta-keyword">.PHONY</span>: all</span>
 <span class="hljs-section">all: <span class="hljs-variable">$(obj_files)</span></span>
 
 <span class="hljs-variable">$(<span class="hljs-built_in">filter</span> %.o,<span class="hljs-variable">$(obj_files)</span>)</span>: %.o: %.c
@@ -1161,7 +1161,7 @@ bar := <span class="hljs-variable">$(<span class="hljs-built_in">if</span> <span
 	echo This line is too long, so \
 		it is broken up into multiple lines</code></pre>
 <h2 id="phony">.phony</h2>
-<p>Adding <code>.PHONY</code> to a target will prevent make from confusing the phony target with a file name. In this example, if the file <code>clean</code> is created, make clean will still be run. <code>.PHONY</code> is great to use, but I&#39;ll skip it in the rest of the examples for simplicity.</p>
+<p>Adding <code>.PHONY</code> to a target will prevent Make from confusing the phony target with a file name. In this example, if the file <code>clean</code> is created, make clean will still be run. Technically, I should have have used it in every example with <code>all</code> or <code>clean</code>, but I didn&#39;t to keep the examples clean. Additionally, &quot;phony&quot; targets typically have names that are rarely file names, and in practice many people skip this.</p>
 <pre><code class="hljs makefile"><span class="hljs-section">some_file:</span>
 	touch some_file
 	touch clean
