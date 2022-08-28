@@ -502,7 +502,7 @@ Hello, World</code></pre>
 <li>This target has no <em>prerequisites</em></li>
 </ul>
 <p>We&#39;ll then run <code>make hello</code>. As long as the <code>hello</code> file does not exist, the commands will run. If <code>hello</code> does exist, no commands will run.</p>
-<p>It&#39;s important to realize that I&#39;m talking about <code>hello</code> as both a <em>target</em> and a <em>file</em>. That&#39;s because the two are directly tied together. Typically, when a target is run (aka when the commands of a target is run), the commands will create a file with the same name as the target. In this case, the <code>hello</code> <em>target</em> does not create the <code>hello</code> <em>file</em>.</p>
+<p>It&#39;s important to realize that I&#39;m talking about <code>hello</code> as both a <em>target</em> and a <em>file</em>. That&#39;s because the two are directly tied together. Typically, when a target is run (aka when the commands of a target are run), the commands will create a file with the same name as the target. In this case, the <code>hello</code> <em>target</em> does not create the <code>hello</code> <em>file</em>.</p>
 <p>Let&#39;s create a more typical Makefile - one that compiles a single C file. But before we do, make a file called <code>blah.c</code> that has the following contents:</p>
 <pre><code class="hljs c"><span class="hljs-comment">// blah.c</span>
 <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; }</code></pre>
