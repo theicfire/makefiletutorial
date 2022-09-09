@@ -585,8 +585,8 @@ modified. But it&#39;s important to realize that this isn&#39;t always the case.
 <span class="hljs-section">clean:</span>
 	rm -f file1 file2 some_file</code></pre>
 <p>Single or double quotes have no meaning to Make. They are simply characters that are assigned to the variable. Quotes <em>are</em> useful to shell/bash, though, and you need them in commands like <code>printf</code>. In this example, the two commands behave the same:</p>
-<pre><code class="hljs makefile">a = one two <span class="hljs-comment"># a is assigned to the string "one two"</span>
-b = 'one two' <span class="hljs-comment"># Not recommended. b is assigned to the string "'one two'"</span>
+<pre><code class="hljs makefile">a := one two <span class="hljs-comment"># a is assigned to the string "one two"</span>
+b := 'one two' <span class="hljs-comment"># Not recommended. b is assigned to the string "'one two'"</span>
 <span class="hljs-section">all:</span>
 	printf '$a'
 	printf $b</code></pre>

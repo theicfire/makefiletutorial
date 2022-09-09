@@ -189,8 +189,8 @@ clean:
 
 Single or double quotes have no meaning to Make. They are simply characters that are assigned to the variable. Quotes *are* useful to shell/bash, though, and you need them in commands like `printf`. In this example, the two commands behave the same:
 ```makefile
-a = one two # a is assigned to the string "one two"
-b = 'one two' # Not recommended. b is assigned to the string "'one two'"
+a := one two # a is assigned to the string "one two"
+b := 'one two' # Not recommended. b is assigned to the string "'one two'"
 all:
 	printf '$a'
 	printf $b
