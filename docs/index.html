@@ -977,7 +977,7 @@ in a separate shell, as expected.</p>
 <pre><code class="hljs makefile">one = <span class="hljs-keyword">export</span> blah=<span class="hljs-string">"I was set!"</span>; echo $$blah
 
 <span class="hljs-keyword">define</span> two
-<span class="hljs-keyword">export</span> blah=set
+<span class="hljs-keyword">export</span> blah="I was set!"
 echo $$blah
 <span class="hljs-keyword">endef</span>
 

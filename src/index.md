@@ -687,7 +687,7 @@ in a separate shell, as expected.
 one = export blah="I was set!"; echo $$blah
 
 define two
-export blah=set
+export blah="I was set!"
 echo $$blah
 endef
 
