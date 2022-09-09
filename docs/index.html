@@ -242,6 +242,12 @@
 </ol>
 
 <ol>
+    <li><a class="toc-item" href="#double-dollar-sign">Double dollar sign</a>
+    </li>
+    
+</ol>
+
+<ol>
     <li><a class="toc-item" href="#error-handling-with--k--i-and--">Error handling with -k, -i, and -</a>
     </li>
     
@@ -260,7 +266,7 @@
 </ol>
 
 <ol>
-    <li><a class="toc-item" href="#use-export-for-recursive-make">Use export for recursive make</a>
+    <li><a class="toc-item" href="#export-environments-and-recursive-make">Export, environments, and recursive make</a>
     </li>
     
 </ol>
@@ -578,6 +584,12 @@ modified. But it&#39;s important to realize that this isn&#39;t always the case.
 
 <span class="hljs-section">clean:</span>
 	rm -f file1 file2 some_file</code></pre>
+<p>Single or double quotes have no meaning to Make. They are simply characters that are assigned to the variable. Quotes <em>are</em> useful to shell/bash, though, and you need them in commands like <code>printf</code>. In this example, the two commands behave the same:</p>
+<pre><code class="hljs makefile">a = one two <span class="hljs-comment"># a is assigned to the string "one two"</span>
+b = 'one two' <span class="hljs-comment"># Not recommended. b is assigned to the string "'one two'"</span>
+<span class="hljs-section">all:</span>
+	printf '$a'
+	printf $b</code></pre>
 <p>Reference variables using either <code>${}</code> or <code>$()</code></p>
 <pre><code class="hljs makefile">x := dude
 
@@ -826,6 +838,16 @@ src_files = foo.raw bar.c lose.c
 
 <span class="hljs-section">cool:</span>
 	echo <span class="hljs-string">"Hello from bash"</span></code></pre>
+<h2 id="double-dollar-sign">Double dollar sign</h2>
+<p>If you want a string to have a dollar sign, you can use <code>$$</code>. This is how to use a shell variable in <code>bash</code> or <code>sh</code>.</p>
+<p>Note the differences between Makefile variables and Shell variables in this next example.</p>
+<pre><code class="hljs makefile">make_var = I am a make variable
+<span class="hljs-section">all:</span>
+	<span class="hljs-comment"># Same as running "sh_var='I am a shell variable'; echo $sh_var" in the shell</span>
+	sh_var='I am a shell variable'; echo $$sh_var
+
+	<span class="hljs-comment"># Same as running "echo I am a amke variable" in the shell</span>
+	echo <span class="hljs-variable">$(make_var)</span></code></pre>
 <h2 id="error-handling-with--k--i-and--">Error handling with <code>-k</code>, <code>-i</code>, and <code>-</code></h2>
 <!--  (Section 5.4) -->
 <p>Add <code>-k</code> when running make to continue running even in the face of errors. Helpful if you want to see all the errors of Make at once.<br>Add a <code>-</code> before a command to suppress the error<br>Add <code>-i</code> to make to have this happen for every command.</p>
@@ -850,10 +872,23 @@ src_files = foo.raw bar.c lose.c
 <span class="hljs-section">clean:</span>
 	rm -rf subdir
 </code></pre>
-<h2 id="use-export-for-recursive-make">Use export for recursive make</h2>
+<h2 id="export-environments-and-recursive-make">Export, environments, and recursive make</h2>
 <!--  (Section 5.6) -->
-<p>The export directive takes a variable and makes it accessible to sub-make commands. In this example, <code>cooly</code> is exported such that the makefile in subdir can use it.  </p>
-<p>Note: export has the same syntax as sh, but they aren&#39;t related (although similar in function)  </p>
+<p>When Make starts, it automatically creates Make variables out of all the environment variables that are set when it&#39;s executed.</p>
+<pre><code class="hljs makefile"><span class="hljs-comment"># Run this with "export shell_env_var='I am an environment variable'; make"</span>
+<span class="hljs-section">all:</span>
+	<span class="hljs-comment"># Print out the Shell variable</span>
+	echo $$shell_env_var
+
+	<span class="hljs-comment"># Print out the Make variable</span>
+	echo <span class="hljs-variable">$(shell_env_var)</span></code></pre>
+<p>The <code>export</code> directive takes a variable and sets it the environment for all shell commands in all the recipes:</p>
+<pre><code class="hljs makefile">shell_env_var=Shell env var, created inside of Make
+<span class="hljs-keyword">export</span> shell_env_var
+<span class="hljs-section">all:</span>
+	echo <span class="hljs-variable">$(shell_env_var)</span>
+	echo $$shell_env_var</code></pre>
+<p>As such, when you run the <code>make</code> command inside of make, you can use the <code>export</code> directive to make it accessible to sub-make commands. In this example, <code>cooly</code> is exported such that the makefile in subdir can use it.</p>
 <pre><code class="hljs makefile">new_contents = <span class="hljs-string">"hello:\n\techo \$<span class="hljs-variable">$(cooly)</span>"</span>
 
 <span class="hljs-section">all:</span>
@@ -971,17 +1006,14 @@ option_two = not_override
 	echo <span class="hljs-variable">$(option_two)</span></code></pre>
 <h2 id="list-of-commands-and-define">List of commands and define</h2>
 <!--  (Section 6.8) -->
-<p>&quot;define&quot; is actually just a list of commands. It has nothing to do with being a function.
-Note here that it&#39;s a bit different than having a semi-colon between commands, because each is run
-in a separate shell, as expected.</p>
+<p>The <a href="https://www.gnu.org/software/make/manual/html_node/Multi_002dLine.html">define directive</a> is not a function, though it may look that way. I&#39;ve seen it used so infrequently that I won&#39;t go into details, but it&#39;s mainly used for defining <a href="https://www.gnu.org/software/make/manual/html_node/Canned-Recipes.html#Canned-Recipes">canned recipes</a> and also pairs well with the <a href="https://www.gnu.org/software/make/manual/html_node/Eval-Function.html#Eval-Function">eval function</a>.</p>
+<p><code>define</code>/<code>endef</code> simply creates a variable that is assigned to a list of commands. Note here that it&#39;s a bit different than having a semi-colon between commands, because each is run in a separate shell, as expected.</p>
 <pre><code class="hljs makefile">one = <span class="hljs-keyword">export</span> blah=<span class="hljs-string">"I was set!"</span>; echo $$blah
 
 <span class="hljs-keyword">define</span> two
-<span class="hljs-keyword">export</span> blah="I was set!"
+<span class="hljs-keyword">export</span> blah=<span class="hljs-string">"I was set!"</span>
 echo $$blah
 <span class="hljs-keyword">endef</span>
-
-<span class="hljs-comment"># One and two are different.</span>
 
 <span class="hljs-section">all: </span>
 	@echo <span class="hljs-string">"This prints 'I was set'"</span>

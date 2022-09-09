@@ -187,6 +187,15 @@ clean:
 	rm -f file1 file2 some_file
 ```
 
+Single or double quotes have no meaning to Make. They are simply characters that are assigned to the variable. Quotes *are* useful to shell/bash, though, and you need them in commands like `printf`. In this example, the two commands behave the same:
+```makefile
+a = one two # a is assigned to the string "one two"
+b = 'one two' # Not recommended. b is assigned to the string "'one two'"
+all:
+	printf '$a'
+	printf $b
+```
+
 Reference variables using either `${}` or `$()`
 ```makefile
 x := dude
@@ -492,6 +501,20 @@ cool:
 	echo "Hello from bash"
 ```
 
+## Double dollar sign
+If you want a string to have a dollar sign, you can use `$$`. This is how to use a shell variable in `bash` or `sh`.
+
+Note the differences between Makefile variables and Shell variables in this next example.
+```makefile
+make_var = I am a make variable
+all:
+	# Same as running "sh_var='I am a shell variable'; echo $sh_var" in the shell
+	sh_var='I am a shell variable'; echo $$sh_var
+
+	# Same as running "echo I am a amke variable" in the shell
+	echo $(make_var)
+```
+
 ## Error handling with `-k`, `-i`, and `-`
 <!--  (Section 5.4) -->
 Add `-k` when running make to continue running even in the face of errors. Helpful if you want to see all the errors of Make at once.  
@@ -526,11 +549,31 @@ clean:
 
 ```
 
-## Use export for recursive make
+## Export, environments, and recursive make
 <!--  (Section 5.6) -->
-The export directive takes a variable and makes it accessible to sub-make commands. In this example, `cooly` is exported such that the makefile in subdir can use it.  
-  
-Note: export has the same syntax as sh, but they aren't related (although similar in function)  
+When Make starts, it automatically creates Make variables out of all the environment variables that are set when it's executed.
+```makefile
+# Run this with "export shell_env_var='I am an environment variable'; make"
+all:
+	# Print out the Shell variable
+	echo $$shell_env_var
+
+	# Print out the Make variable
+	echo $(shell_env_var)
+```
+
+The `export` directive takes a variable and sets it the environment for all shell commands in all the recipes:
+
+```makefile
+shell_env_var=Shell env var, created inside of Make
+export shell_env_var
+all:
+	echo $(shell_env_var)
+	echo $$shell_env_var
+```
+
+As such, when you run the `make` command inside of make, you can use the `export` directive to make it accessible to sub-make commands. In this example, `cooly` is exported such that the makefile in subdir can use it.
+
 ```makefile
 new_contents = "hello:\n\techo \$$(cooly)"
 
@@ -680,9 +723,9 @@ all:
 
 ## List of commands and define
 <!--  (Section 6.8) -->
-"define" is actually just a list of commands. It has nothing to do with being a function.
-Note here that it's a bit different than having a semi-colon between commands, because each is run
-in a separate shell, as expected.
+The [define directive](https://www.gnu.org/software/make/manual/html_node/Multi_002dLine.html) is not a function, though it may look that way. I've seen it used so infrequently that I won't go into details, but it's mainly used for defining [canned recipes](https://www.gnu.org/software/make/manual/html_node/Canned-Recipes.html#Canned-Recipes) and also pairs well with the [eval function](https://www.gnu.org/software/make/manual/html_node/Eval-Function.html#Eval-Function).
+
+`define`/`endef` simply creates a variable that is assigned to a list of commands. Note here that it's a bit different than having a semi-colon between commands, because each is run in a separate shell, as expected.
 ```makefile
 one = export blah="I was set!"; echo $$blah
 
@@ -690,8 +733,6 @@ define two
 export blah="I was set!"
 echo $$blah
 endef
-
-# One and two are different.
 
 all: 
 	@echo "This prints 'I was set'"
