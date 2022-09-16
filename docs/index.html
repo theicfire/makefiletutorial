@@ -1254,7 +1254,7 @@ CPPFLAGS := <span class="hljs-variable">$(INC_FLAGS)</span> -MMD -MP
 
 <span class="hljs-comment"># The final build step.</span>
 <span class="hljs-variable">$(BUILD_DIR)</span>/<span class="hljs-variable">$(TARGET_EXEC)</span>: <span class="hljs-variable">$(OBJS)</span>
-	<span class="hljs-variable">$(CC)</span> <span class="hljs-variable">$(OBJS)</span> -o <span class="hljs-variable">$@</span> <span class="hljs-variable">$(LDFLAGS)</span>
+	<span class="hljs-variable">$(CXX)</span> <span class="hljs-variable">$(OBJS)</span> -o <span class="hljs-variable">$@</span> <span class="hljs-variable">$(LDFLAGS)</span>
 
 <span class="hljs-comment"># Build step for C source</span>
 <span class="hljs-variable">$(BUILD_DIR)</span>/%.c.o: %.c
