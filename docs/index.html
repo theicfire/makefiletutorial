@@ -523,7 +523,7 @@ Hello, World</code></pre>
 <ul>
 <li>The first target is selected, because the first target is the default target</li>
 <li>This has a prerequisite of <code>blah.c</code></li>
-<li>Make decides if it should run the <code>blah</code> target. It will only run if <code>blah.c</code> doesn&#39;t exist, or <code>blah.c</code> is <em>newer than</em> <code>blah</code></li>
+<li>Make decides if it should run the <code>blah</code> target. It will only run if <code>blah</code> doesn&#39;t exist, or <code>blah.c</code> is <em>newer than</em> <code>blah</code></li>
 </ul>
 <p>This last step is critical, and is the <strong>essence of make</strong>. What it&#39;s attempting to do is decide if the prerequisites of <code>blah</code> have changed since <code>blah</code> was last compiled. That is, if <code>blah.c</code> is modified, running <code>make</code> should recompile the file. And conversely, if <code>blah.c</code> has not changed, then it should not be recompiled.</p>
 <p>To make this happen, it uses the filesystem timestamps as a proxy to determine if something has changed. This is a reasonable heuristic, because file timestamps typically will only change if the files are

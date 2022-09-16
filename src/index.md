@@ -109,7 +109,7 @@ blah: blah.c
 When we run `make` again, the following set of steps happens:
 - The first target is selected, because the first target is the default target
 - This has a prerequisite of `blah.c`
-- Make decides if it should run the `blah` target. It will only run if `blah.c` doesn't exist, or `blah.c` is *newer than* `blah`
+- Make decides if it should run the `blah` target. It will only run if `blah` doesn't exist, or `blah.c` is *newer than* `blah`
 
 This last step is critical, and is the **essence of make**. What it's attempting to do is decide if the prerequisites of `blah` have changed since `blah` was last compiled. That is, if `blah.c` is modified, running `make` should recompile the file. And conversely, if `blah.c` has not changed, then it should not be recompiled.
 
