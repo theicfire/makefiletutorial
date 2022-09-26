@@ -325,9 +325,9 @@ clean:
 ## Implicit Rules
 <!--  (Section 10) -->
 Make loves c compilation. And every time it expresses its love, things get confusing. Perhaps the most confusing part of Make is the magic/automatic rules that are made. Make calls these "implicit" rules. I don't personally agree with this design decision, and I don't recommend using them, but they're often used and are thus useful to know. Here's a list of implicit rules:
-- Compiling a C program: `n.o` is made automatically from `n.c` with a command of the form `$(CC) -c $(CPPFLAGS) $(CFLAGS)`
-- Compiling a C++ program: `n.o` is made automatically from `n.cc` or `n.cpp` with a command of the form `$(CXX) -c $(CPPFLAGS) $(CXXFLAGS)`
-- Linking a single object file: `n` is made automatically from `n.o` by running the command `$(CC) $(LDFLAGS) n.o $(LOADLIBES) $(LDLIBS)`
+- Compiling a C program: `n.o` is made automatically from `n.c` with a command of the form `$(CC) -c $(CPPFLAGS) $(CFLAGS) $^ -o $@`
+- Compiling a C++ program: `n.o` is made automatically from `n.cc` or `n.cpp` with a command of the form `$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $^ -o $@`
+- Linking a single object file: `n` is made automatically from `n.o` by running the command `$(CC) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) -o $@`
 
 The important variables used by implicit rules are:
 - `CC`: Program for compiling C programs; default `cc`
@@ -412,9 +412,14 @@ obj_files = foo.result bar.o lose.o
 src_files = foo.raw bar.c lose.c
 
 all: $(obj_files)
+# Note: PHONY is important here. Without it, implicit rules will try to build the executable "all", since the prereqs are ".o" files.
+.PHONY: all 
 
+# Ex 1: .o files depend on .c files. Though we don't actually make the .o file.
 $(filter %.o,$(obj_files)): %.o: %.c
 	echo "target: $@ prereq: $<"
+
+# Ex 2: .result files depend on .raw files. Though we don't actually make the .result file.
 $(filter %.result,$(obj_files)): %.result: %.raw
 	echo "target: $@ prereq: $<" 
 

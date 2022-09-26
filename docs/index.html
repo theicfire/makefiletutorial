@@ -698,9 +698,9 @@ thing_right := <span class="hljs-variable">$(<span class="hljs-built_in">wildcar
 <!--  (Section 10) -->
 <p>Make loves c compilation. And every time it expresses its love, things get confusing. Perhaps the most confusing part of Make is the magic/automatic rules that are made. Make calls these &quot;implicit&quot; rules. I don&#39;t personally agree with this design decision, and I don&#39;t recommend using them, but they&#39;re often used and are thus useful to know. Here&#39;s a list of implicit rules:</p>
 <ul>
-<li>Compiling a C program: <code>n.o</code> is made automatically from <code>n.c</code> with a command of the form <code>$(CC) -c $(CPPFLAGS) $(CFLAGS)</code></li>
-<li>Compiling a C++ program: <code>n.o</code> is made automatically from <code>n.cc</code> or <code>n.cpp</code> with a command of the form <code>$(CXX) -c $(CPPFLAGS) $(CXXFLAGS)</code></li>
-<li>Linking a single object file: <code>n</code> is made automatically from <code>n.o</code> by running the command <code>$(CC) $(LDFLAGS) n.o $(LOADLIBES) $(LDLIBS)</code></li>
+<li>Compiling a C program: <code>n.o</code> is made automatically from <code>n.c</code> with a command of the form <code>$(CC) -c $(CPPFLAGS) $(CFLAGS) $^ -o $@</code></li>
+<li>Compiling a C++ program: <code>n.o</code> is made automatically from <code>n.cc</code> or <code>n.cpp</code> with a command of the form <code>$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $^ -o $@</code></li>
+<li>Linking a single object file: <code>n</code> is made automatically from <code>n.o</code> by running the command <code>$(CC) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) -o $@</code></li>
 </ul>
 <p>The important variables used by implicit rules are:</p>
 <ul>
@@ -772,9 +772,14 @@ CFLAGS = -g <span class="hljs-comment"># Flag for implicit rules. Turn on debug 
 src_files = foo.raw bar.c lose.c
 
 <span class="hljs-section">all: <span class="hljs-variable">$(obj_files)</span></span>
+<span class="hljs-comment"># Note: PHONY is important here. Without it, implicit rules will try to build the executable "all", since the prereqs are ".o" files.</span>
+<span class="hljs-meta"><span class="hljs-meta-keyword">.PHONY</span>: all </span>
 
+<span class="hljs-comment"># Ex 1: .o files depend on .c files. Though we don't actually make the .o file.</span>
 <span class="hljs-variable">$(<span class="hljs-built_in">filter</span> %.o,<span class="hljs-variable">$(obj_files)</span>)</span>: %.o: %.c
 	echo <span class="hljs-string">"target: <span class="hljs-variable">$@</span> prereq: <span class="hljs-variable">$&lt;</span>"</span>
+
+<span class="hljs-comment"># Ex 2: .result files depend on .raw files. Though we don't actually make the .result file.</span>
 <span class="hljs-variable">$(<span class="hljs-built_in">filter</span> %.result,<span class="hljs-variable">$(obj_files)</span>)</span>: %.result: %.raw
 	echo <span class="hljs-string">"target: <span class="hljs-variable">$@</span> prereq: <span class="hljs-variable">$&lt;</span>"</span> 
 
