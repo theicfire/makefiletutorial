@@ -947,7 +947,7 @@ all:
 
 # Other Features
 ## Include Makefiles
-The include directive tells make to read one or more other makefiles. It's a line in the makefile makefile that looks like this:
+The include directive tells make to read one or more other makefiles. It's a line in the makefile that looks like this:
 ```makefile
 include filenames...
 ```
