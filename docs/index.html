@@ -1240,7 +1240,7 @@ SRC_DIRS := ./src
 <span class="hljs-comment"># Note the single quotes around the * expressions. The shell will incorrectly expand these otherwise, but we want to send the * directly to the find command.</span>
 SRCS := <span class="hljs-variable">$(<span class="hljs-built_in">shell</span> find <span class="hljs-variable">$(SRC_DIRS)</span> -name '*.cpp' -<span class="hljs-built_in">or</span> -name '*.c' -<span class="hljs-built_in">or</span> -name '*.s')</span>
 
-<span class="hljs-comment"># Prepends BUILD_DIR to every src file.</span>
+<span class="hljs-comment"># Prepends BUILD_DIR and appends .o to every src file</span>
 <span class="hljs-comment"># As an example, ./your_dir/hello.cpp turns into ./build/./your_dir/hello.cpp.o</span>
 OBJS := $(SRCS:%=<span class="hljs-variable">$(BUILD_DIR)</span>/%.o)
 
