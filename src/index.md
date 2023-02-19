@@ -880,7 +880,7 @@ all:
 
 The substitution reference `$(text:pattern=replacement)` is a shorthand for this.
 
-There's another shorthand that that replaces only suffixes: `$(text:suffix=replacement)`. No `%` wildcard is used here.
+There's another shorthand that replaces only suffixes: `$(text:suffix=replacement)`. No `%` wildcard is used here.
 
 Note: don't add extra spaces for this shorthand. It will be seen as a search or replacement term.
 
@@ -914,7 +914,7 @@ all:
 
 ## The if function
 <!--  (Section 8.5) -->
-`if` checks if the first argument is nonempty. If so runs the second argument, otherwise runs the third.
+`if` checks if the first argument is nonempty. If so, runs the second argument, otherwise runs the third.
 ```makefile
 foo := $(if this-is-not-empty,then!,else!)
 empty :=
