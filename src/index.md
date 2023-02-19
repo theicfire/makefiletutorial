@@ -1033,8 +1033,8 @@ SRC_DIRS := ./src
 # Note the single quotes around the * expressions. Make will incorrectly expand these otherwise.
 SRCS := $(shell find $(SRC_DIRS) -name '*.cpp' -or -name '*.c' -or -name '*.s')
 
-# String substitution for every C/C++ file.
-# As an example, hello.cpp turns into ./build/hello.cpp.o
+# Prepends BUILD_DIR to every src file.
+# As an example, ./your_dir/hello.cpp turns into ./build/./your_dir/hello.cpp.o
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 
 # String substitution (suffix version without %).
