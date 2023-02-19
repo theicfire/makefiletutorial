@@ -851,7 +851,7 @@ src_files = foo.raw bar.c lose.c
 	<span class="hljs-comment"># Same as running "sh_var='I am a shell variable'; echo $sh_var" in the shell</span>
 	sh_var='I am a shell variable'; echo $$sh_var
 
-	<span class="hljs-comment"># Same as running "echo I am a amke variable" in the shell</span>
+	<span class="hljs-comment"># Same as running "echo I am a make variable" in the shell</span>
 	echo <span class="hljs-variable">$(make_var)</span></code></pre>
 <h2 id="error-handling-with--k--i-and--">Error handling with <code>-k</code>, <code>-i</code>, and <code>-</code></h2>
 <!--  (Section 5.4) -->
@@ -1237,11 +1237,11 @@ BUILD_DIR := ./build
 SRC_DIRS := ./src
 
 <span class="hljs-comment"># Find all the C and C++ files we want to compile</span>
-<span class="hljs-comment"># Note the single quotes around the * expressions. Make will incorrectly expand these otherwise.</span>
+<span class="hljs-comment"># Note the single quotes around the * expressions. The shell will incorrectly expand these otherwise, but we want to send the * directly to the find command.</span>
 SRCS := <span class="hljs-variable">$(<span class="hljs-built_in">shell</span> find <span class="hljs-variable">$(SRC_DIRS)</span> -name '*.cpp' -<span class="hljs-built_in">or</span> -name '*.c' -<span class="hljs-built_in">or</span> -name '*.s')</span>
 
-<span class="hljs-comment"># String substitution for every C/C++ file.</span>
-<span class="hljs-comment"># As an example, hello.cpp turns into ./build/hello.cpp.o</span>
+<span class="hljs-comment"># Prepends BUILD_DIR to every src file.</span>
+<span class="hljs-comment"># As an example, ./your_dir/hello.cpp turns into ./build/./your_dir/hello.cpp.o</span>
 OBJS := $(SRCS:%=<span class="hljs-variable">$(BUILD_DIR)</span>/%.o)
 
 <span class="hljs-comment"># String substitution (suffix version without %).</span>
