@@ -1096,7 +1096,7 @@ foo = <span class="hljs-variable">$(bar)</span>
 <h1 id="functions">Functions</h1>
 <h2 id="first-functions">First Functions</h2>
 <!--  (Section 8.1) -->
-<p><em>Functions</em> are mainly just for text processing. Call functions with <code>$(fn, arguments)</code> or <code>${fn, arguments}</code>. You can make your own using the <a href="https://www.gnu.org/software/make/manual/html_node/Call-Function.html#Call-Function">call</a> builtin function. Make has a decent amount of <a href="https://www.gnu.org/software/make/manual/html_node/Functions.html">builtin functions</a>.</p>
+<p><em>Functions</em> are mainly just for text processing. Call functions with <code>$(fn, arguments)</code> or <code>${fn, arguments}</code>. Make has a decent amount of <a href="https://www.gnu.org/software/make/manual/html_node/Functions.html">builtin functions</a>.</p>
 <pre><code class="hljs makefile">bar := ${subst not, totally, <span class="hljs-string">"I am not superman"</span>}
 <span class="hljs-section">all: </span>
 	@echo <span class="hljs-variable">$(bar)</span>
@@ -1164,7 +1164,7 @@ bar := <span class="hljs-variable">$(<span class="hljs-built_in">if</span> <span
 	@echo <span class="hljs-variable">$(bar)</span></code></pre>
 <h2 id="the-call-function">The call function</h2>
 <!--  (Section 8.6) -->
-<p>Make supports creating basic functions. You &quot;define&quot; the function just by creating a variable, but use the parameters <code>$(0)</code>, <code>$(1)</code>, etc. You then call the function with the special <code>call</code> function. The syntax is <code>$(call variable,param,param)</code>. <code>$(0)</code> is the variable, while <code>$(1)</code>, <code>$(2)</code>, etc. are the params.</p>
+<p>Make supports creating basic functions. You &quot;define&quot; the function just by creating a variable, but use the parameters <code>$(0)</code>, <code>$(1)</code>, etc. You then call the function with the special <a href="https://www.gnu.org/software/make/manual/html_node/Call-Function.html#Call-Function"><code>call</code></a> builtin function. The syntax is <code>$(call variable,param,param)</code>. <code>$(0)</code> is the variable, while <code>$(1)</code>, <code>$(2)</code>, etc. are the params.</p>
 <pre><code class="hljs makefile">sweet_new_fn = Variable Name: $(0) First: $(1) Second: $(2) Empty Variable: $(3)
 
 <span class="hljs-section">all:</span>
@@ -1182,15 +1182,20 @@ bar := <span class="hljs-variable">$(<span class="hljs-built_in">if</span> <span
 <p>This is particularly useful when you use compiler flags like <code>-M</code> that create Makefiles based on the source. For example, if some c files includes a header, that header will be added to a Makefile that&#39;s written by gcc. I talk about this more in the <a href="#makefile-cookbook">Makefile Cookbook</a></p>
 <h2 id="the-vpath-directive">The vpath Directive</h2>
 <!--  (Section 4.3.2) -->
-<p>Use vpath to specify where some set of prerequisites exist. The format is <code>vpath &lt;pattern&gt; &lt;directories, space/colon separated&gt;</code><br><code>&lt;pattern&gt;</code> can have a <code>%</code>, which matches any zero or more characters.<br>You can also do this globallyish with the variable VPATH  </p>
+<p>Use vpath to specify where some set of prerequisites exist. The format is <code>vpath &lt;pattern&gt; &lt;directories, space/colon separated&gt;</code>
+<code>&lt;pattern&gt;</code> can have a <code>%</code>, which matches any zero or more characters.
+You can also do this globallyish with the variable VPATH</p>
 <pre><code class="hljs makefile"><span class="hljs-keyword">vpath</span> %.h ../headers ../other-directory
 
+<span class="hljs-comment"># Note: vpath allows blah.h to be found even though blah.h is never in the current directory</span>
 <span class="hljs-section">some_binary: ../headers blah.h</span>
 	touch some_binary
 
 <span class="hljs-section">../headers:</span>
 	mkdir ../headers
 
+<span class="hljs-comment"># We call the target blah.h instead of ../headers/blah.h, because that's the prereq that some_binary is looking for</span>
+<span class="hljs-comment"># Typically, blah.h would already exist and you wouldn't need this.</span>
 <span class="hljs-section">blah.h:</span>
 	touch ../headers/blah.h
 
