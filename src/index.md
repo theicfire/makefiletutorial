@@ -962,13 +962,15 @@ You can also do this globallyish with the variable VPATH
 ```makefile
 vpath %.h ../headers ../other-directory
 
+# Note blah.h will be found even though it's not in the current directory
 some_binary: ../headers blah.h
 	touch some_binary
 
 ../headers:
 	mkdir ../headers
 
-# The target doesn't need to be named ../headers/blah.h
+# We call the target blah.h instead of ../headers/blah.h, because that's the prereq that some_binary is looking for
+# Typically, blah.h would already exist and you wouldn't need this.
 blah.h:
 	touch ../headers/blah.h
 
