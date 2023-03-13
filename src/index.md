@@ -956,13 +956,13 @@ This is particularly useful when you use compiler flags like `-M` that create Ma
 
 ## The vpath Directive
 <!--  (Section 4.3.2) -->
-Use vpath to specify where some set of prerequisites exist. The format is `vpath <pattern> <directories, space/colon separated>`  
-`<pattern>` can have a `%`, which matches any zero or more characters.  
-You can also do this globallyish with the variable VPATH  
+Use vpath to specify where some set of prerequisites exist. The format is `vpath <pattern> <directories, space/colon separated>`
+`<pattern>` can have a `%`, which matches any zero or more characters.
+You can also do this globallyish with the variable VPATH
 ```makefile
 vpath %.h ../headers ../other-directory
 
-# Note blah.h will be found even though it's not in the current directory
+# Note blah.h will be found even though it's never in the current directory
 some_binary: ../headers blah.h
 	touch some_binary
 
