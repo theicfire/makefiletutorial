@@ -835,7 +835,7 @@ endif
 # Functions
 ## First Functions
 <!--  (Section 8.1) -->
-*Functions* are mainly just for text processing. Call functions with `$(fn, arguments)` or `${fn, arguments}`. You can make your own using the [call](https://www.gnu.org/software/make/manual/html_node/Call-Function.html#Call-Function) builtin function. Make has a decent amount of [builtin functions](https://www.gnu.org/software/make/manual/html_node/Functions.html).
+*Functions* are mainly just for text processing. Call functions with `$(fn, arguments)` or `${fn, arguments}`. Make has a decent amount of [builtin functions](https://www.gnu.org/software/make/manual/html_node/Functions.html).
 ```makefile
 bar := ${subst not, totally, "I am not superman"}
 all: 
@@ -927,7 +927,7 @@ all:
 
 ## The call function
 <!--  (Section 8.6) -->
-Make supports creating basic functions. You "define" the function just by creating a variable, but use the parameters `$(0)`, `$(1)`, etc. You then call the function with the special `call` function. The syntax is `$(call variable,param,param)`. `$(0)` is the variable, while `$(1)`, `$(2)`, etc. are the params.
+Make supports creating basic functions. You "define" the function just by creating a variable, but use the parameters `$(0)`, `$(1)`, etc. You then call the function with the special [`call`](https://www.gnu.org/software/make/manual/html_node/Call-Function.html#Call-Function) builtin function. The syntax is `$(call variable,param,param)`. `$(0)` is the variable, while `$(1)`, `$(2)`, etc. are the params.
 
 ```makefile
 sweet_new_fn = Variable Name: $(0) First: $(1) Second: $(2) Empty Variable: $(3)
@@ -968,6 +968,7 @@ some_binary: ../headers blah.h
 ../headers:
 	mkdir ../headers
 
+# The target doesn't need to be named ../headers/blah.h
 blah.h:
 	touch ../headers/blah.h
 
