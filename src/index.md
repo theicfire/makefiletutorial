@@ -962,7 +962,7 @@ You can also do this globallyish with the variable VPATH
 ```makefile
 vpath %.h ../headers ../other-directory
 
-# Note blah.h will be found even though it's never in the current directory
+# Note: vpath allows blah.h to be found even though blah.h is never in the current directory
 some_binary: ../headers blah.h
 	touch some_binary
 
