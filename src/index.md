@@ -822,9 +822,6 @@ endif
 <!-- `(Section 7.3) -->
 This example shows you how to test make flags with `findstring` and `MAKEFLAGS`. Run this example with `make -i` to see it print out the echo statement.
 ```makefile
-bar =
-foo = $(bar)
-
 all:
 # Search for the "-i" flag. MAKEFLAGS is just a list of single characters, one per flag. So look for "i" in this case.
 ifneq (,$(findstring i, $(MAKEFLAGS)))
