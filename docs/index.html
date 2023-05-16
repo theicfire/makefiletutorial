@@ -585,8 +585,8 @@ modified. But it&#39;s important to realize that this isn&#39;t always the case.
 <span class="hljs-section">clean:</span>
 	rm -f file1 file2 some_file</code></pre>
 <p>Single or double quotes have no meaning to Make. They are simply characters that are assigned to the variable. Quotes <em>are</em> useful to shell/bash, though, and you need them in commands like <code>printf</code>. In this example, the two commands behave the same:</p>
-<pre><code class="hljs makefile">a := one two <span class="hljs-comment"># a is assigned to the string "one two"</span>
-b := 'one two' <span class="hljs-comment"># Not recommended. b is assigned to the string "'one two'"</span>
+<pre><code class="hljs makefile">a := one two <span class="hljs-comment"># a is set to the string "one two"</span>
+b := 'one two' <span class="hljs-comment"># Not recommended. b is set to the string "'one two'"</span>
 <span class="hljs-section">all:</span>
 	printf '$a'
 	printf $b</code></pre>
@@ -1012,7 +1012,7 @@ option_two = not_override
 <h2 id="list-of-commands-and-define">List of commands and define</h2>
 <!--  (Section 6.8) -->
 <p>The <a href="https://www.gnu.org/software/make/manual/html_node/Multi_002dLine.html">define directive</a> is not a function, though it may look that way. I&#39;ve seen it used so infrequently that I won&#39;t go into details, but it&#39;s mainly used for defining <a href="https://www.gnu.org/software/make/manual/html_node/Canned-Recipes.html#Canned-Recipes">canned recipes</a> and also pairs well with the <a href="https://www.gnu.org/software/make/manual/html_node/Eval-Function.html#Eval-Function">eval function</a>.</p>
-<p><code>define</code>/<code>endef</code> simply creates a variable that is assigned to a list of commands. Note here that it&#39;s a bit different than having a semi-colon between commands, because each is run in a separate shell, as expected.</p>
+<p><code>define</code>/<code>endef</code> simply creates a variable that is set to a list of commands. Note here that it&#39;s a bit different than having a semi-colon between commands, because each is run in a separate shell, as expected.</p>
 <pre><code class="hljs makefile">one = <span class="hljs-keyword">export</span> blah=<span class="hljs-string">"I was set!"</span>; echo $$blah
 
 <span class="hljs-keyword">define</span> two
@@ -1027,7 +1027,7 @@ echo $$blah
 	@<span class="hljs-variable">$(two)</span></code></pre>
 <h2 id="target-specific-variables">Target-specific variables</h2>
 <!--  (Section 6.10) -->
-<p>Variables can be assigned for specific targets</p>
+<p>Variables can be set for specific targets</p>
 <pre><code class="hljs makefile"><span class="hljs-section">all: one = cool</span>
 
 <span class="hljs-section">all: </span>
@@ -1037,7 +1037,7 @@ echo $$blah
 	echo one is nothing: <span class="hljs-variable">$(one)</span></code></pre>
 <h2 id="pattern-specific-variables">Pattern-specific variables</h2>
 <!--  (Section 6.11) -->
-<p>You can assign variables for specific target <em>patterns</em></p>
+<p>You can set variables for specific target <em>patterns</em></p>
 <pre><code class="hljs makefile"><span class="hljs-section">%.c: one = cool</span>
 
 <span class="hljs-section">blah.c: </span>
