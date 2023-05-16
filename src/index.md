@@ -189,8 +189,8 @@ clean:
 
 Single or double quotes have no meaning to Make. They are simply characters that are assigned to the variable. Quotes *are* useful to shell/bash, though, and you need them in commands like `printf`. In this example, the two commands behave the same:
 ```makefile
-a := one two # a is assigned to the string "one two"
-b := 'one two' # Not recommended. b is assigned to the string "'one two'"
+a := one two # a is set to the string "one two"
+b := 'one two' # Not recommended. b is set to the string "'one two'"
 all:
 	printf '$a'
 	printf $b
@@ -730,7 +730,7 @@ all:
 <!--  (Section 6.8) -->
 The [define directive](https://www.gnu.org/software/make/manual/html_node/Multi_002dLine.html) is not a function, though it may look that way. I've seen it used so infrequently that I won't go into details, but it's mainly used for defining [canned recipes](https://www.gnu.org/software/make/manual/html_node/Canned-Recipes.html#Canned-Recipes) and also pairs well with the [eval function](https://www.gnu.org/software/make/manual/html_node/Eval-Function.html#Eval-Function).
 
-`define`/`endef` simply creates a variable that is assigned to a list of commands. Note here that it's a bit different than having a semi-colon between commands, because each is run in a separate shell, as expected.
+`define`/`endef` simply creates a variable that is set to a list of commands. Note here that it's a bit different than having a semi-colon between commands, because each is run in a separate shell, as expected.
 ```makefile
 one = export blah="I was set!"; echo $$blah
 
@@ -748,7 +748,7 @@ all:
 
 ## Target-specific variables
 <!--  (Section 6.10) -->
-Variables can be assigned for specific targets
+Variables can be set for specific targets
 ```makefile
 all: one = cool
 
@@ -761,7 +761,7 @@ other:
 
 ## Pattern-specific variables
 <!--  (Section 6.11) -->
-You can assign variables for specific target *patterns*
+You can set variables for specific target *patterns*
 ```makefile
 %.c: one = cool
 
