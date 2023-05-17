@@ -196,7 +196,7 @@ all:
 	printf $b
 ```
 
-Reference variables using either `${}` or `$()``
+Reference variables using either `${}` or `$()`
 ```makefile
 x := dude
 
