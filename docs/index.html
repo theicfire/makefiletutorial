@@ -346,7 +346,7 @@
 </ol>
 
 <ol>
-    <li><a class="toc-item" href="#makeflags">$(makeflags)</a>
+    <li><a class="toc-item" href="#makeflags">$(MAKEFLAGS)</a>
     </li>
     
 </ol>
@@ -1082,13 +1082,10 @@ foo = <span class="hljs-variable">$(bar)</span>
 	echo <span class="hljs-string">"but bar is not"</span>
 <span class="hljs-keyword">endif</span>
 </code></pre>
-<h2 id="makeflags">$(makeflags)</h2>
+<h2 id="makeflags">$(MAKEFLAGS)</h2>
 <!-- `(Section 7.3) -->
 <p>This example shows you how to test make flags with <code>findstring</code> and <code>MAKEFLAGS</code>. Run this example with <code>make -i</code> to see it print out the echo statement.</p>
-<pre><code class="hljs makefile">bar =
-foo = <span class="hljs-variable">$(bar)</span>
-
-<span class="hljs-section">all:</span>
+<pre><code class="hljs makefile"><span class="hljs-section">all:</span>
 <span class="hljs-comment"># Search for the "-i" flag. MAKEFLAGS is just a list of single characters, one per flag. So look for "i" in this case.</span>
 <span class="hljs-keyword">ifneq</span> (,<span class="hljs-variable">$(<span class="hljs-built_in">findstring</span> i, <span class="hljs-variable">$(MAKEFLAGS)</span>)</span>)
 	echo <span class="hljs-string">"i was passed to MAKEFLAGS"</span>
