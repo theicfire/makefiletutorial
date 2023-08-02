@@ -76,7 +76,7 @@ Let's start with a hello world example:
 ```makefile
 hello:
 	echo "Hello, World"
-	echo "This line will always print, because the file hello does not exist."
+	echo "This line will print if the file hello does not exist."
 ```
 There's already a lot to take in here. Let's break it down:
 - We have one *target* called `hello`
