@@ -1206,7 +1206,7 @@ You can also do this globallyish with the variable VPATH</p>
 	echo This line is too long, so \
 		it is broken up into multiple lines</code></pre>
 <h2 id="phony">.phony</h2>
-<p>Adding <code>.PHONY</code> to a target will prevent Make from confusing the phony target with a file name. In this example, if the file <code>clean</code> is created, make clean will still be run. Technically, I should have have used it in every example with <code>all</code> or <code>clean</code>, but I didn&#39;t to keep the examples clean. Additionally, &quot;phony&quot; targets typically have names that are rarely file names, and in practice many people skip this.</p>
+<p>Adding <code>.PHONY</code> to a target will prevent Make from confusing the phony target with a file name. In this example, if the file <code>clean</code> is created, make clean will still be run. Technically, I should have used it in every example with <code>all</code> or <code>clean</code>, but I didn&#39;t to keep the examples clean. Additionally, &quot;phony&quot; targets typically have names that are rarely file names, and in practice many people skip this.</p>
 <pre><code class="hljs makefile"><span class="hljs-section">some_file:</span>
 	touch some_file
 	touch clean
