@@ -834,7 +834,7 @@ endif
 <!--  (Section 8.1) -->
 *Functions* are mainly just for text processing. Call functions with `$(fn, arguments)` or `${fn, arguments}`. Make has a decent amount of [builtin functions](https://www.gnu.org/software/make/manual/html_node/Functions.html).
 ```makefile
-bar := ${subst not, totally, "I am not superman"}
+bar := ${subst not,totally, "I am not superman"}
 all: 
 	@echo $(bar)
 
